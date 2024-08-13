@@ -4,7 +4,7 @@ export const tabBarItems = [
     title: "Dashboard",
   },
   {
-    name: "planner",
+    name: "(planner)",
     title: "Planner",
   },
   {
@@ -39,4 +39,10 @@ export const tabBarItems = [
     name: "study-room",
     title: "Study Room",
   },
+];
+
+export const plannerSubjectProgressString = [
+  "Student feedback enriched and tailored learning experience.",
+  "Provides insights for personalized academic assistance.",
+  "Enables personalized learning and continuous improvement.",
 ];

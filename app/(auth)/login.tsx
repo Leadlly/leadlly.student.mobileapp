@@ -5,6 +5,7 @@ import {
   Image,
   Pressable,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -14,10 +15,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useLoginUser } from "../../services/queries/userQuery";
+import { useAppDispatch } from "../../services/redux/hooks";
+import { loginAction } from "../../services/redux/slices/userSlice";
+import Toast from "react-native-toast-message";
 
 const Login = () => {
   const [toggleShowPassword, setToggleShowPassword] = useState(false);
+
+  const router = useRouter();
+
+  const dispatch = useAppDispatch();
+
+  const { mutateAsync: login, isPending } = useLoginUser();
 
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
@@ -27,11 +39,26 @@ const Login = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof LoginFormSchema>) => {
-    console.log(data);
+    try {
+      const res = await login(data);
+      dispatch(loginAction({ token: res.token, ...res.user }));
+      Toast.show({
+        type: "success",
+        text1: res.message,
+      });
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.log(error);
+
+      // Toast.show({
+      //   type: "error",
+      //   text1:
+      // })
+    }
   };
 
   return (
-    <View className="flex-1 px-5 bg-white">
+    <SafeAreaView className="flex-1 px-5 bg-white">
       <Image
         source={require("../../assets/images/leadlly_logo_full.png")}
         alt="Leadlly"
@@ -124,8 +151,15 @@ const Login = () => {
 
           <Pressable
             onPress={form.handleSubmit(onSubmit)}
-            className="w-full h-12 bg-primary rounded-lg items-center justify-center mb-4">
-            <Text className="text-lg font-mada-semibold text-white">Login</Text>
+            disabled={isPending}
+            className="w-full h-12 bg-primary rounded-lg items-center justify-center mb-4 disabled:bg-primary/30">
+            {isPending ? (
+              <ActivityIndicator size={"small"} color={"#fff"} />
+            ) : (
+              <Text className="text-lg font-mada-semibold text-white">
+                Login
+              </Text>
+            )}
           </Pressable>
           <View className="mb-2 flex-row justify-between">
             <Text className="text-center text-base text-[#7F7F7F]">
@@ -142,7 +176,7 @@ const Login = () => {
           </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -153,7 +187,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 4.65,
     elevation: 6,
   },

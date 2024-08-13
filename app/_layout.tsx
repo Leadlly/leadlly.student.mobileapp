@@ -1,8 +1,11 @@
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
+import { Provider } from "react-redux";
+import { store } from "../services/redux/store";
+import AppWrapper from "../components/AppWrapper";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Toast from "react-native-toast-message";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,16 +27,16 @@ const RootLayout = () => {
     if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded, error]);
 
+  const queryClient = new QueryClient();
+
   if (!fontsLoaded && !error) return null;
   return (
-    <>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <AppWrapper />
+        <Toast />
+      </QueryClientProvider>
+    </Provider>
   );
 };
 

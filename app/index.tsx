@@ -7,7 +7,7 @@ const WelcomeScreen = () => {
       <Text className="text-3xl font-mada-Bold">WelcomeScreen</Text>
       <TouchableOpacity
         className="w-full h-14 bg-primary rounded-full items-center justify-center mt-4"
-        onPress={() => router.push("/dashboard")}>
+        onPress={() => router.push("/login")}>
         <Text className="text-lg font-mada-semibold text-white">
           Get Started
         </Text>
