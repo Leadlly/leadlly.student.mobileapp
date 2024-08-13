@@ -86,7 +86,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
     // TabBar icons
     const icons = {
       dashboard: (props: SvgProps) => <DashboardIcon {...props} />,
-      planner: (props: SvgProps) => <PlannerIcon {...props} />,
+      "(planner)": (props: SvgProps) => <PlannerIcon {...props} />,
       tracker: (props: SvgProps) => <TrackerIcon {...props} />,
       chat: (props: SvgProps) => <ChatIcon {...props} />,
       quizzes: (props: SvgProps) => <QuizzesIcon {...props} />,
@@ -131,7 +131,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   };
 
   return (
-    <View className="absolute bottom-0 bg-white h-16">
+    <View className="absolute bottom-0 bg-white h-16 border-t border-[#d8d5d5] w-full">
       <FlatList
         ref={flatListRef}
         data={state.routes}

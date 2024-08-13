@@ -17,6 +17,7 @@ module.exports = {
         primary: "#9654F4",
         "input-border": "#D9D8D8",
         "tab-item-gray": "#828282",
+        "secondary-text": "#6E6E6E",
       },
     },
   },
