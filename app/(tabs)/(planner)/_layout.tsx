@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/material-top-tabs";
 import { ParamListBase, TabNavigationState } from "@react-navigation/native";
 import { withLayoutContext } from "expo-router";
+import { colors } from "../../../constants/constants";
 
 const { Navigator } = createMaterialTopTabNavigator();
 
@@ -19,7 +20,7 @@ const PlannerLayout = () => {
   return (
     <MaterialTobTabs
       screenOptions={{
-        tabBarActiveTintColor: "#9654f4",
+        tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: "#000000",
         tabBarLabelStyle: {
           fontSize: 20,
@@ -27,12 +28,12 @@ const PlannerLayout = () => {
           textTransform: "capitalize",
         },
         tabBarIndicatorStyle: {
-          backgroundColor: "#9654f4",
+          backgroundColor: colors.primary,
           height: 3,
           borderRadius: 999,
         },
         tabBarStyle: {
-          borderBottomColor: "#D8D5D5",
+          borderBottomColor: colors.inputBorder,
           borderBottomWidth: 1,
         },
       }}>

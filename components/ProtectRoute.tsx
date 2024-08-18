@@ -2,6 +2,7 @@ import { View, ActivityIndicator } from "react-native";
 import React, { useEffect } from "react";
 import { usePathname, useRouter } from "expo-router";
 import { useAppSelector } from "../services/redux/hooks";
+import { colors } from "../constants/constants";
 
 const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -18,16 +19,16 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!loading && !user && !isPublicPath) {
-      router.push("/");
+      router.replace("/");
     } else if (!loading && user && isPublicPath) {
-      router.push("/dashboard");
+      router.replace("/dashboard");
     }
   }, [loading, user, router]);
 
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size={"large"} color={"#9654f4"} />
+        <ActivityIndicator size={"large"} color={colors.primary} />
       </View>
     );
   }

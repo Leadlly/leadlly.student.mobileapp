@@ -6,6 +6,7 @@ import { store } from "../services/redux/store";
 import AppWrapper from "../components/AppWrapper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import { PaperProvider } from "react-native-paper";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -33,8 +34,10 @@ const RootLayout = () => {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <AppWrapper />
-        <Toast />
+        <PaperProvider>
+          <AppWrapper />
+          <Toast />
+        </PaperProvider>
       </QueryClientProvider>
     </Provider>
   );

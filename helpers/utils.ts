@@ -1,3 +1,7 @@
+import { Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get("window");
+
 const daysOfWeek = [
   "Sunday",
   "Monday",
@@ -62,3 +66,7 @@ export function capitalizeFirstLetter(
 
   return sentence.charAt(0).toUpperCase() + sentence.slice(1);
 }
+
+export const widthPercentage = (percentage: number) => {
+  return (percentage * width) / 100;
+};

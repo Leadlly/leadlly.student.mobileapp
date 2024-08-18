@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useAppDispatch } from "../../../services/redux/hooks";
 import { TDayProps } from "../../../types/types";
 import { setTodaysPlan } from "../../../services/redux/slices/plannerSlice";
+import { colors } from "../../../constants/constants";
 
 const Planner = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>();
@@ -17,7 +18,8 @@ const Planner = () => {
   const plannerData = data?.data;
 
   const renderItem = ({ item }: { item: TDayProps }) => {
-    const borderColor = item._id === selectedPlan ? "#9654f4" : "#d9d8d8";
+    const borderColor =
+      item._id === selectedPlan ? colors.primary : colors.inputBorder;
 
     return (
       <WeeklyPlanButton
@@ -34,7 +36,7 @@ const Planner = () => {
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size={"large"} color={"#9654f4"} />
+        <ActivityIndicator size={"large"} color={colors.primary} />
       </View>
     );
   }
@@ -50,24 +52,37 @@ const Planner = () => {
   }
 
   return (
-    <View className="flex-1 bg-white p-3 mb-[64px]">
+    <View className="flex-1 bg-white p-3 mb-16">
       <View className="flex-1 border border-input-border rounded-2xl py-5">
         <View className="px-5 mb-2">
           <Text className="text-2xl font-mada-semibold leading-tight">
             Weekly Plan
           </Text>
           <Text className="text-base leading-tight font-mada-semibold text-secondary-text">
-            {getMonthDate(new Date(plannerData?.startDate!))} -{" "}
-            {getMonthDate(new Date(plannerData?.endDate!))}
+            {plannerData && plannerData.startDate && plannerData.endDate ? (
+              <>
+                {getMonthDate(new Date(plannerData?.startDate!))} -
+                {getMonthDate(new Date(plannerData?.endDate!))}
+              </>
+            ) : null}
           </Text>
         </View>
 
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={plannerData?.days}
+          data={
+            plannerData && plannerData?.days.length > 0 ? plannerData.days : []
+          }
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
           extraData={selectedPlan}
+          ListEmptyComponent={
+            <View className="w-full my-10">
+              <Text className="text-center font-mada-semibold text-lg leading-tight text-tab-item-gray">
+                No Planner Yet!
+              </Text>
+            </View>
+          }
           className="h-full px-5"
         />
       </View>
