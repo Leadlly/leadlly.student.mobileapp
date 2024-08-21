@@ -19,6 +19,7 @@ import GrowthMeterIcon from "./icons/GrowthMeterIcon";
 import WorkshopsIcon from "./icons/WorkshopsIcon";
 import LibraryIcon from "./icons/LibraryIcon";
 import StudyRoomIcon from "./icons/StudyRoomIcon";
+import { colors } from "../constants/constants";
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const [visibleItems, setVisibleItems] = useState<ViewToken[]>([]);
@@ -109,8 +110,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         className="flex-1 justify-center items-center gap-y-2 w-[72px]">
         {icons[item.name as keyof typeof icons]({
           ...(item.name === "growth-meter"
-            ? { fill: isFocused ? "#9654f4" : "#828282" }
-            : { stroke: isFocused ? "#9654f4" : "#828282" }),
+            ? { fill: isFocused ? colors.primary : colors.tabItemGray }
+            : { stroke: isFocused ? colors.primary : colors.tabItemGray }),
         })}
         <Text
           className={`font-mada-medium text-xs leading-tight ${

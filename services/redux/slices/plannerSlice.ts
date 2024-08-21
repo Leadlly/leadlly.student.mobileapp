@@ -19,9 +19,13 @@ const plannerSlice = createSlice({
       state.plan = action.payload;
       state.loading = false;
     },
+    removeTodaysPlan: (state) => {
+      state.plan = null;
+      state.loading = false;
+    },
   },
 });
 
-export const { setTodaysPlan } = plannerSlice.actions;
+export const { setTodaysPlan, removeTodaysPlan } = plannerSlice.actions;
 
 export default plannerSlice.reducer;
