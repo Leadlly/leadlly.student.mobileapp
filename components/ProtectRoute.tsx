@@ -33,8 +33,6 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!user) return null;
-
   return children;
 };
 

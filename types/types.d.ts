@@ -168,3 +168,12 @@ export type TTrackerProps = {
   chapter: Chapter;
   topics: Topic[];
 };
+
+export type TLevelPointProps = {
+  cardBgColor: string;
+  pointsColor: string;
+  points: number;
+  pointsText: string;
+  progressValue?: number;
+  progressIndicatorBg?: string;
+};

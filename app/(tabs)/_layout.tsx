@@ -1,8 +1,7 @@
-import React from "react";
 import { Tabs } from "expo-router";
 import { tabBarItems } from "../../constants/constants";
 import TabBar from "../../components/TabBar";
-import { Text, TouchableOpacity } from "react-native";
+import UpgradeAndUserProfileButton from "../../components/dashboardComponents/UpgradeAndUserProfileButton";
 
 const TabsLayout = () => {
   return (
@@ -19,11 +18,7 @@ const TabsLayout = () => {
               fontFamily: "Mada-SemiBold",
             },
             ...(item.name === "dashboard" && {
-              headerRight: (props) => (
-                <TouchableOpacity>
-                  <Text>Upgrade</Text>
-                </TouchableOpacity>
-              ),
+              headerRight: () => <UpgradeAndUserProfileButton />,
             }),
           }}
         />

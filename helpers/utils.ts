@@ -70,3 +70,27 @@ export function capitalizeFirstLetter(
 export const widthPercentage = (percentage: number) => {
   return (percentage * width) / 100;
 };
+
+export const formatTime = (seconds: number) => {
+  const days = Math.floor(seconds / (24 * 60 * 60))
+    .toString()
+    .padStart(2, "0");
+  const hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60))
+    .toString()
+    .padStart(2, "0");
+  const minutes = Math.floor((seconds % (60 * 60)) / 60)
+    .toString()
+    .padStart(2, "0");
+  const secs = (seconds % 60).toString().padStart(2, "0");
+
+  return `${days}d : ${hours}h : ${minutes}m : ${secs}s`;
+};
+
+export function isMoodButtonDisabled(lastMoodDate: String) {
+  if (!lastMoodDate) return false;
+
+  const today = new Date();
+  const formattedToday = today.toISOString().split("T")[0];
+
+  return lastMoodDate === formattedToday;
+}

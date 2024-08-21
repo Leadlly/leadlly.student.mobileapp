@@ -41,6 +41,7 @@ const userSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.loading = false;
+      AsyncStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

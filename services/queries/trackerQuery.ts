@@ -18,7 +18,7 @@ export const useGetUserTracker = (subject: string) => {
         return responseData;
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          throw new Error(`Error while fetching tracker data: ${error}`);
+          throw new Error(`${error.response?.data.message}`);
         } else {
           throw new Error("An unknown error while fetching tracker data");
         }

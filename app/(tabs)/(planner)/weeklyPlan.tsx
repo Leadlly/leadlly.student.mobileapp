@@ -43,8 +43,8 @@ const Planner = () => {
 
   if (isError) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-gray-300 font-mada-semibold text-base text-center">
+      <View className="flex-1 justify-center items-center bg-white px-4">
+        <Text className="text-gray-400 font-mada-semibold text-base text-center">
           {error.message}
         </Text>
       </View>

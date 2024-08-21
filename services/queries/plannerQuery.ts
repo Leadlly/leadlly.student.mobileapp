@@ -13,7 +13,7 @@ export const useGetUserPlanner = () => {
         return responseData;
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          throw new Error(`Error while fetching planner data: ${error}`);
+          throw new Error(`${error.response?.data.message}`);
         } else {
           throw new Error("An unknown error while fetching planner data");
         }

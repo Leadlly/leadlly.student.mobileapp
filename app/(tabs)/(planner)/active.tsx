@@ -73,8 +73,8 @@ const ActivePlannerPage = () => {
     <View className="flex-1 bg-white p-3">
       <View className="border border-[#d8d5d5] rounded-2xl max-h-[300px] h-full overflow-hidden mb-4">
         {isError ? (
-          <View className="w-full h-full items-center justify-center">
-            <Text className="text-sm text-gray-300 font-mada-semibold text-center">
+          <View className="w-full h-full items-center justify-center px-4">
+            <Text className="text-sm text-gray-400 font-mada-semibold text-center">
               {error.message}
             </Text>
           </View>
