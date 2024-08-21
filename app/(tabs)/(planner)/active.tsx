@@ -16,7 +16,10 @@ import {
   getTodaysFormattedDate,
 } from "../../../helpers/utils";
 import PlannerSubjectList from "../../../components/plannerComponents/PlannerSubjectList";
-import { plannerSubjectProgressString } from "../../../constants/constants";
+import {
+  colors,
+  plannerSubjectProgressString,
+} from "../../../constants/constants";
 import { Link } from "expo-router";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -70,8 +73,8 @@ const ActivePlannerPage = () => {
     <View className="flex-1 bg-white p-3">
       <View className="border border-[#d8d5d5] rounded-2xl max-h-[300px] h-full overflow-hidden mb-4">
         {isError ? (
-          <View className="w-full h-full items-center justify-center">
-            <Text className="text-sm text-gray-300 font-mada-semibold text-center">
+          <View className="w-full h-full items-center justify-center px-4">
+            <Text className="text-sm text-gray-400 font-mada-semibold text-center">
               {error.message}
             </Text>
           </View>
@@ -79,7 +82,7 @@ const ActivePlannerPage = () => {
 
         {isLoading || isFetching || loading ? (
           <View className="w-full h-full items-center justify-center">
-            <ActivityIndicator size={"small"} color={"#9654f4"} />
+            <ActivityIndicator size={"small"} color={colors.primary} />
           </View>
         ) : (
           <>

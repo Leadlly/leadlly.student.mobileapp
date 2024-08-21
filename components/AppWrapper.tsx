@@ -17,6 +17,18 @@ const AppWrapper = () => {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(subscription)/subscription-plans"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(profile)/profile"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(manage-account)/manage-account"
+          options={{ headerShown: false }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ProtectRoute>

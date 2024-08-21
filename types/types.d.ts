@@ -96,13 +96,40 @@ export type UserDataProps = {
   createdAt?: Date;
 };
 
+export type Topic = {
+  name: string;
+  plannerFrequency?: number;
+  level?: string;
+  overall_efficiency?: number;
+  studiedAt: {
+    date?: Date;
+    efficiency?: number;
+  }[];
+};
+
+export type Chapter = {
+  name: string;
+  plannerFrequency?: number;
+  level?: string;
+  overall_efficiency?: number;
+  overall_progress?: number;
+  total_questions_solved: {
+    number?: number;
+    percentage?: number;
+  };
+  studiedAt: {
+    date?: Date;
+    efficiency?: number;
+  }[];
+};
+
 export type TRevisionProps = {
   _id: string;
   user: string;
   tag: string;
   topic: Topic;
   chapter: Chapter;
-  subject: subject;
+  subject: ISubject;
   standard: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -132,4 +159,21 @@ export type PlannerDataProps = {
 
 export type DataProps = {
   data: PlannerDataProps;
+};
+
+export type TTrackerProps = {
+  _id: string;
+  user: string;
+  subject: string;
+  chapter: Chapter;
+  topics: Topic[];
+};
+
+export type TLevelPointProps = {
+  cardBgColor: string;
+  pointsColor: string;
+  points: number;
+  pointsText: string;
+  progressValue?: number;
+  progressIndicatorBg?: string;
 };
