@@ -177,3 +177,14 @@ export type TLevelPointProps = {
   progressValue?: number;
   progressIndicatorBg?: string;
 };
+export type FormType = UseFormReturn<
+	{
+		phoneNumber: string;
+		schedule: string;
+		gender?: 'Male' | 'Female' | 'Other' | undefined;
+		class?: '11th' | '12th' | undefined;
+		course?: 'Jee' | 'Neet' | undefined;
+	},
+	any,
+	undefined
+>;
