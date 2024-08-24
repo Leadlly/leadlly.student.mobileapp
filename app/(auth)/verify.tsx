@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, Image } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
-import { useNavigation } from '@react-navigation/native';
 import showToast from '../../components/AuthComponents/Verify/Toastconfig';
 import OTPInput from '../../components/AuthComponents/Verify/OtpInput';
 import ResendOtpButton from '../../components/AuthComponents/Verify/ResendButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
+import { useAppDispatch } from '../../services/redux/hooks';
+import { verifyAction } from '../../services/redux/slices/userSlice';
+import { useVerifyUser } from '../../services/queries/userQuery';
+
 const OTPFormSchema = z.object({
 	otp: z
 		.string({ required_error: 'OTP is required!' })
@@ -20,42 +21,37 @@ const OTPFormSchema = z.object({
 });
 
 const Verify: React.FC = () => {
-	const [isVerifying, setIsVerifying] = useState(false);
+	const { mutateAsync: verify, isPending: isVerifying } = useVerifyUser();
 	const {
 		control,
 		handleSubmit,
 		formState: { errors },
-	} = useForm({
+	} = useForm<z.infer<typeof OTPFormSchema>>({
 		resolver: zodResolver(OTPFormSchema),
 	});
-	const navigation = useNavigation();
+	const router = useRouter();
+	const dispatch = useAppDispatch();
+	const onOTPSubmit = async (data: z.infer<typeof OTPFormSchema>) => {
+		const email = await AsyncStorage.getItem('email');
 
-	// const onOTPSubmit = async (data: { otp: string }) => {
-	// 	setIsVerifying(true);
-	// 	const email = await AsyncStorage.getItem('email');
+		try {
+			if (!email) {
+				throw new Error('email not found');
+			}
 
-	// 	try {
-	// 		const response = await axios.post('/api/auth/verify', {
-	// 			otp: data.otp,
-	// 			email,
-	// 		});
+			const res = await verify({ otp: data.otp, email });
 
-	// 		if (response.status === 200) {
-	// 			const responseData = response.data;
-
-	// 			showToast('success', 'Success', 'Account verified successfully');
-
-	// 			await AsyncStorage.removeItem('email');
-	// 			navigation.replace('InitialInfo'); // Navigate to the next screen
-	// 		} else {
-	// 			showToast('error', 'Error', response.data.message);
-	// 		}
-	// 	} catch (error) {
-	// 		showToast('error', 'Verification Failed', 'Account verification failed!');
-	// 	} finally {
-	// 		setIsVerifying(false);
-	// 	}
-	// };
+			dispatch(verifyAction({ token: res.token, ...res.user }));
+			console.log(res, '2');
+			await AsyncStorage.removeItem('email');
+			console.log(res, '1');
+			showToast('success', 'Success', 'Account verified successfully');
+			router.push('/initialInfo');
+		} catch (error) {
+			console.log(error);
+			showToast('error', 'Verification Failed', 'Account verification failed!');
+		}
+	};
 
 	return (
 		<SafeAreaView className='flex-1 p-4 bg-white'>
@@ -73,11 +69,13 @@ const Verify: React.FC = () => {
 					control={control}
 					errors={errors}
 				/>
-				<Text className='text-center  text-gray-700 mb-4'>Please enter the one-time password sent to your email.</Text>
+				<Text className='text-center  text-gray-700 mb-4'>
+					Please enter the one-time password sent to your email.
+				</Text>
 
 				<TouchableOpacity
 					className={`mt-4 bg-blue-500 p-3 rounded-lg ${isVerifying ? 'opacity-50' : ''}`}
-					// onPress={handleSubmit(onOTPSubmit)}
+					onPress={handleSubmit(onOTPSubmit)}
 					disabled={isVerifying}
 				>
 					{isVerifying ? (

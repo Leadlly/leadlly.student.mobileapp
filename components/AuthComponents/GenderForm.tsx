@@ -34,12 +34,12 @@ const GenderForm = ({ next, form }: { next: () => void; form: FormType }) => {
 						<View className='flex justify-around flex-row  flex-wrap py-4'>
 							<Pressable
 								className={`m-2  py-4 px-5 rounded-lg border-2 ${
-									field.value === 'Male'
+									field.value === 'male'
 										? 'border-[#9654F4] bg-gray-50'
 										: 'border-transparent bg-gray-50'
 								}`}
 								onPress={() => {
-									field.onChange('Male');
+									field.onChange('male');
 									next();
 								}}
 							>
@@ -49,7 +49,7 @@ const GenderForm = ({ next, form }: { next: () => void; form: FormType }) => {
 								/>
 								<Text
 									className={`text-center font-semibold  text-lg ${
-										field.value === 'Male' ? 'text-black' : 'text-gray-500'
+										field.value === 'male' ? 'text-black' : 'text-gray-500'
 									}`}
 								>
 									Male
@@ -58,12 +58,12 @@ const GenderForm = ({ next, form }: { next: () => void; form: FormType }) => {
 
 							<Pressable
 								className={`m-2 py-4 px-5 rounded-lg border-2 ${
-									field.value === 'Female'
+									field.value === 'female'
 										? 'border-[#9654F4] bg-gray-50'
 										: 'border-transparent bg-gray-50'
 								}`}
 								onPress={() => {
-									field.onChange('Female');
+									field.onChange('female');
 									next();
 								}}
 							>
@@ -73,7 +73,7 @@ const GenderForm = ({ next, form }: { next: () => void; form: FormType }) => {
 								/>
 								<Text
 									className={`text-center font-semibold  text-lg ${
-										field.value === 'Female' ? 'text-black' : 'text-gray-500'
+										field.value === 'female' ? 'text-black' : 'text-gray-500'
 									}`}
 								>
 									Female
@@ -82,12 +82,12 @@ const GenderForm = ({ next, form }: { next: () => void; form: FormType }) => {
 
 							<Pressable
 								className={`m-2 py-4 px-5 rounded-lg border-2 ${
-									field.value === 'Other'
+									field.value === 'other'
 										? 'border-[#9654F4] bg-gray-50'
 										: 'border-transparent bg-gray-50'
 								}`}
 								onPress={() => {
-									field.onChange('Other');
+									field.onChange('other');
 									next();
 								}}
 							>
@@ -97,7 +97,7 @@ const GenderForm = ({ next, form }: { next: () => void; form: FormType }) => {
 								/>
 								<Text
 									className={`text-center font-semibold  text-lg ${
-										field.value === 'Other' ? 'text-black' : 'text-gray-500'
+										field.value === 'other' ? 'text-black' : 'text-gray-500'
 									}`}
 								>
 									Other

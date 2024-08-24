@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Controller, Control } from 'react-hook-form';
 import OTPTextInput from 'react-native-otp-textinput';
 interface OTPInputProps {
-	control: Control<any>;
+	control: Control<{ otp: string }, any>;
 	errors: any;
 }
 

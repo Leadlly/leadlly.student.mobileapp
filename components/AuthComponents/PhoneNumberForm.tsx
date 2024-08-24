@@ -1,13 +1,22 @@
 import { Image } from 'expo-image';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { FormType } from '../../types/types';
+
 const PhoneNumberForm = ({ next, form }: { next: () => void; form: FormType }) => {
-	const onSubmit = () => {
-		next();
+	const {
+		control,
+		trigger,
+		formState: { errors },
+	} = form;
+
+	const validatePhoneNumber = async () => {
+		const isPhoneNumberValid = await trigger('phoneNumber');
+		if (isPhoneNumberValid) {
+			next(); 
+		}
 	};
+
 	return (
 		<View className='flex items-center gap-5 py-12 px-12'>
 			<Image
@@ -26,13 +35,9 @@ const PhoneNumberForm = ({ next, form }: { next: () => void; form: FormType }) =
 			>
 				<Controller
 					name='phoneNumber'
-					control={form.control}
-					rules={{ required: true }}
+					control={control}
 					render={({ field }) => (
-						<View
-							className='h-12 w-full border border-input-border px-3 rounded-lg flex-row items-center '
-							style={{}}
-						>
+						<View className='h-12 w-full border border-input-border px-3 rounded-lg flex-row items-center'>
 							<Text className='mr-3'>+91</Text>
 							<TextInput
 								inputMode='numeric'
@@ -42,27 +47,27 @@ const PhoneNumberForm = ({ next, form }: { next: () => void; form: FormType }) =
 								value={field.value}
 								cursorColor={'#9654F4'}
 								keyboardType='numeric'
-								className='w-full h-full text-lg font-mada-regular '
+								className='w-full h-full text-lg font-mada-regular'
 							/>
 						</View>
 					)}
 				/>
-				{form.formState.errors.phoneNumber && (
-					<Text className='text-red-600 font-mada-medium'>
-						{form.formState.errors.phoneNumber.message}
-					</Text>
+				{errors.phoneNumber && (
+					<Text className='text-red-600 font-mada-medium'>{errors.phoneNumber.message}</Text>
 				)}
 			</View>
 			<Pressable
-				onPress={onSubmit}
-				className='w-2/4 h-12  bg-primary rounded-lg items-center justify-center mb-4 disabled:bg-primary/30'
+				onPress={validatePhoneNumber} 
+				className='w-2/4 h-12 bg-primary rounded-lg items-center justify-center mb-4 disabled:bg-primary/30'
 			>
 				<Text className='text-lg font-mada-semibold text-white'>Confirm</Text>
 			</Pressable>
 		</View>
 	);
 };
+
 export default PhoneNumberForm;
+
 const styles = StyleSheet.create({
 	input: {
 		shadowColor: 'rgba(0, 0, 0, 0.2)',

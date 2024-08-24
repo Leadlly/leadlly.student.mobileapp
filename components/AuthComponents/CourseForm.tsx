@@ -35,12 +35,12 @@ const CourseForm = ({ next, form }: { next: () => void; form: FormType }) => {
 						<View className='flex justify-between items-center flex-row gap-10 py-4'>
 							<Pressable
 								className={`mx-2  w-[110px]  h-[132px] rounded-lg border-2 ${
-									field.value === 'Jee'
+									field.value === 'JEE'
 										? 'border-[#9654F4] bg-gray-50'
 										: 'border-transparent bg-gray-50'
 								}`}
 								onPress={() => {
-									field.onChange('Jee');
+									field.onChange('JEE');
 									next();
 								}}
 							>
@@ -56,12 +56,12 @@ const CourseForm = ({ next, form }: { next: () => void; form: FormType }) => {
 
 							<Pressable
 								className={`mx-2 w-[110px]  h-[132px] rounded-lg border-2 ${
-									field.value === 'Neet'
+									field.value === 'NEET'
 										? 'border-[#9654F4] bg-gray-50'
 										: 'border-transparent bg-gray-50'
 								}`}
 								onPress={() => {
-									field.onChange('Neet');
+									field.onChange('NEET');
 									next();
 								}}
 							>

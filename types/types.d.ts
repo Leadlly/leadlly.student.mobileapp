@@ -181,10 +181,33 @@ export type FormType = UseFormReturn<
 	{
 		phoneNumber: string;
 		schedule: string;
-		gender?: 'Male' | 'Female' | 'Other' | undefined;
-		class?: '11th' | '12th' | undefined;
-		course?: 'Jee' | 'Neet' | undefined;
+		gender?: 'male' | 'female' | 'other' | undefined;
+		class?: '11' | '12' | undefined;
+		course?: 'JEE' | 'NEET' | undefined;
 	},
 	any,
 	undefined
 >;
+export type StudentPersonalInfoProps = {
+	address?: string;
+	class?: number;
+	coachingAddress?: string;
+	coachingName?: string;
+	coachingType?: string;
+	competitiveExam?: string;
+	country?: string;
+	dateOfBirth?: string;
+	email?: string;
+	firstName?: string;
+	gender?: string;
+	lastName?: string;
+	messageAboutCompetitiveExam?: string;
+	messageAboutStudentSchedule?: string;
+	parentName?: string;
+	parentsPhone?: number;
+	phone?: number;
+	pinCode?: number;
+	schoolOrCollegeAddress?: string;
+	schoolOrCollegeName?: string;
+	studentSchedule?: string;
+};

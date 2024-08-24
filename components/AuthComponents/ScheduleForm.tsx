@@ -5,10 +5,49 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { isValid, z } from 'zod';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 import { Feather } from '@expo/vector-icons';
-import { FormType } from '../../types/types';
+import { FormType, StudentPersonalInfoProps } from '../../types/types';
+import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { FormSchema } from '../../schemas/formSchema';
+import { useAppDispatch, useAppSelector } from '../../services/redux/hooks';
+import { useRouter } from 'expo-router';
+import Toast from 'react-native-toast-message';
+import { setUser } from '../../services/redux/slices/userSlice';
 
-const ScheduleForm = ({ next, form }: { next: () => void; form: FormType }) => {
-	const onSubmit = () => {};
+const ScheduleForm = ({
+	next,
+	form,
+	saveInitialInfo,
+}: {
+	next: () => void;
+	form: FormType;
+	saveInitialInfo: UseMutateAsyncFunction<any, Error, StudentPersonalInfoProps, unknown>;
+}) => {
+	const { handleSubmit } = form;
+	const user = useAppSelector((state) => state.user.user);
+
+	const dispatch = useAppDispatch();
+
+	const router = useRouter();
+	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+		try {
+			const res = await saveInitialInfo({
+				phone: Number(data.phoneNumber),
+				class: Number(data.class),
+				competitiveExam: data.course,
+				studentSchedule: data.schedule,
+				gender: data.gender,
+			});
+			console.log({ ...user, ...res.user });
+			dispatch(setUser({ ...user, ...res.user }));
+			Toast.show({
+				type: 'success',
+				text1: 'Success',
+				text2: res.message,
+			});
+
+			router.replace('/subscription-plans');
+		} catch (error) {}
+	};
 
 	return (
 		<Animated.View
@@ -73,10 +112,10 @@ const ScheduleForm = ({ next, form }: { next: () => void; form: FormType }) => {
 					</Text>
 				)}
 			</View>
-			
+
 			<Pressable
 				className='mt-8 py-2 px-6 bg-[#9654F4] rounded-lg flex flex-row space-x-2 justify-center items-center'
-				onPress={onSubmit}
+				onPress={handleSubmit(onSubmit)}
 			>
 				<Text className='text-white font-semibold'>Next</Text>
 				<Feather

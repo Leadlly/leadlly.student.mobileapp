@@ -17,11 +17,11 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Link, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLoginUser } from '../../services/queries/userQuery';
+import { useLoginUser, useSignUpUser } from '../../services/queries/userQuery';
 import { useAppDispatch } from '../../services/redux/hooks';
-import { loginAction } from '../../services/redux/slices/userSlice';
 import Toast from 'react-native-toast-message';
 import { Fontisto } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUp = () => {
 	const [toggleShowPassword, setToggleShowPassword] = useState(false);
@@ -30,34 +30,34 @@ const SignUp = () => {
 
 	const dispatch = useAppDispatch();
 
-	const { mutateAsync: login, isPending } = useLoginUser();
+	const { mutateAsync: signUp, isPending } = useSignUpUser();
 
 	const form = useForm<z.infer<typeof SignUpFormSchema>>({
 		resolver: zodResolver(SignUpFormSchema),
 		defaultValues: {
-			fullName: '',
+			name: '',
 			email: '',
 		},
 	});
 
-	// const onSubmit = async (data: z.infer<typeof SignUpFormSchema>) => {
-	// 	try {
-	// 		const res = await login(data);
-	// 		dispatch(loginAction({ token: res.token, ...res.user }));
-	// 		Toast.show({
-	// 			type: 'success',
-	// 			text1: res.message,
-	// 		});
-	// 		router.push('/dashboard');
-	// 	} catch (error: any) {
-	// 		console.log(error);
+	const onSubmit = async (data: z.infer<typeof SignUpFormSchema>) => {
+		try {
+			const res = await signUp(data);
+			Toast.show({
+				type: 'success',
+				text1: res.message,
+			});
+				AsyncStorage.setItem('email', data.email);
+			router.push('/verify');
+		} catch (error: any) {
+			console.log(error);
 
-	// 		// Toast.show({
-	// 		//   type: "error",
-	// 		//   text1:
-	// 		// })
-	// 	}
-	// };
+			// Toast.show({
+			//   type: "error",
+			//   text1:
+			// })
+		}
+	};
 
 	return (
 		<SafeAreaView className='flex-1 px-5 bg-white'>
@@ -82,7 +82,7 @@ const SignUp = () => {
 					</View>
 					<View className='mb-4'>
 						<Controller
-							name='fullName'
+							name='name'
 							control={form.control}
 							rules={{ required: true }}
 							render={({ field }) => (
@@ -106,9 +106,9 @@ const SignUp = () => {
 								</View>
 							)}
 						/>
-						{form.formState.errors.email && (
+						{form.formState.errors.name && (
 							<Text className='text-red-600 font-mada-medium'>
-								{form.formState.errors.email.message}
+								{form.formState.errors.name.message}
 							</Text>
 						)}
 					</View>
@@ -195,7 +195,7 @@ const SignUp = () => {
 					</View>
 
 					<Pressable
-						// onPress={form.handleSubmit(onSubmit)}
+						onPress={form.handleSubmit(onSubmit)}
 						disabled={isPending}
 						className='w-full h-12 bg-primary rounded-lg items-center justify-center mb-4 disabled:bg-primary/30'
 					>

@@ -10,7 +10,7 @@ export const LoginFormSchema = z.object({
 });
 
 export const SignUpFormSchema = z.object({
-  fullName:z
+  name:z
 		.string({ required_error: 'Full  name is required' }),
 	email: z
 		.string({ required_error: 'Email is required' })

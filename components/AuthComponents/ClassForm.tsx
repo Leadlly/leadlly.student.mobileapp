@@ -37,12 +37,12 @@ const ClassForm = ({ next, form }: { next: () => void; form: FormType }) => {
 						<View className='flex justify-between items-center flex-row gap-10 py-4'>
 							<Pressable
 								className={`mx-2  py-4 px-4 rounded-lg border-2 ${
-									field.value === '11th'
+									field.value === '11'
 										? 'border-[#9654F4] bg-gray-50'
 										: 'border-transparent bg-gray-50'
 								}`}
 								onPress={() => {
-									field.onChange('11th');
+									field.onChange('11');
 									next();
 								}}
 							>
@@ -52,7 +52,7 @@ const ClassForm = ({ next, form }: { next: () => void; form: FormType }) => {
 								/>
 								<Text
 									className={`text-center font-semibold text-lg ${
-										field.value === '11th' ? 'text-black' : 'text-gray-500'
+										field.value === '11' ? 'text-black' : 'text-gray-500'
 									}`}
 								>
 									11th Class
@@ -61,12 +61,12 @@ const ClassForm = ({ next, form }: { next: () => void; form: FormType }) => {
 
 							<Pressable
 								className={`mx-2 py-4 px-4 rounded-lg border-2 ${
-									field.value === '12th'
+									field.value === '12'
 										? 'border-[#9654F4] bg-gray-50'
 										: 'border-transparent bg-gray-50'
 								}`}
 								onPress={() => {
-									field.onChange('12th');
+									field.onChange('12');
 									next();
 								}}
 							>
@@ -76,7 +76,7 @@ const ClassForm = ({ next, form }: { next: () => void; form: FormType }) => {
 								/>
 								<Text
 									className={`text-center font-semibold  text-lg ${
-										field.value === '12th' ? 'text-black' : 'text-gray-500'
+										field.value === '12' ? 'text-black' : 'text-gray-500'
 									}`}
 								>
 									12th Class

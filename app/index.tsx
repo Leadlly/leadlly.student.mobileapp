@@ -11,8 +11,6 @@ const WelcomeScreen = () => {
 			>
 				<Text className='text-lg font-mada-semibold text-white'>Get Started</Text>
 			</TouchableOpacity>
-			{/* <Link href={'/initialInfo'}> initialInfo</Link>
-			<Link href={'/verify'}> initialInfo</Link> */}
 		</View>
 	);
 };

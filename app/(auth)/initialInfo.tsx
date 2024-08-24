@@ -11,9 +11,17 @@ import { useForm } from 'react-hook-form';
 import { FormSchema } from '../../schemas/formSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
+import { useRouter } from 'expo-router';
+import { useAppDispatch } from '../../services/redux/hooks';
+import { useStudentPersonalInfo } from '../../services/queries/userQuery';
 
 const initialInfo = () => {
+	const dispatch = useAppDispatch();
+
+	const router = useRouter();
+
+	const { mutateAsync: saveInitialInfo, isPending: isSavingInitialInfo } = useStudentPersonalInfo();
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -27,10 +35,11 @@ const initialInfo = () => {
 
 	const [currentStepIndex, setCurrentStepIndex] = useState(0);
 	function back() {
-		setCurrentStepIndex((i) => {
-			if (i <= 0) return i;
-			return i - 1;
-		});
+		!isSavingInitialInfo &&
+			setCurrentStepIndex((i) => {
+				if (i <= 0) return i;
+				return i - 1;
+			});
 	}
 	function next() {
 		setTimeout(() => {
@@ -57,6 +66,7 @@ const initialInfo = () => {
 		<ScheduleForm
 			next={next}
 			form={form}
+			saveInitialInfo={saveInitialInfo}
 		/>,
 	];
 	return (

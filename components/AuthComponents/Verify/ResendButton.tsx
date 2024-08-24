@@ -14,7 +14,7 @@ const ResendOtpButton: React.FC = () => {
 		const email = await AsyncStorage.getItem('email');
 
 		try {
-			const response = await axios.post('/api/auth/resend-otp', { email });
+			const response = await axios.post('/api/auth/resend', { email });
 			const data = response.data;
 
 			if (data.success) {
@@ -32,6 +32,7 @@ const ResendOtpButton: React.FC = () => {
 			}
 			setTimeLeft(30);
 		} catch (error) {
+			console.log(error);
 			Toast.show({
 				type: 'error',
 				text1: 'Error',

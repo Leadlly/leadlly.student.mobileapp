@@ -11,7 +11,7 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
 	const { user, loading } = useAppSelector((state) => state.user);
 
 	const isPublicPath =
-		pathname.startsWith('/') ||
+		pathname == '/' ||
 		pathname.startsWith('/login') ||
 		pathname.startsWith('/sign-up') ||
 		pathname.startsWith('/verify') ||
