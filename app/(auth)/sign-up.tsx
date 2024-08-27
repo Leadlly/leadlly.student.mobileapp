@@ -48,7 +48,7 @@ const SignUp = () => {
 				text1: res.message,
 			});
 				AsyncStorage.setItem('email', data.email);
-			router.push('/verify');
+			router.replace('/verify');
 		} catch (error: any) {
 			console.log(error);
 
