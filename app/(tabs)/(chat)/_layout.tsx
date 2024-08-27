@@ -24,7 +24,7 @@ const PlannerLayout = () => {
 				tabBarInactiveTintColor: '#000000',
 				tabBarLabelStyle: {
 					fontSize: 15,
-					paddingVertical:5,
+					paddingVertical:2,
 					fontFamily: 'Mada-SemiBold',
 					textTransform: 'capitalize',
 				},

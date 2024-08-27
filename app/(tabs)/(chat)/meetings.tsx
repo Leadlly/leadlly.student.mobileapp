@@ -217,10 +217,10 @@ const MeetingsComponent: React.FC = () => {
 			renderTabBar={(props) => (
 				<TabBar
 					{...props}
-					indicatorStyle={{ backgroundColor: 'white' }}
+					indicatorStyle={{ backgroundColor: '#9654F4' }}
 					labelStyle={{ color: 'black', fontWeight: 'bold' }}
-					style={{ backgroundColor: '#CFB0FA' }}
-          activeColor='white'
+					style={{ backgroundColor: '#E9EBF8' }}
+					activeColor='#9654F4'
 				/>
 			)}
 		/>
