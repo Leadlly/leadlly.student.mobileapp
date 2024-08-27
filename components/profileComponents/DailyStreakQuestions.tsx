@@ -20,8 +20,12 @@ const DailyStreakQuestions = () => {
         </TouchableOpacity>
       </View>
 
-      <View>
-        <Image source={require("../../assets/images/dsq_image.png")} />
+      <View className="w-32 h-28">
+        <Image
+          source={require("../../assets/images/dsq_image.png")}
+          className="w-full h-full"
+          resizeMode="contain"
+        />
       </View>
     </View>
   );

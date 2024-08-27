@@ -57,6 +57,13 @@ export function getFormattedDate(date: Date): string {
   return `${dayOfMonth} ${month} ${year}`;
 }
 
+export function formatDate(dateString: Date): string {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "short" });
+  return `${day} ${month}`;
+}
+
 export function capitalizeFirstLetter(
   sentence: string | undefined
 ): string | undefined {

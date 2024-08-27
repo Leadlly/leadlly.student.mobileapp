@@ -19,7 +19,7 @@ const LogoutButton = () => {
       const res = await logout();
       dispatch(logoutAction());
       dispatch(removeTodaysPlan());
-      router.replace("/");
+      router.replace("/login");
       Toast.show({
         type: "success",
         text1: res.message,
