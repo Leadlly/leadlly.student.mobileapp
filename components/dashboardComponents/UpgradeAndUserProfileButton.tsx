@@ -7,7 +7,6 @@ import clsx from "clsx";
 
 const UpgradeAndUserProfileButton = () => {
   const user = useAppSelector((state) => state.user.user);
-
   return (
     <View className="mr-4 flex-row items-center gap-4">
       <Link href="/subscription-plans" asChild>
