@@ -18,6 +18,7 @@ module.exports = {
         "input-border": "#D9D8D8",
         "tab-item-gray": "#828282",
         "secondary-text": "#6E6E6E",
+        "checkbox-gray": "#787878",
         "leadlly-red": "#ff2e2e",
         "leadlly-yellow": "#ff9900",
         "leadlly-green": "#0fd679",

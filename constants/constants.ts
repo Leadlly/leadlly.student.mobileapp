@@ -86,3 +86,18 @@ export const moodEmojis = [
     mood: "laughing",
   },
 ];
+
+export const progressAnalyticsMenus = [
+  {
+    id: "weekly",
+    title: "Weekly",
+  },
+  {
+    id: "monthly",
+    title: "Monthly",
+  },
+  {
+    id: "overall",
+    title: "Overall",
+  },
+];
