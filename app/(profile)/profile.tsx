@@ -11,7 +11,7 @@ const Profile = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       <View className="my-3 flex-row items-center px-4">
         <Pressable className="mr-5" onPress={() => router.back()}>
           <AntDesign name="arrowleft" size={24} color="black" />

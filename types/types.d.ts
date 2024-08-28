@@ -177,6 +177,52 @@ export type TLevelPointProps = {
   progressValue?: number;
   progressIndicatorBg?: string;
 };
+
+export type subjectChaptersProps = {
+  _id: string;
+  exam: string[];
+  name: string;
+  standard: number;
+  subjectName: string;
+  topics: {
+    _id: string;
+    name: string;
+    icon?: React.ComponentType<{ className?: string | undefined }>;
+  }[];
+};
+
+export type chapterTopicsProps = {
+  _id: string;
+  chapterName: string;
+  createdAt: string;
+  exam: string[];
+  name: string;
+  standard: number;
+  subjectName: string;
+  subtopics: any[];
+  updatedAt: string;
+};
+
+export type TStudentReportProps = {
+  startDate: string;
+  endDate: string;
+  days: Array<{
+    day: string;
+    date: string;
+    session: number;
+    quiz: number;
+    overall: number;
+  }>;
+};
+
+export type TStudentOverallReportProps = {
+  day: string;
+  date: string;
+  session: number;
+  quiz: number;
+  overall: number;
+};
+
 export type FormType = UseFormReturn<
 	{
 		phoneNumber: string;
