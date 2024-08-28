@@ -10,43 +10,45 @@ import {
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { LoginFormSchema } from '../../schemas/loginSchema';
+import { SignUpFormSchema } from '../../schemas/loginSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Link, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLoginUser } from '../../services/queries/userQuery';
+import { useLoginUser, useSignUpUser } from '../../services/queries/userQuery';
 import { useAppDispatch } from '../../services/redux/hooks';
-import { loginAction } from '../../services/redux/slices/userSlice';
 import Toast from 'react-native-toast-message';
 import { Fontisto } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Login = () => {
+const SignUp = () => {
 	const [toggleShowPassword, setToggleShowPassword] = useState(false);
 
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
 
-	const { mutateAsync: login, isPending } = useLoginUser();
+	const { mutateAsync: signUp, isPending } = useSignUpUser();
 
-	const form = useForm<z.infer<typeof LoginFormSchema>>({
-		resolver: zodResolver(LoginFormSchema),
+	const form = useForm<z.infer<typeof SignUpFormSchema>>({
+		resolver: zodResolver(SignUpFormSchema),
 		defaultValues: {
+			name: '',
 			email: '',
 		},
 	});
 
-	const onSubmit = async (data: z.infer<typeof LoginFormSchema>) => {
+	const onSubmit = async (data: z.infer<typeof SignUpFormSchema>) => {
 		try {
-			const res = await login(data);
-			dispatch(loginAction({ token: res.token, ...res.user }));
+			const res = await signUp(data);
 			Toast.show({
 				type: 'success',
 				text1: res.message,
 			});
-			router.push('/dashboard');
+				AsyncStorage.setItem('email', data.email);
+			router.push('/verify');
 		} catch (error: any) {
 			console.log(error);
 
@@ -71,12 +73,45 @@ const Login = () => {
 					style={styles.boxShadow}
 				>
 					<View className='mb-10'>
-						<Text className='text-5xl font-mada-Bold leading-tight text-center'>Welcome</Text>
+						<Text className='text-4xl font-mada-Bold leading-tight text-center'>
+							Create an account
+						</Text>
 						<Text className='text-lg leading-tight font-mada-regular text-center'>
-							We are glad to see you with us
+							Unlock your potential with expert guidance sign up for mentorship today!
 						</Text>
 					</View>
-
+					<View className='mb-4'>
+						<Controller
+							name='name'
+							control={form.control}
+							rules={{ required: true }}
+							render={({ field }) => (
+								<View className='h-12 w-full border border-input-border px-3 rounded-lg flex-row items-center'>
+									<View className='mr-3'>
+										<AntDesign
+											name='user'
+											size={18}
+											color='#7F7F7F'
+										/>
+									</View>
+									<TextInput
+										inputMode='text'
+										placeholder='Enter full name'
+										onBlur={field.onBlur}
+										onChangeText={field.onChange}
+										value={field.value}
+										cursorColor={'#9654F4'}
+										className='w-full h-full text-lg font-mada-regular'
+									/>
+								</View>
+							)}
+						/>
+						{form.formState.errors.name && (
+							<Text className='text-red-600 font-mada-medium'>
+								{form.formState.errors.name.message}
+							</Text>
+						)}
+					</View>
 					<View className='mb-4'>
 						<Controller
 							name='email'
@@ -165,31 +200,25 @@ const Login = () => {
 						className='w-full h-12 bg-primary rounded-lg items-center justify-center mb-4 disabled:bg-primary/30'
 					>
 						{isPending ? (
-						
 							<ActivityIndicator
 								size={'small'}
 								color={'#fff'}
 							/>
 						) : (
-							<Text className='text-lg font-mada-semibold text-white'>Login</Text>
+							<Text className='text-lg font-mada-semibold text-white'>Sign Up</Text>
 						)}
 					</Pressable>
-					<View className='mb-2 flex-row justify-between'>
+					<View className='mb-2 flex-row justify-center'>
 						<Text className='text-center text-base text-[#7F7F7F]'>
-							No account yet?{' '}
+							Already have an account ?{' '}
 							<Link
-								href={'/sign-up'}
+								href={'/login'}
 								className='text-primary font-mada-medium'
 							>
-								Sign Up
+								login
 							</Link>
 						</Text>
-						<Link
-							href={'/forgot-password'}
-							className='text-primary text-base text-center font-mada-medium'
-						>
-							Forgot Password
-						</Link>
+						
 					</View>
 				</View>
 			</View>
@@ -210,4 +239,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Login;
+export default SignUp;
