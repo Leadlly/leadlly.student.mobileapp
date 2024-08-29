@@ -18,7 +18,6 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
 		pathname.startsWith('/forgot-password');
 
 	useEffect(() => {
-		console.log(pathname); // only runs once should run every time route changes
 		if (!loading && !user && !isPublicPath) {
 			router.replace('/');
 		} else if (!loading && user && isPublicPath) {

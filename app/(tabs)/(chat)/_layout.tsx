@@ -18,42 +18,34 @@ export const MaterialTobTabs = withLayoutContext<
 
 const PlannerLayout = () => {
 	return (
-		<MaterialTobTabs
-			screenOptions={{
-				tabBarActiveTintColor: colors.primary,
-				tabBarInactiveTintColor: '#000000',
-				tabBarLabelStyle: {
-					fontSize: 15,
-					paddingVertical:2,
-					fontFamily: 'Mada-SemiBold',
-					textTransform: 'capitalize',
-				},
-				tabBarIndicatorStyle: {
-					backgroundColor: colors.primary,
-					height: 3,
-					borderRadius: 999,
-				},
-				tabBarStyle: {
-					borderBottomColor: colors.inputBorder,
-					borderBottomWidth: 1,
-					marginTop: 30,
-				},
-			}}
-		>
-			<MaterialTobTabs.Screen
-				name='chats'
-				options={{ title: 'Chats' }}
-			/>
-			<MaterialTobTabs.Screen
-				name='meetings'
-				options={{ title: 'Meetings' }}
-			/>
-			<MaterialTobTabs.Screen
-				name='requestMeeting'
-				options={{ title: 'Request Meeting' }}
-			/>
-		</MaterialTobTabs>
-	);
+    <MaterialTobTabs
+      screenOptions={{
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: "#000000",
+        tabBarLabelStyle: {
+          fontSize: 15,
+          paddingVertical: 2,
+          fontFamily: "Mada-SemiBold",
+          textTransform: "capitalize",
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: colors.primary,
+          height: 3,
+          borderRadius: 999,
+        },
+        tabBarStyle: {
+          borderBottomColor: colors.inputBorder,
+          borderBottomWidth: 1,
+        },
+      }}
+    >
+      <MaterialTobTabs.Screen name="meetings" options={{ title: "Meetings" }} />
+      <MaterialTobTabs.Screen
+        name="requestMeeting"
+        options={{ title: "Request Meeting" }}
+      />
+    </MaterialTobTabs>
+  );
 };
 
 export default PlannerLayout;

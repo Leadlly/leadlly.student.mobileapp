@@ -11,7 +11,6 @@ const TabsLayout = () => {
 					key={item.name}
 					name={item.name}
 					options={{
-						headerShown: item.name !== '(chat)',
 						title: item.title,
 						headerShadowVisible: false,
 						headerTitleStyle: {

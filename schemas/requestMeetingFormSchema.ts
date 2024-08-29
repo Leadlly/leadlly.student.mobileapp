@@ -7,5 +7,5 @@ export const RequestMeetingFormSchema = z.object({
 	time: z.string({ required_error: 'A time is required to request meeting!' }),
 	meeting_agenda: z.string({
 		required_error: 'Please enter your meeting agenda',
-	}),
+	}).min(20),
 });
