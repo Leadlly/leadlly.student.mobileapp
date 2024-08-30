@@ -10,8 +10,8 @@ import ResendOtpButton from '../../components/AuthComponents/Verify/ResendButton
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAppDispatch } from '../../services/redux/hooks';
-import { verifyAction } from '../../services/redux/slices/userSlice';
 import { useVerifyUser } from '../../services/queries/userQuery';
+import { loginAction } from '../../services/redux/slices/userSlice';
 
 const OTPFormSchema = z.object({
 	otp: z
@@ -41,12 +41,10 @@ const Verify: React.FC = () => {
 
 			const res = await verify({ otp: data.otp, email });
 
-			dispatch(verifyAction({ token: res.token, ...res.user }));
-			console.log(res, '2');
+			dispatch(loginAction({ token: res.token, ...res.user }));
 			await AsyncStorage.removeItem('email');
-			console.log(res, '1');
 			showToast('success', 'Success', 'Account verified successfully');
-			router.push('/initialInfo');
+			router.replace('/initialInfo');
 		} catch (error) {
 			console.log(error);
 			showToast('error', 'Verification Failed', 'Account verification failed!');

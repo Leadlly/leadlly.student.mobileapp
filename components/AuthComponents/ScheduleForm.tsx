@@ -37,7 +37,6 @@ const ScheduleForm = ({
 				studentSchedule: data.schedule,
 				gender: data.gender,
 			});
-			console.log({ ...user, ...res.user });
 			dispatch(setUser({ ...user, ...res.user }));
 			Toast.show({
 				type: 'success',
@@ -46,7 +45,11 @@ const ScheduleForm = ({
 			});
 
 			router.replace('/subscription-plans');
-		} catch (error) {}
+		} catch (error) {	Toast.show({
+			type: 'failed ',
+			text1: 'failed',
+			text2: 'Initial info not submitted',
+		});}
 	};
 
 	return (

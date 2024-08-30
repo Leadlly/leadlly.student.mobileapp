@@ -11,7 +11,7 @@ const SubjectProgress = () => {
     (state) => state.user.user?.academic.subjects
   );
 
-  const [activeSubject, setActiveSubject] = useState(userSubjects?.[0].name);
+  const [activeSubject, setActiveSubject] = useState(userSubjects?.[0]?.name);
 
   const subject = userSubjects?.filter(
     (subject) => subject.name === activeSubject

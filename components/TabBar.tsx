@@ -89,7 +89,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
       dashboard: (props: SvgProps) => <DashboardIcon {...props} />,
       "(planner)": (props: SvgProps) => <PlannerIcon {...props} />,
       tracker: (props: SvgProps) => <TrackerIcon {...props} />,
-      chat: (props: SvgProps) => <ChatIcon {...props} />,
+      "(chat)": (props: SvgProps) => <ChatIcon {...props} />,
       quizzes: (props: SvgProps) => <QuizzesIcon {...props} />,
       errorbook: (props: SvgProps) => <ErrorBookIcon {...props} />,
       "growth-meter": (props: SvgProps) => <GrowthMeterIcon {...props} />,

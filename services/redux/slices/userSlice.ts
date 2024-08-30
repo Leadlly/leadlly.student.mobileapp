@@ -29,11 +29,7 @@ const userSlice = createSlice({
 	initialState,
 	reducers: {
 	
-		verifyAction: (state, action: PayloadAction<UserDataProps>) => {
-			state.user = action.payload;
-			state.loading = false;
-			AsyncStorage.setItem('userInfo', JSON.stringify(action.payload));
-		},
+		
 		loginAction: (state, action: PayloadAction<UserDataProps>) => {
 			state.user = action.payload;
 			state.loading = false;
@@ -55,7 +51,7 @@ const userSlice = createSlice({
 	},
 });
 
-export const { loginAction, logoutAction, setLoading, setUser, verifyAction } =
+export const { loginAction, logoutAction, setLoading, setUser} =
 	userSlice.actions;
 
 export default userSlice.reducer;

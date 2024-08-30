@@ -17,11 +17,12 @@ const FreeTrialTimer = () => {
     const checkTrialStatus = () => {
       const trialStartDate = new Date(freeTrialActivationDate!);
       const trialEndDate = new Date(
-        trialStartDate.getTime() + 30 * 24 * 60 * 60 * 1000
+        trialStartDate.getTime() + 60 * 24 * 60 * 60 * 1000
       );
       const now = new Date();
 
       if (now >= trialEndDate) {
+        console.log(trialEndDate, now >= trialEndDate);
         router.replace("/subscription-plans");
       } else {
         const remainingTime = Math.max(
