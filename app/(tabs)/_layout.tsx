@@ -17,6 +17,7 @@ const TabsLayout = () => {
               fontSize: 25,
               fontFamily: "Mada-SemiBold",
             },
+            headerTitleAlign: "left",
             ...(item.name === "dashboard" && {
               headerRight: () => <UpgradeAndUserProfileButton />,
             }),

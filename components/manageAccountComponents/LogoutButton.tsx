@@ -19,7 +19,7 @@ const LogoutButton = () => {
       const res = await logout();
       dispatch(logoutAction());
       dispatch(removeTodaysPlan());
-      router.replace("/login");
+      router.replace("/welcome");
       Toast.show({
         type: "success",
         text1: res.message,
@@ -37,7 +37,8 @@ const LogoutButton = () => {
       <TouchableOpacity
         onPress={() => handleLogout()}
         disabled={isPending}
-        className="w-24 h-10 rounded-full bg-primary/10 border border-input-border items-center justify-center">
+        className="w-24 h-10 rounded-full bg-primary/10 border border-input-border items-center justify-center"
+      >
         {isPending ? (
           <ActivityIndicator size={"small"} color={colors.primary} />
         ) : (

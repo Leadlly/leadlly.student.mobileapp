@@ -3,13 +3,13 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LogoutButton from "../../components/manageAccountComponents/LogoutButton";
 
-const ManageAccount = () => {
+const PersonalInfo = () => {
   return (
-    <SafeAreaView>
-      <Text>ManageAccount</Text>
+    <View>
+      <Text>PersonalInfo</Text>
       <LogoutButton />
-    </SafeAreaView>
+    </View>
   );
 };
 
-export default ManageAccount;
+export default PersonalInfo;

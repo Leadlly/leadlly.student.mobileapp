@@ -10,12 +10,12 @@ const OverallReportChart = ({
   overallProgress: TStudentOverallReportProps[] | null;
 }) => {
   const sessionData =
-    overallProgress && overallProgress.length
+    overallProgress && overallProgress.length > 0
       ? overallProgress.map((data) => ({ value: Math.round(data.session) }))
       : [{ value: 0 }];
 
   const quizData =
-    overallProgress && overallProgress.length
+    overallProgress && overallProgress.length > 0
       ? overallProgress.map((data) => ({ value: Math.round(data.quiz) }))
       : [{ value: 0 }];
 

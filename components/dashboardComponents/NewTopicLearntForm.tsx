@@ -8,12 +8,10 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import { ISubject } from "../../types/types";
 import clsx from "clsx";
-import DropDownPicker from "react-native-dropdown-picker";
 import {
   useGetChapterTopics,
   useGetSubjectChapters,
 } from "../../services/queries/questionQuery";
-import { colors } from "../../constants/constants";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import MultiSelect from "../shared/MultiSelect";
 import Select from "../shared/Select";
@@ -130,12 +128,14 @@ const NewTopicLearntForm = ({
             className={clsx(
               "border border-input-border rounded-lg w-20 h-9 items-center justify-center",
               activeSubject === subject.name && "bg-primary/10 border-primary"
-            )}>
+            )}
+          >
             <Text
               className={clsx(
                 "capitalize text-sm font-mada-medium leading-tight text-tab-item-gray",
                 activeSubject === subject.name && "text-primary"
-              )}>
+              )}
+            >
               {subject.name}
             </Text>
           </Pressable>
@@ -178,7 +178,8 @@ const NewTopicLearntForm = ({
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
             className="border border-tab-item-gray items-center justify-center w-20 h-10 rounded-lg"
-            onPress={() => setActiveSubject(null)}>
+            onPress={() => setActiveSubject(null)}
+          >
             <Text className="text-sm font-mada-semibold leading-tight">
               Back
             </Text>
@@ -189,7 +190,8 @@ const NewTopicLearntForm = ({
               isPending || (updatingPlanner && "opacity-70")
             )}
             disabled={isPending || updatingPlanner}
-            onPress={() => onSubmit()}>
+            onPress={() => onSubmit()}
+          >
             {isPending || updatingPlanner ? (
               <ActivityIndicator size={"small"} color={"white"} />
             ) : (

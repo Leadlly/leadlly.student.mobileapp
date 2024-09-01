@@ -1,14 +1,14 @@
-import { MaterialTobTabs } from "../../../components/shared/MaterialTobTabsConfig";
-import { colors } from "../../../constants/constants";
+import { MaterialTobTabs } from "../../components/shared/MaterialTobTabsConfig";
+import { colors } from "../../constants/constants";
 
-const PlannerLayout = () => {
+const ManageAccountLayout = () => {
   return (
     <MaterialTobTabs
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: "#000000",
         tabBarLabelStyle: {
-          fontSize: 20,
+          fontSize: 16,
           fontFamily: "Mada-SemiBold",
           textTransform: "capitalize",
         },
@@ -23,13 +23,16 @@ const PlannerLayout = () => {
         },
       }}
     >
-      <MaterialTobTabs.Screen name="active" options={{ title: "Active" }} />
       <MaterialTobTabs.Screen
-        name="weeklyPlan"
-        options={{ title: "Weekly Plan" }}
+        name="personalInfo"
+        options={{ title: "Personal Info" }}
+      />
+      <MaterialTobTabs.Screen
+        name="studyProgress"
+        options={{ title: "Study Progress" }}
       />
     </MaterialTobTabs>
   );
 };
 
-export default PlannerLayout;
+export default ManageAccountLayout;
