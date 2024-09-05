@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import axiosClient from "../axios/axios";
 
@@ -34,6 +34,51 @@ export const useSaveStudyData = () => {
       queryClient.invalidateQueries({
         queryKey: ["unrevised_topics"],
       });
+    },
+  });
+};
+
+export const useDeleteUnrevisedTopics = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { chapterName: string }) => {
+      try {
+        const res = await axiosClient.delete("/api/user/topics/delete", {
+          data,
+        });
+
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error("An unknown error while deleting unrevised topics!!");
+        }
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["unrevised_topics"],
+      });
+    },
+  });
+};
+
+export const useGetUnrevisedTopics = () => {
+  return useQuery({
+    queryKey: ["unrevised_topics"],
+    queryFn: async () => {
+      try {
+        const res = await axiosClient.get("/api/user/topics/get");
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error("An unknown error while fetching unrevised topics!!");
+        }
+      }
     },
   });
 };

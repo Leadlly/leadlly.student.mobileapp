@@ -23,6 +23,7 @@ import {
 import { Link } from "expo-router";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
+import InitialTodoBox from "../../../components/dashboardComponents/InitialTodoBox";
 
 const ActivePlannerPage = () => {
   const { data, isError, isLoading, isFetching, isSuccess, error } =
@@ -31,9 +32,9 @@ const ActivePlannerPage = () => {
   const dispatch = useAppDispatch();
 
   const { loading, plan } = useAppSelector((state) => state.todaysPlan);
-  const userSubjects = useAppSelector(
-    (state) => state.user.user?.academic.subjects
-  );
+  const user = useAppSelector((state) => state.user.user);
+
+  const userSubjects = user?.academic.subjects;
 
   function getBackRevisionTopicsForSubject(subject: string) {
     const topics = plan?.backRevisionTopics
@@ -69,6 +70,14 @@ const ActivePlannerPage = () => {
     }
   }, [dispatch, isSuccess, data]);
 
+  if (user && user.planner === false) {
+    return (
+      <View className="p-3 bg-white flex-1">
+        <InitialTodoBox />
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 bg-white p-3">
       <View className="border border-[#d8d5d5] rounded-2xl max-h-[300px] h-full overflow-hidden mb-4">
@@ -91,8 +100,8 @@ const ActivePlannerPage = () => {
                 {!plan?.day && plan?.day !== getTodaysDay()
                   ? "Today"
                   : plan?.day && plan.day === getTodaysDay()
-                  ? "Today"
-                  : plan.day}
+                    ? "Today"
+                    : plan.day}
                 &apos;s Plan
               </Text>
               <Text className="text-sm leading-tight font-mada-semibold text-[#888]">
@@ -127,7 +136,7 @@ const ActivePlannerPage = () => {
         )}
       </View>
 
-      <View className="border border-[#d8d5d5] rounded-2xl py-5 px-4">
+      {/* <View className="border border-[#d8d5d5] rounded-2xl py-5 px-4">
         <Text className="text-xl leading-tight font-mada-semibold text-primary mb-2">
           Study Progress
         </Text>
@@ -160,7 +169,7 @@ const ActivePlannerPage = () => {
             </TouchableOpacity>
           </Link>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };

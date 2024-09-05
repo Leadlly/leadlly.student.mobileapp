@@ -12,8 +12,9 @@ const ProfileBox = () => {
       <View
         className={clsx(
           "w-20 h-20 rounded-full items-center justify-center mb-2",
-          user?.avatar && user.avatar.url ? "" : "bg-slate-100"
-        )}>
+          user?.avatar && user.avatar.url ? "" : "bg-primary/20"
+        )}
+      >
         {user?.avatar && user.avatar.url ? (
           <Image
             src={user.avatar.url}
@@ -22,7 +23,7 @@ const ProfileBox = () => {
             className="w-full h-full rounded-full"
           />
         ) : (
-          <Text className="text-xl font-mada-semibold leading-tight">
+          <Text className="text-xl text-primary font-mada-semibold leading-tight">
             {capitalizeFirstLetter(user?.firstname.charAt(0))}
             {user?.lastname
               ? capitalizeFirstLetter(user.lastname.charAt(0))
@@ -34,7 +35,8 @@ const ProfileBox = () => {
       <Text
         className="capitalize text-[22px] font-mada-semibold leading-tight mb-2"
         numberOfLines={1}
-        ellipsizeMode="tail">
+        ellipsizeMode="tail"
+      >
         <Text className="text-primary font-mada-Bold">Hello,</Text>{" "}
         {user?.firstname} {user?.lastname ? user.lastname : null}
       </Text>
@@ -44,7 +46,7 @@ const ProfileBox = () => {
         propelling you towards success with unwavering determination.
       </Text>
 
-      <Link href="/manage-account" asChild>
+      <Link href="/personalInfo" asChild>
         <TouchableOpacity className="w-32 h-10 bg-white rounded-lg border border-input-border items-center justify-center -mt-2">
           <Text className="text-sm font-mada-semibold leading-tight text-primary">
             Manage Account

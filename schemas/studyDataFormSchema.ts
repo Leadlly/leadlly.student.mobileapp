@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const NewTopicLearntSchema = z.object({
+export const StudyDataFormSchema = z.object({
   chapterName: z.string({ required_error: "Please select a chapter!" }),
   topicNames: z
     .string({ required_error: "Please select at least one topic" })

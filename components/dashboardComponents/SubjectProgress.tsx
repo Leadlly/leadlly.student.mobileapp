@@ -14,7 +14,7 @@ const SubjectProgress = () => {
   const [activeSubject, setActiveSubject] = useState(userSubjects?.[0]?.name);
 
   const subject = userSubjects?.filter(
-    (subject) => subject.name === activeSubject
+    (subject) => subject?.name === activeSubject
   )[0];
 
   return (
@@ -27,18 +27,20 @@ const SubjectProgress = () => {
         <View className="flex-row items-center border border-input-border rounded-md p-0.5">
           {userSubjects?.map((subject) => (
             <Pressable
-              key={subject.name}
+              key={subject?.name}
               className="relative w-16 h-6 items-center justify-center"
-              onPress={() => setActiveSubject(subject.name)}>
-              {activeSubject === subject.name && (
+              onPress={() => setActiveSubject(subject?.name)}
+            >
+              {activeSubject === subject?.name && (
                 <Animated.View className="bg-primary w-16 h-6 absolute inset-0 rounded" />
               )}
               <Text
                 className={clsx(
                   "capitalize text-xs font-mada-semibold leading-tight",
-                  activeSubject === subject.name && "text-white"
-                )}>
-                {subject.name}
+                  activeSubject === subject?.name && "text-white"
+                )}
+              >
+                {subject?.name}
               </Text>
             </Pressable>
           ))}

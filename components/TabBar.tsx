@@ -6,6 +6,7 @@ import {
   FlatList,
   ListRenderItemInfo,
   ViewToken,
+  StyleSheet,
 } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import DashboardIcon from "./icons/DashboardIcon";
@@ -20,8 +21,11 @@ import WorkshopsIcon from "./icons/WorkshopsIcon";
 import LibraryIcon from "./icons/LibraryIcon";
 import StudyRoomIcon from "./icons/StudyRoomIcon";
 import { colors } from "../constants/constants";
+import { useAppSelector } from "../services/redux/hooks";
+import { BlurView } from "expo-blur";
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
+  const user = useAppSelector((state) => state.user.user);
   const [visibleItems, setVisibleItems] = useState<ViewToken[]>([]);
 
   const flatListRef = useRef<FlatList<any>>(null);
@@ -35,8 +39,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
       options.tabBarLabel !== undefined
         ? options.tabBarLabel
         : options.title !== undefined
-        ? options.title
-        : item.name;
+          ? options.title
+          : item.name;
 
     if (["_sitemap", "+not-found"].includes(item.name)) return null;
 
@@ -107,7 +111,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         testID={options.tabBarTestID}
         onPress={onPress}
         onLongPress={onLongPress}
-        className="flex-1 justify-center items-center gap-y-2 w-[72px]">
+        className="flex-1 justify-center items-center gap-y-2 w-[72px]"
+      >
         {icons[item.name as keyof typeof icons]({
           ...(item.name === "growth-meter"
             ? { fill: isFocused ? colors.primary : colors.tabItemGray }
@@ -116,7 +121,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         <Text
           className={`font-mada-medium text-xs leading-tight ${
             isFocused ? "text-primary" : "text-tab-item-gray"
-          }`}>
+          }`}
+        >
           {label?.toString()}
         </Text>
       </TouchableOpacity>
@@ -148,5 +154,12 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  blurOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 9999,
+  },
+});
 
 export default TabBar;

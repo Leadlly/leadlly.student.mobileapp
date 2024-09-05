@@ -41,12 +41,6 @@ const ToDoList = () => {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size={"small"} color={colors.primary} />
         </View>
-      ) : isError ? (
-        <View className="flex-1 items-center justify-center px-5">
-          <Text className="text-center text-sm text-tab-item-gray font-mada-semibold leading-tight">
-            {error.message}
-          </Text>
-        </View>
       ) : (
         <>
           {todaysTopics &&
@@ -64,7 +58,8 @@ const ToDoList = () => {
               <ScrollView
                 nestedScrollEnabled={true}
                 showsVerticalScrollIndicator={false}
-                className="flex-1 space-y-4">
+                className="flex-1 space-y-4"
+              >
                 {todaysTopics.backRevisionTopics.map((item) => (
                   <ToDoListItem
                     key={item._id}

@@ -1,3 +1,5 @@
+import { TextInputProps } from "react-native";
+
 export interface ISubject {
 	name: string;
 	overall_efficiency: number;
@@ -224,39 +226,54 @@ export type TStudentOverallReportProps = {
 };
 
 export type FormType = UseFormReturn<
-	{
-		phoneNumber: string;
-		schedule: string;
-		gender?: 'male' | 'female' | 'other' | undefined;
-		class?: '11' | '12' | undefined;
-		course?: 'JEE' | 'NEET' | undefined;
-	},
-	any,
-	undefined
+  {
+    phoneNumber: string;
+    schedule: string;
+    gender?: "male" | "female" | "other" | undefined;
+    class?: "11" | "12" | undefined;
+    course?: "JEE" | "NEET" | undefined;
+  },
+  any,
+  undefined
 >;
 export type StudentPersonalInfoProps = {
-	address?: string;
-	class?: number;
-	coachingAddress?: string;
-	coachingName?: string;
-	coachingType?: string;
-	competitiveExam?: string;
-	country?: string;
-	dateOfBirth?: string;
-	email?: string;
-	firstName?: string;
-	gender?: string;
-	lastName?: string;
-	messageAboutCompetitiveExam?: string;
-	messageAboutStudentSchedule?: string;
-	parentName?: string;
-	parentsPhone?: number;
-	phone?: number;
-	pinCode?: number;
-	schoolOrCollegeAddress?: string;
-	schoolOrCollegeName?: string;
-	studentSchedule?: string;
+  address?: string;
+  class?: number | null;
+  coachingAddress?: string;
+  coachingName?: string;
+  coachingType?: string;
+  competitiveExam?: string;
+  country?: string;
+  dateOfBirth?: string;
+  email?: string;
+  firstName?: string;
+  gender?: string;
+  lastName?: string;
+  messageAboutCompetitiveExam?: string;
+  messageAboutStudentSchedule?: string;
+  parentName?: string;
+  parentsPhone?: number | null;
+  phone?: number | null;
+  pinCode?: number | null;
+  schoolOrCollegeAddress?: string;
+  schoolOrCollegeName?: string;
+  studentSchedule?: string;
 };
+
+export interface InputFieldProps extends TextInputProps {
+  label?: string;
+  icon?: any;
+  icon2?: any;
+  secureTextEntry?: boolean;
+  labelStyle?: string;
+  containerStyle?: string;
+  inputStyle?: string;
+  iconStyle?: string;
+  icon2Style?: string;
+  className?: string;
+  handlePress?: () => void;
+}
+
 export type TMeetingsProps = {
 	rescheduled: {
 		isRescheduled: boolean;
