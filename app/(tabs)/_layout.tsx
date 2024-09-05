@@ -1,7 +1,7 @@
-import { Tabs } from "expo-router";
-import { tabBarItems } from "../../constants/constants";
-import TabBar from "../../components/TabBar";
-import UpgradeAndUserProfileButton from "../../components/dashboardComponents/UpgradeAndUserProfileButton";
+import { Tabs } from 'expo-router';
+import { tabBarItems } from '../../constants/constants';
+import TabBar from '../../components/TabBar';
+import UpgradeAndUserProfileButton from '../../components/dashboardComponents/UpgradeAndUserProfileButton';
 
 const TabsLayout = () => {
   return (

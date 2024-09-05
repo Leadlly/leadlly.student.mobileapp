@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,scss,html}'"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
@@ -39,6 +40,7 @@
     "react": "18.2.0",
     "react-hook-form": "^7.52.2",
     "react-native": "0.74.5",
+    "react-native-calendars": "^1.1306.0",
     "react-native-chart-kit": "^6.12.0",
     "react-native-circular-progress": "^1.4.0",
     "react-native-color-matrix-image-filters": "^7.0.1",
@@ -46,6 +48,7 @@
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-gifted-charts": "^1.4.30",
     "react-native-otp-textinput": "^1.1.6",
+    "react-native-pager-view": "6.3.0",
     "react-native-paper": "^5.12.5",
     "react-native-progress": "^5.0.1",
     "react-native-reanimated": "~3.10.1",

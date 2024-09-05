@@ -26,7 +26,7 @@ export const tabBarItems = [
     title: "Tracker",
   },
   {
-    name: "chat",
+    name: "(chat)",
     title: "Chat",
   },
   {

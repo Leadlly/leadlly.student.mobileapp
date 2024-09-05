@@ -51,7 +51,6 @@ const SignUp = () => {
       router.push("/verify");
     } catch (error: any) {
       console.log(error);
-
       Toast.show({
         type: "error",
         text1: error.message,

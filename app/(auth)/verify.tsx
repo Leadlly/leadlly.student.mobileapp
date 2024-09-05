@@ -1,23 +1,17 @@
-import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  Image,
-} from "react-native";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import showToast from "../../components/AuthComponents/Verify/Toastconfig";
-import OTPInput from "../../components/AuthComponents/Verify/OtpInput";
-import ResendOtpButton from "../../components/AuthComponents/Verify/ResendButton";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
-import { useAppDispatch } from "../../services/redux/hooks";
-import { verifyAction } from "../../services/redux/slices/userSlice";
-import { useVerifyUser } from "../../services/queries/userQuery";
+import React from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import showToast from '../../components/AuthComponents/Verify/Toastconfig';
+import OTPInput from '../../components/AuthComponents/Verify/OtpInput';
+import ResendOtpButton from '../../components/AuthComponents/Verify/ResendButton';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
+import { useAppDispatch } from '../../services/redux/hooks';
+import { useVerifyUser } from '../../services/queries/userQuery';
+import { loginAction } from '../../services/redux/slices/userSlice';
 
 const OTPFormSchema = z.object({
   otp: z
@@ -46,18 +40,17 @@ const Verify: React.FC = () => {
       if (!email) {
         throw new Error("email not found");
       }
-
-      const res = await verify({ otp: data.otp, email });
-
-      dispatch(verifyAction({ token: res.token, ...res.user }));
-      await AsyncStorage.removeItem("email");
-      showToast("success", "Success", "Account verified successfully");
-      router.replace("/initialInfo");
-    } catch (error) {
-      console.log(error);
-      showToast("error", "Verification Failed", "Account verification failed!");
-    }
-  };
+        
+        const res = await verify({ otp: data.otp, email });
+			dispatch(loginAction({ token: res.token, ...res.user }));
+			await AsyncStorage.removeItem('email');
+			showToast('success', 'Success', 'Account verified successfully');
+			router.replace('/initialInfo');
+		} catch (error) {
+			console.log(error);
+			showToast('error', 'Verification Failed', 'Account verification failed!');
+		}
+	};
 
   return (
     <SafeAreaView className="flex-1 p-4 bg-white">
