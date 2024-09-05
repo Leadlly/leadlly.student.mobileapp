@@ -12,7 +12,7 @@ const ProfileBox = () => {
       <View
         className={clsx(
           "w-20 h-20 rounded-full items-center justify-center mb-2",
-          user?.avatar && user.avatar.url ? "" : "bg-slate-100"
+          user?.avatar && user.avatar.url ? "" : "bg-primary/20"
         )}
       >
         {user?.avatar && user.avatar.url ? (
@@ -23,7 +23,7 @@ const ProfileBox = () => {
             className="w-full h-full rounded-full"
           />
         ) : (
-          <Text className="text-xl font-mada-semibold leading-tight">
+          <Text className="text-xl text-primary font-mada-semibold leading-tight">
             {capitalizeFirstLetter(user?.firstname.charAt(0))}
             {user?.lastname
               ? capitalizeFirstLetter(user.lastname.charAt(0))

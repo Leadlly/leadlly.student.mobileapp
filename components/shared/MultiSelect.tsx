@@ -1,6 +1,5 @@
-import DropDownPicker from "react-native-dropdown-picker";
 import { colors } from "../../constants/constants";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -11,8 +10,8 @@ import {
 import clsx from "clsx";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { capitalizeFirstLetter } from "../../helpers/utils";
+import ModalComponent from "./ModalComponent";
 
 const MultiSelect = ({
   items,
@@ -40,6 +39,10 @@ const MultiSelect = ({
   const [showDropdown, setShowDropdown] = useState(false);
 
   const [selectedValues, setSelectedValues] = useState<string[]>(defaultValue);
+
+  useEffect(() => {
+    setSelectedValues(defaultValue);
+  }, [defaultValue]);
 
   const handleClear = () => {
     setSelectedValues([]);
@@ -73,7 +76,7 @@ const MultiSelect = ({
   };
 
   return (
-    <View className="relative w-full mb-4">
+    <View className="relative z-50 w-full mb-4">
       {label ? (
         <Text
           className={clsx(
@@ -165,97 +168,97 @@ const MultiSelect = ({
         )}
       </Pressable>
 
-      {showDropdown && (
-        <Animated.View
-          entering={FadeIn.duration(200)}
-          exiting={FadeOut.duration(200)}
-          className="absolute top-full inset-x-0 z-[9999] bg-white rounded-lg border border-input-border py-1"
-          style={{ maxHeight: 250 }}
+      <ModalComponent
+        modalVisible={showDropdown}
+        setModalVisible={setShowDropdown}
+      >
+        <View className="items-center justify-center py-3">
+          <Text className="text-xl font-mada-semibold leading-none">
+            Select {label}
+          </Text>
+        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled={true}
+          className="h-80 bg-white rounded-lg rounded-b-none border border-input-border py-1"
         >
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            nestedScrollEnabled={true}
-          >
-            {loading || fetching ? (
-              <View>
-                <ActivityIndicator size={"small"} color={colors.primary} />
-              </View>
-            ) : items && items.length > 0 ? (
-              <>
+          {loading || fetching ? (
+            <View>
+              <ActivityIndicator size={"small"} color={colors.primary} />
+            </View>
+          ) : items && items.length > 0 ? (
+            <>
+              <Pressable
+                onPress={() => handleSelectAll()}
+                className="flex-row items-center px-4 py-3 border-b border-input-border"
+              >
+                <View
+                  className={clsx(
+                    "w-4 h-4 rounded border items-center justify-center",
+                    selectedValues.length === items.length &&
+                      "bg-primary border-primary"
+                  )}
+                >
+                  {selectedValues.length === items.length && (
+                    <Feather name="check" size={14} color="white" />
+                  )}
+                </View>
+                <Text className="ml-3 text-base font-mada-medium leading-tight">
+                  Select All
+                </Text>
+              </Pressable>
+              {items.map((item) => (
                 <Pressable
-                  onPress={() => handleSelectAll()}
-                  className="h-10 flex-row items-center px-4 border-b border-input-border"
+                  key={item.value}
+                  className="flex-row items-center px-4 py-3 border-b border-input-border"
+                  onPress={() => handleSelectValue(item.value)}
                 >
                   <View
                     className={clsx(
                       "w-4 h-4 rounded border items-center justify-center",
-                      selectedValues.length === items.length &&
+                      selectedValues.includes(item.value) &&
                         "bg-primary border-primary"
                     )}
                   >
-                    {selectedValues.length === items.length && (
+                    {selectedValues.includes(item.value) && (
                       <Feather name="check" size={14} color="white" />
                     )}
                   </View>
-                  <Text className="ml-3 text-base font-mada-medium leading-tight">
-                    Select All
+
+                  <Text className="ml-3 text-base font-mada-regular leading-tight">
+                    {capitalizeFirstLetter(item.label)}
                   </Text>
                 </Pressable>
-                {items.map((item) => (
-                  <Pressable
-                    key={item.value}
-                    className="h-10 flex-row items-center px-4 border-b border-input-border"
-                    onPress={() => handleSelectValue(item.value)}
-                  >
-                    <View
-                      className={clsx(
-                        "w-4 h-4 rounded border items-center justify-center",
-                        selectedValues.includes(item.value) &&
-                          "bg-primary border-primary"
-                      )}
-                    >
-                      {selectedValues.includes(item.value) && (
-                        <Feather name="check" size={14} color="white" />
-                      )}
-                    </View>
+              ))}
+            </>
+          ) : (
+            <View className="h-20 items-center justify-center">
+              <Text className="text-sm leading-tight font-mada-medium text-tab-item-gray">
+                No items to show!
+              </Text>
+            </View>
+          )}
+        </ScrollView>
 
-                    <Text className="ml-3 text-base font-mada-regular leading-tight">
-                      {capitalizeFirstLetter(item.label)}
-                    </Text>
-                  </Pressable>
-                ))}
-              </>
-            ) : (
-              <View className="h-10 items-center justify-center">
-                <Text className="text-sm leading-tight font-mada-medium text-tab-item-gray">
-                  No items to show!
-                </Text>
-              </View>
-            )}
-          </ScrollView>
-
-          <View className="fixed bottom-0 inset-x-0 h-10 flex-row items-center justify-between bg-white">
-            {selectedValues.length > 0 && (
-              <Pressable
-                className="items-center justify-center flex-1 border-r border-input-border"
-                onPress={() => handleClear()}
-              >
-                <Text className="text-sm font-mada-medium leading-none">
-                  Clear
-                </Text>
-              </Pressable>
-            )}
+        <View className="fixed bottom-0 inset-x-0 h-10 border border-t-0 border-input-border rounded-b-lg flex-row items-center justify-between bg-white">
+          {selectedValues.length > 0 && (
             <Pressable
-              className="items-center justify-center flex-1"
-              onPress={() => setShowDropdown(false)}
+              className="items-center justify-center flex-1 border-r border-input-border"
+              onPress={() => handleClear()}
             >
               <Text className="text-sm font-mada-medium leading-none">
-                Close
+                Clear
               </Text>
             </Pressable>
-          </View>
-        </Animated.View>
-      )}
+          )}
+          <Pressable
+            className="items-center justify-center flex-1"
+            onPress={() => setShowDropdown(false)}
+          >
+            <Text className="text-sm font-mada-medium leading-none">Close</Text>
+          </Pressable>
+        </View>
+      </ModalComponent>
     </View>
   );
 };

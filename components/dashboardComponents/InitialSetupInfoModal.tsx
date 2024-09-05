@@ -26,7 +26,8 @@ const InitialSetupInfoModal = ({
       }}
     >
       <BlurView
-        intensity={15}
+        intensity={100}
+        tint="systemUltraThinMaterialLight"
         className="flex-1 items-center justify-center p-5"
       >
         <View

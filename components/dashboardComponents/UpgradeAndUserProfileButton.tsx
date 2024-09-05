@@ -18,12 +18,13 @@ const UpgradeAndUserProfileButton = () => {
         </TouchableOpacity>
       </Link>
 
-      <Link href="/profile" asChild>
+      <Link href="/personalInfo" asChild>
         <TouchableOpacity
           className={clsx(
             "w-10 h-10 rounded-full items-center justify-center",
-            user?.avatar && user.avatar.url ? "" : "bg-slate-100"
-          )}>
+            user?.avatar && user.avatar.url ? "" : "bg-primary/10"
+          )}
+        >
           {user?.avatar && user.avatar.url ? (
             <Image
               src={user.avatar.url}
@@ -32,7 +33,7 @@ const UpgradeAndUserProfileButton = () => {
               className="w-full h-full rounded-full"
             />
           ) : (
-            <Text className="text-base leading-tight font-mada-semibold">
+            <Text className="text-base text-primary leading-tight font-mada-semibold">
               {capitalizeFirstLetter(user?.firstname.charAt(0))}
               {user?.lastname
                 ? capitalizeFirstLetter(user.lastname.charAt(0))

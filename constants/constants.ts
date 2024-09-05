@@ -4,6 +4,7 @@ export const colors = Object.freeze({
   inputBorder: "#D9D8D8",
   tabItemGray: "#828282",
   secondaryText: "#6E6E6E",
+  iconGray: "#7F7F7F",
   leadllyGreen: "#ff2e2e",
   leadllyYellow: "#ff9900",
   leadllyRed: "#0fd679",

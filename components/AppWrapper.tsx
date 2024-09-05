@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import ProtectRoute from "./ProtectRoute";
 import { TouchableOpacity, View } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import LogoutButton from "./manageAccountComponents/LogoutButton";
 
 const AppWrapper = () => {
   const dispatch = useAppDispatch();
@@ -20,9 +21,6 @@ const AppWrapper = () => {
       <Stack screenOptions={{ headerShadowVisible: false }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-
-        <Stack.Screen name="(initial-info)" options={{ headerShown: false }} />
-
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="(subscription)/subscription-plans"
@@ -60,6 +58,11 @@ const AppWrapper = () => {
                 <TouchableOpacity onPress={() => router.back()}>
                   <AntDesign name="arrowleft" size={22} color="black" />
                 </TouchableOpacity>
+              </View>
+            ),
+            headerRight: () => (
+              <View>
+                <LogoutButton />
               </View>
             ),
           }}

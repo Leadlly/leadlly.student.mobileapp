@@ -22,6 +22,7 @@ import { useSignUpUser } from "../../services/queries/userQuery";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "../../constants/constants";
+import Input from "../../components/shared/Input";
 
 const SignUp = () => {
   const [toggleShowPassword, setToggleShowPassword] = useState(false);
@@ -35,6 +36,7 @@ const SignUp = () => {
     defaultValues: {
       name: "",
       email: "",
+      password: "",
     },
   });
 
@@ -59,14 +61,6 @@ const SignUp = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="px-5">
-        <Image
-          source={require("../../assets/images/leadlly_logo_full.png")}
-          alt="Leadlly"
-          className="w-36 h-16"
-          resizeMode="contain"
-        />
-      </View>
       <ScrollView
         contentContainerStyle={{
           flex: 1,
@@ -94,23 +88,16 @@ const SignUp = () => {
               control={form.control}
               rules={{ required: true }}
               render={({ field }) => (
-                <View className="h-12 w-full border border-input-border px-3 rounded-lg flex-row items-center">
-                  <View className="mr-3">
-                    <AntDesign name="user" size={18} color="#7F7F7F" />
-                  </View>
-                  <TextInput
-                    inputMode="text"
-                    placeholder="Enter full name"
-                    onBlur={field.onBlur}
-                    onChangeText={field.onChange}
-                    value={field.value}
-                    cursorColor={colors.primary}
-                    selectionHandleColor={colors.primary}
-                    selectionColor={colors.primary200}
-                    autoCapitalize="words"
-                    className="w-full h-full text-lg font-mada-regular"
-                  />
-                </View>
+                <Input
+                  inputMode="text"
+                  placeholder="Enter full name"
+                  onBlur={field.onBlur}
+                  onChangeText={field.onChange}
+                  value={field.value}
+                  autoCapitalize="words"
+                  inputStyle="pr-3 text-lg h-12"
+                  icon={<AntDesign name="user" size={18} color="#7F7F7F" />}
+                />
               )}
             />
             {form.formState.errors.name && (
@@ -125,24 +112,17 @@ const SignUp = () => {
               control={form.control}
               rules={{ required: true }}
               render={({ field }) => (
-                <View className="h-12 w-full border border-input-border px-3 rounded-lg flex-row items-center">
-                  <View className="mr-3">
-                    <Feather name="mail" size={18} color="#7F7F7F" />
-                  </View>
-                  <TextInput
-                    inputMode="email"
-                    placeholder="Enter your email"
-                    onBlur={field.onBlur}
-                    onChangeText={field.onChange}
-                    value={field.value}
-                    cursorColor={colors.primary}
-                    selectionHandleColor={colors.primary}
-                    selectionColor={colors.primary200}
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                    className="w-full h-full text-lg font-mada-regular"
-                  />
-                </View>
+                <Input
+                  inputMode="email"
+                  placeholder="Enter your email"
+                  onBlur={field.onBlur}
+                  onChangeText={field.onChange}
+                  value={field.value}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  inputStyle="pr-3 text-lg h-12"
+                  icon={<Feather name="mail" size={18} color="#7F7F7F" />}
+                />
               )}
             />
             {form.formState.errors.email && (
@@ -158,26 +138,17 @@ const SignUp = () => {
               control={form.control}
               rules={{ required: true }}
               render={({ field }) => (
-                <View className="h-12 w-full border border-input-border px-3 rounded-lg flex-row items-center">
-                  <View className="mr-3">
-                    <Feather name="lock" size={18} color="#7F7F7F" />
-                  </View>
-                  <TextInput
-                    placeholder="Password"
-                    secureTextEntry={toggleShowPassword ? false : true}
-                    onBlur={field.onBlur}
-                    onChangeText={field.onChange}
-                    value={field.value}
-                    cursorColor={colors.primary}
-                    selectionHandleColor={colors.primary}
-                    selectionColor={colors.primary200}
-                    autoCapitalize="none"
-                    className="flex-1 h-full text-lg font-mada-regular"
-                  />
-                  <Pressable
-                    onPress={() => setToggleShowPassword(!toggleShowPassword)}
-                  >
-                    {toggleShowPassword ? (
+                <Input
+                  placeholder="Password"
+                  secureTextEntry={toggleShowPassword ? false : true}
+                  onBlur={field.onBlur}
+                  onChangeText={field.onChange}
+                  value={field.value}
+                  autoCapitalize="none"
+                  inputStyle="text-lg h-12"
+                  icon={<Feather name="lock" size={18} color="#7F7F7F" />}
+                  icon2={
+                    toggleShowPassword ? (
                       <FontAwesome6
                         name="eye-slash"
                         size={16}
@@ -185,9 +156,10 @@ const SignUp = () => {
                       />
                     ) : (
                       <FontAwesome6 name="eye" size={16} color="#7F7F7F" />
-                    )}
-                  </Pressable>
-                </View>
+                    )
+                  }
+                  handlePress={() => setToggleShowPassword(!toggleShowPassword)}
+                />
               )}
             />
             {form.formState.errors.password && (

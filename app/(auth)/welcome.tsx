@@ -7,13 +7,6 @@ import { Feather } from "@expo/vector-icons";
 const Welcome = () => {
   return (
     <SafeAreaView className="flex-1 bg-white px-5">
-      <Image
-        source={require("../../assets/images/leadlly_logo_full.png")}
-        alt="Leadlly"
-        className="w-36 h-16"
-        resizeMode="contain"
-      />
-
       <View className="flex-1 items-center justify-center space-y-5">
         <Image
           source={require("../../assets/images/welcome.png")}
@@ -32,7 +25,7 @@ const Welcome = () => {
         </Text>
 
         <Link href={"/sign-up"} asChild>
-          <TouchableOpacity className="w-40 h-11 bg-primary items-center justify-center flex-row space-x-2 rounded-md">
+          <TouchableOpacity className="w-3/4 h-11 bg-primary items-center justify-center flex-row space-x-2 rounded-full">
             <Text className="text-white text-base leading-tight font-mada-medium">
               Get Started
             </Text>

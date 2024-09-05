@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { useAppSelector } from "../../services/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/redux/hooks";
 import Animated from "react-native-reanimated";
 import clsx from "clsx";
 import {
@@ -28,8 +28,10 @@ import {
   useAllocateBackTopics,
   useCreatePlanner,
 } from "../../services/queries/plannerQuery";
+import { setUser } from "../../services/redux/slices/userSlice";
 
 const StudyProgress = () => {
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
 
   const userSubjects = user?.academic.subjects;
@@ -42,7 +44,6 @@ const StudyProgress = () => {
   });
 
   const selectedChapter = form.watch("chapterName");
-  const selectedTopics = form.watch("topicNames");
 
   const {
     data: chapterData,
@@ -52,10 +53,9 @@ const StudyProgress = () => {
   } = useGetSubjectChapters(activeSubject!, userStandard!);
 
   useEffect(() => {
-    if (activeSubject) {
-      refetchChapter();
-    }
-  }, [activeSubject, refetchChapter]);
+    form.setValue("chapterName", "");
+    refetchChapter();
+  }, [activeSubject, refetchChapter, form.setValue]);
 
   const {
     data: topicsData,
@@ -65,10 +65,9 @@ const StudyProgress = () => {
   } = useGetChapterTopics(activeSubject!, selectedChapter, userStandard!);
 
   useEffect(() => {
-    if (activeSubject && selectedChapter) {
-      refetchTopics();
-    }
-  }, [activeSubject, selectedChapter, refetchTopics]);
+    form.setValue("topicNames", []);
+    refetchTopics();
+  }, [activeSubject, selectedChapter, refetchTopics, form.setValue]);
 
   const { mutateAsync: saveStudyData, isPending: savingStudyData } =
     useSaveStudyData();
@@ -78,12 +77,14 @@ const StudyProgress = () => {
   const { mutateAsync: allocateBackTopics, isPending: allocatingBackTopics } =
     useAllocateBackTopics();
 
-  const onSubmitStudyData = async () => {
+  const onSubmitStudyData = async (
+    data: z.infer<typeof StudyDataFormSchema>
+  ) => {
     const formattedData = {
       tag: "unrevised_topic",
-      topics: selectedTopics.map((topic) => ({ name: topic })),
+      topics: data.topicNames.map((topic) => ({ name: topic })),
       chapter: {
-        name: selectedChapter,
+        name: data.chapterName,
       },
       subject: activeSubject!,
       standard: userStandard!,
@@ -95,6 +96,7 @@ const StudyProgress = () => {
       const studyDataResponse = await saveStudyData(formattedData);
       if (user && user.planner === false) {
         plannerResponse = await createPlanner();
+        dispatch(setUser({ ...user, planner: true }));
       } else if (user && user.planner === true) {
         plannerResponse = await allocateBackTopics();
       }
@@ -108,6 +110,10 @@ const StudyProgress = () => {
           ? plannerResponse.message
           : "Planner updated.",
       });
+      form.reset({
+        chapterName: "",
+        topicNames: [],
+      });
     } catch (error: any) {
       Toast.show({
         type: "error",
@@ -117,15 +123,12 @@ const StudyProgress = () => {
   };
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={true}
-      className="flex-1 bg-white p-3"
-    >
+    <View className="flex-1 bg-white p-3">
       <Text className="text-base font-mada-medium leading-tight px-12 my-3">
         Select the chapters and topics you've finished in your classes.
       </Text>
 
-      <View className="bg-primary/10 rounded-xl py-3 px-4 my-2">
+      <View className="bg-primary/10 rounded-xl py-3 px-4 my-2 relative z-[999999]">
         <View className="flex-row border border-input-border p-1 rounded-lg items-center justify-between h-10 bg-white">
           {userSubjects?.map((subject) => (
             <Pressable
@@ -217,7 +220,7 @@ const StudyProgress = () => {
       </View>
 
       <UnrevisedTopicsList />
-    </ScrollView>
+    </View>
   );
 };
 

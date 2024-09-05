@@ -1,34 +1,34 @@
 import {
   ActivityIndicator,
-  FlatList,
   Pressable,
+  ScrollView,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import DropDownPicker from "react-native-dropdown-picker";
+import React, { useEffect, useState } from "react";
 import { colors } from "../../constants/constants";
 import Feather from "@expo/vector-icons/Feather";
 import clsx from "clsx";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { capitalizeFirstLetter } from "../../helpers/utils";
+import ModalComponent from "./ModalComponent";
 
 const Select = ({
   items,
   defaultValue,
   onValueChange,
   className,
+  listContainerStyle,
   placeholder = "Select an item",
   label,
   labelStyle,
   fetching,
   loading,
 }: {
-  items: { label: string; value: string }[];
+  items: { label: string | number; value: string | number }[];
   defaultValue: string;
   onValueChange: (value: string) => void;
   className?: string;
+  listContainerStyle?: string;
   placeholder?: string;
   loading?: boolean;
   fetching?: boolean;
@@ -38,6 +38,10 @@ const Select = ({
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
 
+  useEffect(() => {
+    setSelectedValue(defaultValue);
+  }, [defaultValue]);
+
   const handleSelectValue = (value: string) => {
     setSelectedValue(value);
     onValueChange(value);
@@ -45,7 +49,7 @@ const Select = ({
   };
 
   return (
-    <View className="relative w-full mb-4">
+    <View className="relative mb-4">
       {label ? (
         <Text
           className={clsx(
@@ -57,7 +61,10 @@ const Select = ({
         </Text>
       ) : null}
       <Pressable
-        className="w-full h-12 bg-white flex-row items-center justify-between px-3 rounded-lg border border-input-border"
+        className={clsx(
+          "w-full h-12 bg-white flex-row items-center justify-between px-3 rounded-lg border border-input-border",
+          className
+        )}
         onPress={() => setShowDropdown(!showDropdown)}
       >
         <View className="flex-1">
@@ -73,12 +80,20 @@ const Select = ({
         <Feather name="chevron-down" size={20} color="black" />
       </Pressable>
 
-      {showDropdown && (
-        <Animated.ScrollView
-          entering={FadeIn.duration(200)}
-          exiting={FadeOut.duration(200)}
-          className="absolute top-full inset-x-0 z-[99999] bg-white rounded-lg border border-input-border py-1"
-          style={{ maxHeight: 250 }}
+      <ModalComponent
+        modalVisible={showDropdown}
+        setModalVisible={setShowDropdown}
+      >
+        <View className="items-center justify-center py-3">
+          <Text className="text-xl font-mada-semibold leading-none">
+            Select a {label}
+          </Text>
+        </View>
+        <ScrollView
+          className={clsx(
+            "h-80 bg-white rounded-lg border border-input-border py-1",
+            listContainerStyle
+          )}
           showsVerticalScrollIndicator={false}
           nestedScrollEnabled={true}
         >
@@ -90,10 +105,13 @@ const Select = ({
             items.map((item) => (
               <Pressable
                 key={item.value}
-                className="h-10 flex-row items-center justify-between px-4 border-b border-input-border"
-                onPress={() => handleSelectValue(item.value)}
+                className={clsx(
+                  "flex-row items-center justify-between px-4 py-3 border-b border-input-border",
+                  items[items.length - 1].value === item.value && "border-b-0"
+                )}
+                onPress={() => handleSelectValue(String(item.value))}
               >
-                <Text>{capitalizeFirstLetter(item.label)}</Text>
+                <Text>{capitalizeFirstLetter(String(item.label))}</Text>
                 {selectedValue === item.value && (
                   <Feather name="check" size={20} color="black" />
                 )}
@@ -106,8 +124,8 @@ const Select = ({
               </Text>
             </View>
           )}
-        </Animated.ScrollView>
-      )}
+        </ScrollView>
+      </ModalComponent>
     </View>
   );
 };

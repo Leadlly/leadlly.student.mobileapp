@@ -18,6 +18,10 @@ import Select from "../shared/Select";
 import { useSaveStudyData } from "../../services/queries/studyDataQuery";
 import Toast from "react-native-toast-message";
 import { useUpdatePlanner } from "../../services/queries/plannerQuery";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { StudyDataFormSchema } from "../../schemas/studyDataFormSchema";
 
 const NewTopicLearntForm = ({
   activeSubject,
@@ -30,48 +34,35 @@ const NewTopicLearntForm = ({
   userStandard: number;
   userSubjects: ISubject[];
 }) => {
-  const [chapterListOpen, setChapterListOpen] = useState(false);
-  const [chapterItemValue, setChapterItemValue] = useState(null);
+  const form = useForm<z.infer<typeof StudyDataFormSchema>>({
+    resolver: zodResolver(StudyDataFormSchema),
+  });
 
-  const [topicListOpen, setTopicListOpen] = useState(false);
-  const [topicItemsValue, setTopicItemsValue] = useState([]);
-
-  const onChapterListOpen = useCallback(() => {
-    setTopicListOpen(false);
-  }, []);
-
-  const onTopicListOpen = useCallback(() => {
-    setChapterListOpen(false);
-  }, []);
+  const selectedChapter = form.watch("chapterName");
 
   const {
     data: chapterData,
     isLoading: chaptersLoading,
     isFetching: chaptersFetching,
     refetch: refetchChapter,
-  } = useGetSubjectChapters(activeSubject, userStandard);
+  } = useGetSubjectChapters(activeSubject!, userStandard!);
 
   useEffect(() => {
-    if (activeSubject) {
-      setChapterItemValue(null);
-      refetchChapter();
-    }
-  }, [activeSubject, refetchChapter]);
+    form.setValue("chapterName", "");
+    refetchChapter();
+  }, [activeSubject, refetchChapter, form.setValue]);
 
   const {
     data: topicsData,
     isFetching: topicsFetching,
     isLoading: topicsLoading,
     refetch: refetchTopics,
-  } = useGetChapterTopics(activeSubject, chapterItemValue!, userStandard);
+  } = useGetChapterTopics(activeSubject!, selectedChapter, userStandard!);
 
   useEffect(() => {
-    if (activeSubject && chapterItemValue) {
-      setTopicItemsValue([]);
-      setTopicListOpen(false);
-      refetchTopics();
-    }
-  }, [activeSubject, chapterItemValue, refetchTopics]);
+    form.setValue("topicNames", []);
+    refetchTopics();
+  }, [activeSubject, selectedChapter, refetchTopics, form.setValue]);
 
   const {
     mutateAsync: saveStudyData,
@@ -87,35 +78,18 @@ const NewTopicLearntForm = ({
     error: updatingPlannerError,
   } = useUpdatePlanner();
 
-  const onSubmit = async () => {
-    if (isSavingDataError || isUpdatingPlannerError) {
-      return Toast.show({
-        type: "error",
-        text1: savingDataError?.message || updatingPlannerError?.message,
-      });
-    }
+  const onSubmit = async (data: z.infer<typeof StudyDataFormSchema>) => {
+    const formattedData = {
+      tag: "continuous_revision",
+      topics: data.topicNames.map((topic) => ({ name: topic })),
+      chapter: {
+        name: data.chapterName,
+      },
+      subject: activeSubject!,
+      standard: userStandard!,
+    };
 
-    if (chapterItemValue && topicItemsValue.length > 0) {
-      const formattedData = {
-        tag: "continuous_revision",
-        topics: topicItemsValue.map((topic) => ({ name: topic })),
-        chapter: {
-          name: chapterItemValue,
-        },
-        subject: activeSubject,
-        standard: userStandard,
-      };
-
-      const res = await saveStudyData(formattedData);
-      await updatePlanner();
-      Toast.show({
-        type: "success",
-        text1: res.message,
-      });
-
-      setChapterItemValue(null);
-      setTopicItemsValue([]);
-    }
+    console.log(formattedData);
   };
 
   return (
@@ -142,38 +116,55 @@ const NewTopicLearntForm = ({
         ))}
       </View>
 
-      <View className="mt-5 h-48">
-        <Select
-          items={
-            chapterData?.chapters.map((chapter) => ({
-              label: capitalizeFirstLetter(chapter.name)!,
-              value: chapter.name,
-            })) || []
-          }
-          open={chapterListOpen}
-          setOpen={setChapterListOpen}
-          onOpen={onChapterListOpen}
-          value={chapterItemValue}
-          setValue={setChapterItemValue}
-          loading={chaptersLoading}
-          fetching={chaptersFetching}
-        />
+      <View className="mt-5">
+        <View>
+          <Controller
+            name="chapterName"
+            control={form.control}
+            render={({ field }) => (
+              <Select
+                label="Chapter"
+                labelStyle="text-xl ml-1"
+                placeholder="Select a chapter"
+                items={
+                  chapterData?.chapters.map((chapter) => ({
+                    label: chapter.name,
+                    value: chapter.name,
+                  })) || []
+                }
+                defaultValue={field.value}
+                onValueChange={field.onChange}
+                loading={chaptersLoading}
+                fetching={chaptersFetching}
+              />
+            )}
+          />
+        </View>
 
-        <MultiSelect
-          items={
-            topicsData?.topics.map((topic) => ({
-              label: capitalizeFirstLetter(topic.name)!,
-              value: topic.name,
-            })) || []
-          }
-          onOpen={onTopicListOpen}
-          open={topicListOpen}
-          setOpen={setTopicListOpen}
-          value={topicItemsValue}
-          setValue={(val) => setTopicItemsValue(val)}
-          loading={topicsLoading}
-          fetching={topicsFetching}
-        />
+        <View>
+          <Controller
+            name="topicNames"
+            control={form.control}
+            render={({ field }) => (
+              <MultiSelect
+                label="Topics"
+                labelStyle="text-xl ml-1"
+                placeholder="Select topics"
+                defaultValue={field.value}
+                onValueChange={field.onChange}
+                items={
+                  topicsData?.topics.map((topic) => ({
+                    label: capitalizeFirstLetter(topic.name)!,
+                    value: topic.name,
+                  })) || []
+                }
+                loading={topicsLoading}
+                fetching={topicsFetching}
+                maxCount={3}
+              />
+            )}
+          />
+        </View>
 
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
@@ -190,7 +181,7 @@ const NewTopicLearntForm = ({
               isPending || (updatingPlanner && "opacity-70")
             )}
             disabled={isPending || updatingPlanner}
-            onPress={() => onSubmit()}
+            onPress={form.handleSubmit(onSubmit)}
           >
             {isPending || updatingPlanner ? (
               <ActivityIndicator size={"small"} color={"white"} />

@@ -22,6 +22,7 @@ import { useAppDispatch } from "../../services/redux/hooks";
 import { loginAction } from "../../services/redux/slices/userSlice";
 import Toast from "react-native-toast-message";
 import { colors } from "../../constants/constants";
+import Input from "../../components/shared/Input";
 
 const Login = () => {
   const [toggleShowPassword, setToggleShowPassword] = useState(false);
@@ -60,12 +61,6 @@ const Login = () => {
 
   return (
     <SafeAreaView className="flex-1 px-5 bg-white">
-      <Image
-        source={require("../../assets/images/leadlly_logo_full.png")}
-        alt="Leadlly"
-        className="w-36 h-16"
-        resizeMode="contain"
-      />
       <View className="flex-1 items-center justify-center">
         <View
           className="rounded-xl bg-white px-4 py-10 w-full"
@@ -86,24 +81,17 @@ const Login = () => {
               control={form.control}
               rules={{ required: true }}
               render={({ field }) => (
-                <View className="h-12 w-full border border-input-border px-3 rounded-lg flex-row items-center">
-                  <View className="mr-3">
-                    <AntDesign name="user" size={18} color="#7F7F7F" />
-                  </View>
-                  <TextInput
-                    inputMode="email"
-                    placeholder="Enter your email"
-                    onBlur={field.onBlur}
-                    onChangeText={field.onChange}
-                    value={field.value}
-                    cursorColor={colors.primary}
-                    selectionHandleColor={colors.primary}
-                    selectionColor={colors.primary200}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    className="flex-1 text-lg font-mada-regular"
-                  />
-                </View>
+                <Input
+                  inputMode="email"
+                  placeholder="Enter your email"
+                  onBlur={field.onBlur}
+                  onChangeText={field.onChange}
+                  value={field.value}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  inputStyle="pr-3 text-lg h-12"
+                  icon={<AntDesign name="user" size={18} color="#7F7F7F" />}
+                />
               )}
             />
             {form.formState.errors.email && (
@@ -119,26 +107,17 @@ const Login = () => {
               control={form.control}
               rules={{ required: true }}
               render={({ field }) => (
-                <View className="h-12 w-full border border-input-border px-3 rounded-lg flex-row items-center">
-                  <View className="mr-3">
-                    <Feather name="lock" size={18} color="#7F7F7F" />
-                  </View>
-                  <TextInput
-                    placeholder="Password"
-                    secureTextEntry={toggleShowPassword ? false : true}
-                    onBlur={field.onBlur}
-                    onChangeText={field.onChange}
-                    value={field.value}
-                    cursorColor={colors.primary}
-                    selectionHandleColor={colors.primary}
-                    selectionColor={colors.primary200}
-                    autoCapitalize="none"
-                    className="flex-1 text-lg font-mada-regular"
-                  />
-                  <Pressable
-                    onPress={() => setToggleShowPassword(!toggleShowPassword)}
-                  >
-                    {toggleShowPassword ? (
+                <Input
+                  placeholder="Password"
+                  secureTextEntry={toggleShowPassword ? false : true}
+                  onBlur={field.onBlur}
+                  onChangeText={field.onChange}
+                  value={field.value}
+                  autoCapitalize="none"
+                  inputStyle="text-lg h-12"
+                  icon={<Feather name="lock" size={18} color="#7F7F7F" />}
+                  icon2={
+                    toggleShowPassword ? (
                       <FontAwesome6
                         name="eye-slash"
                         size={16}
@@ -146,9 +125,10 @@ const Login = () => {
                       />
                     ) : (
                       <FontAwesome6 name="eye" size={16} color="#7F7F7F" />
-                    )}
-                  </Pressable>
-                </View>
+                    )
+                  }
+                  handlePress={() => setToggleShowPassword(!toggleShowPassword)}
+                />
               )}
             />
             {form.formState.errors.password && (
