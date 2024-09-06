@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Progress from "../../components/AuthComponents/Progress";
 import PhoneNumberForm from "../../components/AuthComponents/PhoneNumberForm";
@@ -60,7 +60,7 @@ const initialInfo = () => {
         steps={steps.length}
         back={back}
       />
-      <View>{steps[currentStepIndex]}</View>
+      <ScrollView>{steps[currentStepIndex]}</ScrollView>
     </SafeAreaView>
   );
 };
