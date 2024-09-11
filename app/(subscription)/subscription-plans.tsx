@@ -41,24 +41,24 @@ const features = [
 const plans: Plan[] = [
   {
     id: 1,
-    name: "6 Month",
+    name: "3 Months",
     price: "499",
     planType: "Basic Plan",
-    duration: "6 months",
+    duration: "3",
   },
   {
     id: 2,
-    name: "1 Year",
+    name: "6 Months",
     price: "416",
     planType: "Professional Plan",
-    duration: "1 year",
+    duration:"6",
   },
   {
     id: 3,
-    name: "2 Years",
+    name: "1 Year",
     price: "333",
     planType: "Ultimate Plan",
-    duration: "2 years",
+    duration: "12",
   },
 ];
 
@@ -119,7 +119,7 @@ const SubscriptionPlansScreen: React.FC = () => {
               )}
               <View>
                 <Text className="text-xl font-mada-semibold text-black">
-                  {plan.duration}
+                  {plan.name}
                 </Text>
                 <Text className="text-gray-500 font-mada-semibold">
                   {plan.price}/- per month
