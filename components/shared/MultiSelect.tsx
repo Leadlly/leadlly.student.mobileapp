@@ -255,7 +255,7 @@ const MultiSelect = ({
             className="items-center justify-center flex-1"
             onPress={() => setShowDropdown(false)}
           >
-            <Text className="text-sm font-mada-medium leading-none">Close</Text>
+            <Text className="text-sm font-mada-medium leading-none">Done</Text>
           </Pressable>
         </View>
       </ModalComponent>

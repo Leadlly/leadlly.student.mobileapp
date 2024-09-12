@@ -4,6 +4,7 @@ import {
   Pressable,
   TouchableOpacity,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { ISubject } from "../../types/types";
@@ -22,15 +23,23 @@ import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StudyDataFormSchema } from "../../schemas/studyDataFormSchema";
+import ModalComponent from "../shared/ModalComponent";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { colors } from "../../constants/constants";
+import TabNav from "../shared/TabNav";
 
 const NewTopicLearntForm = ({
   activeSubject,
   setActiveSubject,
   userStandard,
   userSubjects,
+  modalVisible,
+  setModalVisible,
 }: {
   activeSubject: string;
   setActiveSubject: (activeSubject: string | null) => void;
+  modalVisible: boolean;
+  setModalVisible: (modalVisible: boolean) => void;
   userStandard: number;
   userSubjects: ISubject[];
 }) => {
@@ -64,19 +73,10 @@ const NewTopicLearntForm = ({
     refetchTopics();
   }, [activeSubject, selectedChapter, refetchTopics, form.setValue]);
 
-  const {
-    mutateAsync: saveStudyData,
-    isPending,
-    isError: isSavingDataError,
-    error: savingDataError,
-  } = useSaveStudyData();
+  const { mutateAsync: saveStudyData, isPending } = useSaveStudyData();
 
-  const {
-    mutateAsync: updatePlanner,
-    isPending: updatingPlanner,
-    isError: isUpdatingPlannerError,
-    error: updatingPlannerError,
-  } = useUpdatePlanner();
+  const { mutateAsync: updatePlanner, isPending: updatingPlanner } =
+    useUpdatePlanner();
 
   const onSubmit = async (data: z.infer<typeof StudyDataFormSchema>) => {
     const formattedData = {
@@ -89,111 +89,142 @@ const NewTopicLearntForm = ({
       standard: userStandard!,
     };
 
-    console.log(formattedData);
+    try {
+      const res = await saveStudyData(formattedData);
+      const updatePlannerResponse = await updatePlanner();
+
+      Toast.show({
+        type: "success",
+        text1: res.message ? res.message : "Study data saved successfully.",
+        text2: updatePlannerResponse?.message
+          ? updatePlannerResponse.message
+          : "Planner updated successfully!",
+      });
+
+      form.reset({
+        chapterName: "",
+        topicNames: [],
+      });
+
+      setModalVisible(false);
+    } catch (error: any) {
+      Toast.show({
+        type: "error",
+        text1: error.message,
+      });
+    }
   };
 
   return (
-    <View className="flex-1">
-      <View className="flex-row items-center justify-between">
-        {userSubjects.map((subject) => (
-          <Pressable
-            key={subject.name}
-            onPress={() => setActiveSubject(subject.name)}
-            className={clsx(
-              "border border-input-border rounded-lg w-20 h-9 items-center justify-center",
-              activeSubject === subject.name && "bg-primary/10 border-primary"
-            )}
-          >
-            <Text
-              className={clsx(
-                "capitalize text-sm font-mada-medium leading-tight text-tab-item-gray",
-                activeSubject === subject.name && "text-primary"
-              )}
-            >
-              {subject.name}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
-      <View className="mt-5">
-        <View>
-          <Controller
-            name="chapterName"
-            control={form.control}
-            render={({ field }) => (
-              <Select
-                label="Chapter"
-                labelStyle="text-xl ml-1"
-                placeholder="Select a chapter"
-                items={
-                  chapterData?.chapters.map((chapter) => ({
-                    label: chapter.name,
-                    value: chapter.name,
-                  })) || []
-                }
-                defaultValue={field.value}
-                onValueChange={field.onChange}
-                loading={chaptersLoading}
-                fetching={chaptersFetching}
-              />
-            )}
-          />
-        </View>
-
-        <View>
-          <Controller
-            name="topicNames"
-            control={form.control}
-            render={({ field }) => (
-              <MultiSelect
-                label="Topics"
-                labelStyle="text-xl ml-1"
-                placeholder="Select topics"
-                defaultValue={field.value}
-                onValueChange={field.onChange}
-                items={
-                  topicsData?.topics.map((topic) => ({
-                    label: capitalizeFirstLetter(topic.name)!,
-                    value: topic.name,
-                  })) || []
-                }
-                loading={topicsLoading}
-                fetching={topicsFetching}
-                maxCount={3}
-              />
-            )}
-          />
-        </View>
+    <ModalComponent
+      modalVisible={modalVisible}
+      setModalVisible={setModalVisible}
+      isCloseIcon={false}
+    >
+      <View className="p-3">
+        <TouchableOpacity
+          className="mb-5"
+          onPress={() => {
+            setActiveSubject(null);
+            setModalVisible(false);
+          }}
+        >
+          <AntDesign name="arrowleft" size={22} color={colors.tabItemGray} />
+        </TouchableOpacity>
 
         <View className="flex-row items-center justify-between">
-          <TouchableOpacity
-            className="border border-tab-item-gray items-center justify-center w-20 h-10 rounded-lg"
-            onPress={() => setActiveSubject(null)}
-          >
-            <Text className="text-sm font-mada-semibold leading-tight">
-              Back
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={clsx(
-              "bg-primary items-center justify-center w-20 h-10 rounded-lg",
-              isPending || (updatingPlanner && "opacity-70")
-            )}
-            disabled={isPending || updatingPlanner}
-            onPress={form.handleSubmit(onSubmit)}
-          >
-            {isPending || updatingPlanner ? (
-              <ActivityIndicator size={"small"} color={"white"} />
-            ) : (
-              <Text className="text-white text-sm font-mada-semibold leading-tight">
-                Submit
+          {userSubjects?.map((subject) => (
+            <Pressable
+              key={subject?.name}
+              onPress={() => setActiveSubject(subject?.name)}
+              className={clsx(
+                "flex-1 h-9 items-center justify-center",
+                activeSubject === subject?.name && "border-b-2 border-primary"
+              )}
+            >
+              <Text
+                className={clsx(
+                  "capitalize text-base font-mada-medium leading-tight text-tab-item-gray",
+                  activeSubject === subject?.name && "text-primary"
+                )}
+              >
+                {subject?.name}
               </Text>
-            )}
-          </TouchableOpacity>
+            </Pressable>
+          ))}
+        </View>
+
+        <View className="mt-5">
+          <View>
+            <Controller
+              name="chapterName"
+              control={form.control}
+              render={({ field }) => (
+                <Select
+                  label="Chapter"
+                  labelStyle="text-xl ml-1"
+                  placeholder="Select a chapter"
+                  items={
+                    chapterData?.chapters.map((chapter) => ({
+                      label: chapter.name,
+                      value: chapter.name,
+                    })) || []
+                  }
+                  defaultValue={field.value}
+                  onValueChange={field.onChange}
+                  loading={chaptersLoading}
+                  fetching={chaptersFetching}
+                />
+              )}
+            />
+          </View>
+
+          <View>
+            <Controller
+              name="topicNames"
+              control={form.control}
+              render={({ field }) => (
+                <MultiSelect
+                  label="Topics"
+                  labelStyle="text-xl ml-1"
+                  placeholder="Select topics"
+                  defaultValue={field.value}
+                  onValueChange={field.onChange}
+                  items={
+                    topicsData?.topics.map((topic) => ({
+                      label: capitalizeFirstLetter(topic.name)!,
+                      value: topic.name,
+                    })) || []
+                  }
+                  loading={topicsLoading}
+                  fetching={topicsFetching}
+                  maxCount={3}
+                />
+              )}
+            />
+          </View>
+
+          <View className="items-center justify-center mt-5">
+            <TouchableOpacity
+              className={clsx(
+                "bg-primary items-center justify-center w-20 h-10 rounded-lg",
+                isPending || (updatingPlanner && "opacity-70")
+              )}
+              disabled={isPending || updatingPlanner}
+              onPress={form.handleSubmit(onSubmit)}
+            >
+              {isPending || updatingPlanner ? (
+                <ActivityIndicator size={"small"} color={"white"} />
+              ) : (
+                <Text className="text-white text-sm font-mada-semibold leading-tight">
+                  Submit
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </ModalComponent>
   );
 };
 

@@ -9,15 +9,15 @@ const FreeTrialTimer = () => {
 
   const router = useRouter();
 
-  const freeTrialActivationDate = useAppSelector(
-    (state) => state.user.user?.freeTrial.dateOfActivation
+  const freeTrialActivation = useAppSelector(
+    (state) => state.user.user?.freeTrial
   );
 
   useEffect(() => {
     const checkTrialStatus = () => {
-      const trialStartDate = new Date(freeTrialActivationDate!);
+      const trialStartDate = new Date(freeTrialActivation?.dateOfActivation!);
       const trialEndDate = new Date(
-        trialStartDate.getTime() + 21 * 24 * 60 * 60 * 1000
+        trialStartDate.getTime() + 7 * 24 * 60 * 60 * 1000
       );
       const now = new Date();
 
@@ -41,7 +41,7 @@ const FreeTrialTimer = () => {
     }, 1000);
 
     return () => clearInterval(timerInterval);
-  }, [freeTrialActivationDate, router]);
+  }, [freeTrialActivation?.dateOfActivation, router]);
   return (
     <Text className="text-[10px] leading-tight font-mada-medium text-white">
       {formatTime(timeLeft!)}

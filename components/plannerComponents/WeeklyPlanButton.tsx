@@ -25,20 +25,23 @@ const WeeklyPlanButton = ({
           : { borderWidth: 1.5 },
         { borderColor, borderRadius: 13 },
       ]}
-      onPress={onPress}>
+      onPress={onPress}
+    >
       <View
         className={`rounded-xl overflow-hidden ${
           getFormattedDate(new Date(item.date)) === getTodaysFormattedDate()
             ? "bg-primary"
             : "bg-transparent"
-        }`}>
+        }`}
+      >
         <View className="px-5 flex-row justify-between border-b border-b-input-border py-2">
           <Text
             className={`text-[17px] leading-tight font-mada-Bold ${
               getFormattedDate(new Date(item.date)) === getTodaysFormattedDate()
                 ? "text-white"
                 : "text-black"
-            }`}>
+            }`}
+          >
             {item.day}
           </Text>
           <Text
@@ -46,7 +49,8 @@ const WeeklyPlanButton = ({
               getFormattedDate(new Date(item.date)) === getTodaysFormattedDate()
                 ? "text-white"
                 : "text-black"
-            }`}>
+            }`}
+          >
             {getFormattedDate(new Date(item.date))}
           </Text>
         </View>
@@ -58,7 +62,8 @@ const WeeklyPlanButton = ({
               getFormattedDate(new Date(item.date)) === getTodaysFormattedDate()
                 ? "text-white"
                 : "text-black"
-            }`}>
+            }`}
+          >
             {item.backRevisionTopics.length > 0 ||
             item.continuousRevisionTopics.length > 0 ? (
               <>
@@ -67,7 +72,7 @@ const WeeklyPlanButton = ({
                     capitalizeFirstLetter(topics.topic.name)
                   )
                   .join(" / ")}
-                {item.continuousRevisionTopics.length > 0 && "/"}
+                {item.backRevisionTopics.length > 0 && "/"}
                 {item.continuousRevisionTopics
                   .map((topics: TRevisionProps) =>
                     capitalizeFirstLetter(topics.topic.name)

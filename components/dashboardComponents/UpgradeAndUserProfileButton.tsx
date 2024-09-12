@@ -14,7 +14,7 @@ const UpgradeAndUserProfileButton = () => {
           <Text className="text-white leading-tight font-mada-semibold text-xs">
             Upgrade
           </Text>
-          <FreeTrialTimer />
+          {user?.subscription.status !== "active" && <FreeTrialTimer />}
         </TouchableOpacity>
       </Link>
 

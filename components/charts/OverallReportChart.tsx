@@ -20,7 +20,7 @@ const OverallReportChart = ({
       : [{ value: 0 }];
 
   return (
-    <View>
+    <View className="flex-1">
       <LineChart
         areaChart
         data={sessionData}

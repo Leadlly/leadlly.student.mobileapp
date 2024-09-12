@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Progress from "../../components/AuthComponents/Progress";
 import PhoneNumberForm from "../../components/AuthComponents/PhoneNumberForm";
@@ -54,13 +54,15 @@ const initialInfo = () => {
     />,
   ];
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1 bg-white">
       <Progress
         currentStep={currentStepIndex}
         steps={steps.length}
         back={back}
       />
-      <View>{steps[currentStepIndex]}</View>
+      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+        {steps[currentStepIndex]}
+      </ScrollView>
     </SafeAreaView>
   );
 };

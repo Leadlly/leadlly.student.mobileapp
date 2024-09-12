@@ -43,7 +43,6 @@ const ScheduleForm = ({
   const { handleSubmit } = form;
   const user = useAppSelector((state) => state.user.user);
 
-
   const dispatch = useAppDispatch();
 
   const router = useRouter();
@@ -109,7 +108,7 @@ const ScheduleForm = ({
                 <Pressable
                   key={option}
                   className={clsx(
-                    "py-2 w-full rounded-lg border-2",
+                    "py-2 px-4 w-full rounded-lg border-2",
                     field.value === option
                       ? "border-[#9654F4] bg-gray-50"
                       : "border-transparent bg-gray-50"
@@ -120,11 +119,11 @@ const ScheduleForm = ({
                 >
                   <Text
                     className={clsx(
-                      "text-center font-semibold text-base",
+                      "font-semibold text-base capitalize",
                       field.value === option ? "text-black" : "text-gray-500"
                     )}
                   >
-                    {option}
+                    {option.split("+").join(" + ")}
                   </Text>
                 </Pressable>
               ))}

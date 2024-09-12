@@ -17,11 +17,13 @@ const ModalComponent = ({
   setModalVisible,
   children,
   className,
+  isCloseIcon = true,
 }: {
   children: React.ReactNode;
   modalVisible: boolean;
   setModalVisible: (modalVisible: boolean) => void;
   className?: string;
+  isCloseIcon?: boolean;
 }) => {
   return (
     <Modal
@@ -43,12 +45,14 @@ const ModalComponent = ({
           style={styles.modalContentContainer}
         >
           {children}
-          <TouchableOpacity
-            className="absolute top-6 right-4 w-7 h-7 border items-center justify-center rounded-md"
-            onPress={() => setModalVisible(false)}
-          >
-            <AntDesign name="close" size={15} color="black" />
-          </TouchableOpacity>
+          {isCloseIcon && (
+            <TouchableOpacity
+              className="absolute top-6 right-4 w-7 h-7 border items-center justify-center rounded-md"
+              onPress={() => setModalVisible(false)}
+            >
+              <AntDesign name="close" size={15} color="black" />
+            </TouchableOpacity>
+          )}
         </View>
       </BlurView>
     </Modal>
