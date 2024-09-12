@@ -28,7 +28,7 @@ const ClassForm = ({ next, form }: { next: () => void; form: FormType }) => {
           name="class"
           control={form.control}
           render={({ field }) => (
-            <View className="flex justify-between items-center flex-row gap-10 py-4">
+            <View className="w-96 flex-wrap justify-center items-center flex-row gap-10 py-4">
               <Pressable
                 className={`mx-2  py-4 px-4 rounded-lg border-2 ${
                   field.value === "11"
@@ -74,6 +74,30 @@ const ClassForm = ({ next, form }: { next: () => void; form: FormType }) => {
                   }`}
                 >
                   12th Class
+                </Text>
+              </Pressable>
+
+              <Pressable
+                className={`mx-2 py-4 px-4 rounded-lg border-2 ${
+                  field.value === "13"
+                    ? "border-[#9654F4] bg-gray-50"
+                    : "border-transparent bg-gray-50"
+                }`}
+                onPress={() => {
+                  field.onChange("13");
+                  next();
+                }}
+              >
+                <Image
+                  source={require("../../assets/images/class13.png")}
+                  className="w-[76px] h-[76px] mx-auto"
+                />
+                <Text
+                  className={`text-center font-semibold  text-lg ${
+                    field.value === "13" ? "text-black" : "text-gray-500"
+                  }`}
+                >
+                  Dropper
                 </Text>
               </Pressable>
             </View>

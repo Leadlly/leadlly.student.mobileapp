@@ -11,6 +11,7 @@ import {
   useGetOverallReport,
   useGetWeeklyReport,
 } from "../../services/queries/studentReportQuery";
+import TabNav from "../shared/TabNav";
 
 const ProgressAnalytics = () => {
   const [activeTab, setActiveTab] = useState("weekly");
@@ -29,27 +30,14 @@ const ProgressAnalytics = () => {
           Progress Analytics
         </Text>
 
-        <View className="flex-row items-center border border-input-border rounded-md p-0.5">
-          {progressAnalyticsMenus.map((item) => (
-            <Pressable
-              key={item.id}
-              className="relative w-14 h-6 items-center justify-center"
-              onPress={() => setActiveTab(item.id)}
-            >
-              {activeTab === item.id && (
-                <Animated.View className="bg-primary w-14 h-6 absolute inset-0 rounded" />
-              )}
-              <Text
-                className={clsx(
-                  "capitalize text-xs font-mada-semibold leading-tight",
-                  activeTab === item.id && "text-white"
-                )}
-              >
-                {item.title}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
+        <TabNav
+          items={progressAnalyticsMenus}
+          activeItem={activeTab}
+          setActiveItem={setActiveTab}
+          width={150}
+          height={24}
+          itemClassName="w-14 h-6"
+        />
       </View>
 
       <View className="flex-row justify-end space-x-5 my-5">

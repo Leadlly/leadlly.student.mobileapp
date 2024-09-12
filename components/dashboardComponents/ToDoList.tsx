@@ -15,10 +15,13 @@ import LottieView from "lottie-react-native";
 const ToDoList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [todaysTopics, setTodaysTopics] = useState<TDayProps | null>(null);
+  const [topic, setTopic] = useState<{ name: string; _id: string } | null>(
+    null
+  );
 
   const animation = useRef<LottieView>(null);
 
-  const { data, isError, isLoading, isFetching, isSuccess, error } =
+  const { data, isLoading, isFetching, isSuccess, refetch } =
     useGetUserPlanner();
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const ToDoList = () => {
         )[0]
       );
     }
-  }, [data, isSuccess]);
+  }, [data, isSuccess, refetch]);
 
   return (
     <View className="h-72 rounded-xl p-4 bg-primary/5 my-1.5">
@@ -47,7 +50,7 @@ const ToDoList = () => {
           (todaysTopics.backRevisionTopics.length > 0 ||
             todaysTopics?.continuousRevisionTopics.length > 0) ? (
             <>
-              <View className="mb-3">
+              <View className="mb-1.5">
                 <Text className="text-xl leading-tight font-mada-Bold text-primary">
                   Todo List
                 </Text>
@@ -65,6 +68,9 @@ const ToDoList = () => {
                     key={item._id}
                     item={item}
                     setModalVisible={setModalVisible}
+                    setTopic={setTopic}
+                    completedTopics={todaysTopics.completedTopics}
+                    incompleteTopics={todaysTopics.incompletedTopics}
                   />
                 ))}
                 {todaysTopics.continuousRevisionTopics.map((item) => (
@@ -72,6 +78,9 @@ const ToDoList = () => {
                     key={item._id}
                     item={item}
                     setModalVisible={setModalVisible}
+                    setTopic={setTopic}
+                    completedTopics={todaysTopics.completedTopics}
+                    incompleteTopics={todaysTopics.incompletedTopics}
                   />
                 ))}
               </ScrollView>
@@ -102,10 +111,15 @@ const ToDoList = () => {
         </>
       )}
 
-      <QuestionsModal
-        setModalVisible={setModalVisible}
-        modalVisible={modalVisible}
-      />
+      {modalVisible && (
+        <QuestionsModal
+          setModalVisible={setModalVisible}
+          modalVisible={modalVisible}
+          questions={todaysTopics?.questions?.[topic?.name!]}
+          topic={topic}
+          refetchPlannerData={refetch}
+        />
+      )}
     </View>
   );
 };

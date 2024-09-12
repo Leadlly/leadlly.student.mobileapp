@@ -6,6 +6,9 @@ const WelcomeScreen = () => {
 
   if (!loading && !user) return <Redirect href={"/welcome"} />;
 
+  if (!loading && user && !user.academic.standard)
+    return <Redirect href={"/initialInfo"} />;
+
   return <Redirect href={"/dashboard"} />;
 };
 

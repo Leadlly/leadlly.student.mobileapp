@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Platform,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { UserDataProps } from "../../types/types";
@@ -73,15 +74,6 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
       dateOfBirth: user?.about.dateOfBirth ? user.about.dateOfBirth : "",
     },
   });
-
-  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    setShowCalendar(Platform.OS === "ios");
-    if (event.type === "set") {
-      form.setValue("dateOfBirth", selectedDate?.toDateString());
-    } else {
-      setShowCalendar(false);
-    }
-  };
 
   const { mutateAsync: studentPersonalInfo, isPending: savingStudentInfo } =
     useStudentPersonalInfo();
@@ -238,30 +230,12 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
                 render={({ field }) => {
                   return (
                     <>
-                      <Input
-                        label="Date of Birth"
-                        labelStyle="text-secondary-text"
-                        icon2={
-                          <EvilIcons
-                            name="calendar"
-                            size={20}
-                            color={colors.iconGray}
-                          />
-                        }
-                        onFocus={() => setShowCalendar(true)}
-                        value={field.value ? field.value.toString() : ""}
-                        placeholder="Enter your D.O.B"
-                        inputStyle="pl-3"
-                      />
-
-                      {/* <Text className="text-base font-mada-medium leading-none text-secondary-text mb-1">
+                      <Text className="text-base font-mada-medium leading-none text-secondary-text mb-1">
                         Date of Birth
                       </Text>
                       <Pressable
                         className="border border-input-border rounded-lg h-10 flex-row items-center justify-between pl-3"
-                        onPress={() => {
-                          setShowCalendar(true);
-                        }}
+                        onPress={() => setShowCalendar(true)}
                       >
                         <Text
                           className={clsx(
@@ -269,9 +243,7 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
                             !field.value && "text-tab-item-gray"
                           )}
                         >
-                          {field.value
-                            ? capitalizeFirstLetter(field.value)
-                            : "Select your d.o.b"}
+                          {field.value ? field.value : "Select your d.o.b"}
                         </Text>
                         <View className="w-10 items-center justify-center">
                           <Feather
@@ -280,23 +252,7 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
                             color={colors.iconGray}
                           />
                         </View>
-                      </Pressable> */}
-
-                      {showCalendar && (
-                        <DateTimePicker
-                          value={toDate(new Date(field.value!)) || new Date()}
-                          mode="date"
-                          display={
-                            Platform.OS === "ios" ? "spinner" : "default"
-                          }
-                          onChange={(event, date) => {
-                            setShowCalendar(Platform.OS === "ios");
-                            onChange(event, date);
-                          }}
-                          maximumDate={new Date()}
-                          accentColor={colors.primary}
-                        />
-                      )}
+                      </Pressable>
                     </>
                   );
                 }}
@@ -327,7 +283,9 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
                         )}
                       >
                         {field.value
-                          ? `${capitalizeFirstLetter(field.value)}th`
+                          ? field.value !== "13"
+                            ? `${capitalizeFirstLetter(field.value)}th`
+                            : "Dropper"
                           : "Select your country"}
                       </Text>
                       <View className="w-10 items-center justify-center">
@@ -342,7 +300,7 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
                     <PersonalInfoFormDropdown
                       form={form}
                       fieldName="class"
-                      items={["11", "12"]}
+                      items={["11", "12", "13"]}
                       setShowDropdown={setShowClassDropdown}
                       showDropdown={showClassDropdown}
                     />
@@ -760,11 +718,16 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
       <View className="items-center justify-center py-2">
         <TouchableOpacity
           onPress={form.handleSubmit(onSubmit)}
+          disabled={savingStudentInfo}
           className="bg-primary rounded-md w-36 h-10 items-center justify-center"
         >
-          <Text className="text-white text-base font-mada-semibold">
-            Save Changes
-          </Text>
+          {savingStudentInfo ? (
+            <ActivityIndicator size={"small"} color="#fff" />
+          ) : (
+            <Text className="text-white text-base font-mada-semibold">
+              Save Changes
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>

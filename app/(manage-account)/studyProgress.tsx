@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../services/redux/hooks";
@@ -29,6 +30,7 @@ import {
   useCreatePlanner,
 } from "../../services/queries/plannerQuery";
 import { setUser } from "../../services/redux/slices/userSlice";
+import TabNav from "../../components/shared/TabNav";
 
 const StudyProgress = () => {
   const dispatch = useAppDispatch();
@@ -128,28 +130,17 @@ const StudyProgress = () => {
         Select the chapters and topics you've finished in your classes.
       </Text>
 
-      <View className="bg-primary/10 rounded-xl py-3 px-4 my-2 relative z-[999999]">
-        <View className="flex-row border border-input-border p-1 rounded-lg items-center justify-between h-10 bg-white">
-          {userSubjects?.map((subject) => (
-            <Pressable
-              key={subject.name}
-              className="flex-1 justify-center items-center"
-              onPress={() => setActiveSubject(subject.name)}
-            >
-              {activeSubject === subject.name && (
-                <Animated.View className="bg-primary w-full h-full absolute inset-0 rounded" />
-              )}
-              <Text
-                className={clsx(
-                  "capitalize text-lg leading-none font-mada-semibold",
-                  activeSubject === subject.name && "text-white"
-                )}
-              >
-                {subject.name}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
+      <View className="bg-primary/10 rounded-xl py-3 px-4 my-2">
+        <TabNav
+          items={userSubjects!}
+          activeItem={activeSubject!}
+          setActiveItem={setActiveSubject}
+          width={Dimensions.get("screen").width - 56}
+          height={40}
+          containerClassName="bg-white justify-between h-9"
+          itemClassName="flex-1"
+          itemTextClassName="text-lg"
+        />
 
         <View className="mt-5">
           <Controller

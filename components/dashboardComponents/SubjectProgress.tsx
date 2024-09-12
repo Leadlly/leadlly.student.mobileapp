@@ -1,10 +1,15 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, LayoutChangeEvent } from "react-native";
 import React, { useState } from "react";
 import { useAppSelector } from "../../services/redux/hooks";
-import Animated from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 import { colors } from "../../constants/constants";
 import clsx from "clsx";
 import SemiRadialChart from "../charts/SemiRadialChart";
+import TabNav from "../shared/TabNav";
 
 const SubjectProgress = () => {
   const userSubjects = useAppSelector(
@@ -24,27 +29,14 @@ const SubjectProgress = () => {
           Subject Progress
         </Text>
 
-        <View className="flex-row items-center border border-input-border rounded-md p-0.5">
-          {userSubjects?.map((subject) => (
-            <Pressable
-              key={subject?.name}
-              className="relative w-16 h-6 items-center justify-center"
-              onPress={() => setActiveSubject(subject?.name)}
-            >
-              {activeSubject === subject?.name && (
-                <Animated.View className="bg-primary w-16 h-6 absolute inset-0 rounded" />
-              )}
-              <Text
-                className={clsx(
-                  "capitalize text-xs font-mada-semibold leading-tight",
-                  activeSubject === subject?.name && "text-white"
-                )}
-              >
-                {subject?.name}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
+        <TabNav
+          items={userSubjects || []}
+          activeItem={activeSubject!}
+          setActiveItem={setActiveSubject}
+          width={190}
+          height={24}
+          itemClassName="w-16 h-6"
+        />
       </View>
 
       <View className="mt-5 mb-3 flex-row justify-between items-center">

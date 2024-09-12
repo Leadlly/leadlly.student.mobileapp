@@ -54,13 +54,16 @@ const initialInfo = () => {
     />,
   ];
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1 bg-white">
       <Progress
         currentStep={currentStepIndex}
         steps={steps.length}
         back={back}
       />
-      <ScrollView>{steps[currentStepIndex]}</ScrollView>
+
+      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+        {steps[currentStepIndex]}
+      </ScrollView>
     </SafeAreaView>
   );
 };

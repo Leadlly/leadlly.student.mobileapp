@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../axios/axios";
 import axios, { AxiosResponse } from "axios";
 import { StudentPersonalInfoProps } from "../../types/types";
@@ -84,6 +84,24 @@ export const useLogoutUser = () => {
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });
+    },
+  });
+};
+
+export const useGetUser = () => {
+  return useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      try {
+        const res = await axiosClient.get("/api/auth/user");
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error("An unknown error while fetching current user!!");
+        }
+      }
     },
   });
 };

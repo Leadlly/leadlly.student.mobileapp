@@ -32,7 +32,7 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
     } else if (!loading && user && isPublicPath) {
       router.replace("/dashboard");
     }
-  }, [loading, user, router]);
+  }, [loading, pathname, user, router]);
 
   if (loading) {
     return (

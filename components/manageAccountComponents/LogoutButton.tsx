@@ -17,13 +17,14 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     try {
       const res = await logout();
+      router.replace("/welcome");
+
       dispatch(logoutAction());
       dispatch(removeTodaysPlan());
       Toast.show({
         type: "success",
         text1: res.message,
       });
-      router.replace("/welcome");
     } catch (error: any) {
       Toast.show({
         type: "error",

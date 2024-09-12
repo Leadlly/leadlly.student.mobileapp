@@ -25,7 +25,8 @@ const SemiRadialChart = ({
         rotation={-90}
         lineCap="round"
         arcSweepAngle={180}
-        style={{ marginBottom: -30 }}>
+        style={{ marginBottom: -30 }}
+      >
         {(fill) => (
           <Text className="text-2xl font-mada-Bold leading-tight">
             {Math.round(fill)}%

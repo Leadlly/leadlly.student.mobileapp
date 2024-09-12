@@ -38,7 +38,7 @@ const PersonalInfoFormDropdown = ({
               setShowDropdown(false);
             }}
           >
-            <Text className="text-base font-mada-medium leading-none">{`${capitalizeFirstLetter(item)}${item === "11" || item === "12" ? "th" : ""}`}</Text>
+            <Text className="text-base font-mada-medium leading-none">{`${item !== "13" ? capitalizeFirstLetter(item) : "Dropper"}${item === "11" || item === "12" ? "th" : ""}`}</Text>
           </Pressable>
         ))}
       </View>

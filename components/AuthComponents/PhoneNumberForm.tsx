@@ -25,7 +25,7 @@ const PhoneNumberForm = ({
   };
 
   return (
-    <View className="flex items-center gap-5 py-12 px-12">
+    <View className="flex-1 items-center justify-center gap-5 py-12 px-12">
       <Image
         source={require("../../assets/images/phoneNumber.png")}
         className="w-[20vh] h-[20vh]"

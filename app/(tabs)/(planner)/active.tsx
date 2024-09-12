@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import { useGetUserPlanner } from "../../../services/queries/plannerQuery";
 import { useAppDispatch, useAppSelector } from "../../../services/redux/hooks";
 import { useEffect } from "react";
@@ -16,13 +10,7 @@ import {
   getTodaysFormattedDate,
 } from "../../../helpers/utils";
 import PlannerSubjectList from "../../../components/plannerComponents/PlannerSubjectList";
-import {
-  colors,
-  plannerSubjectProgressString,
-} from "../../../constants/constants";
-import { Link } from "expo-router";
-
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { colors } from "../../../constants/constants";
 import InitialTodoBox from "../../../components/dashboardComponents/InitialTodoBox";
 
 const ActivePlannerPage = () => {
@@ -32,6 +20,7 @@ const ActivePlannerPage = () => {
   const dispatch = useAppDispatch();
 
   const { loading, plan } = useAppSelector((state) => state.todaysPlan);
+
   const user = useAppSelector((state) => state.user.user);
 
   const userSubjects = user?.academic.subjects;
@@ -80,7 +69,7 @@ const ActivePlannerPage = () => {
 
   return (
     <View className="flex-1 bg-white p-3">
-      <View className="border border-[#d8d5d5] rounded-2xl max-h-[300px] h-full overflow-hidden mb-4">
+      <View className="border border-[#d8d5d5] rounded-2xl max-h-[400px] mb-4">
         {isError ? (
           <View className="w-full h-full items-center justify-center px-4">
             <Text className="text-sm text-gray-400 font-mada-semibold text-center">
@@ -135,41 +124,6 @@ const ActivePlannerPage = () => {
           </>
         )}
       </View>
-
-      {/* <View className="border border-[#d8d5d5] rounded-2xl py-5 px-4">
-        <Text className="text-xl leading-tight font-mada-semibold text-primary mb-2">
-          Study Progress
-        </Text>
-
-        <FlatList
-          data={plannerSubjectProgressString}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <View className="flex-row gap-x-4 my-3 w-full">
-              <Text className="text-[#686868] text-base leading-tight">
-                {"\u2022"}
-              </Text>
-              <Text className="text-[#686868] text-base font-mada-regular">
-                {item}
-              </Text>
-            </View>
-          )}
-        />
-
-        <View className="items-center justify-center mt-5">
-          <Link
-            href={"/my-account"}
-            asChild
-            className="max-w-[150px] w-full h-10 bg-primary rounded-lg">
-            <TouchableOpacity className="w-full h-full flex-row items-center justify-center">
-              <Text className="text-sm leading-tight text-white font-mada-semibold">
-                Proceed
-              </Text>
-              <AntDesign name="arrowright" size={17} color="white" />
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </View> */}
     </View>
   );
 };

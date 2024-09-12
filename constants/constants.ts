@@ -5,9 +5,9 @@ export const colors = Object.freeze({
   tabItemGray: "#828282",
   secondaryText: "#6E6E6E",
   iconGray: "#7F7F7F",
-  leadllyGreen: "#ff2e2e",
+  leadllyGreen: "#0fd679",
   leadllyYellow: "#ff9900",
-  leadllyRed: "#0fd679",
+  leadllyRed: "#ff2e2e",
   leadllyCyan: "#72EFDD",
   leadllyChartYellow: "#FFDA57",
 });
@@ -92,14 +92,14 @@ export const moodEmojis = [
 export const progressAnalyticsMenus = [
   {
     id: "weekly",
-    title: "Weekly",
+    name: "weekly",
   },
   {
     id: "monthly",
-    title: "Monthly",
+    name: "monthly",
   },
   {
     id: "overall",
-    title: "Overall",
+    name: "overall",
   },
 ];
