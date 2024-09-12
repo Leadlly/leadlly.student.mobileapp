@@ -60,6 +60,7 @@ const initialInfo = () => {
         steps={steps.length}
         back={back}
       />
+
       <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
         {steps[currentStepIndex]}
       </ScrollView>
