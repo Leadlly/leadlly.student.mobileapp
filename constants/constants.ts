@@ -30,7 +30,7 @@ export const tabBarItems = [
     title: "Chat",
   },
   {
-    name: "quizzes",
+    name: "(quizzes)",
     title: "Quizzes",
   },
   {
@@ -103,3 +103,4 @@ export const progressAnalyticsMenus = [
     name: "overall",
   },
 ];
+

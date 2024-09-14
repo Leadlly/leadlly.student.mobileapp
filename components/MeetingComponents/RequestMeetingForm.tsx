@@ -49,7 +49,7 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
   };
 
   return (
-    <ScrollView className="bg-white px-5">
+    <ScrollView className="bg-white px-5 mb-10">
       <ImageBackground source={require("../../assets/images/programmer.png")}>
         <View className="flex justify-center gap-x-2 py-3 flex-row my-6">
           <Text className="font-mada-Bold text-2xl">

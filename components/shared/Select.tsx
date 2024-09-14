@@ -16,24 +16,26 @@ const Select = ({
   items,
   defaultValue,
   onValueChange,
-  className,
+  inputStyle,
   listContainerStyle,
   placeholder = "Select an item",
   label,
   labelStyle,
   fetching,
   loading,
+  overallClassName,
 }: {
   items: { label: string | number; value: string | number }[];
   defaultValue: string;
   onValueChange: (value: string) => void;
-  className?: string;
+  inputStyle?: string;
   listContainerStyle?: string;
   placeholder?: string;
   loading?: boolean;
   fetching?: boolean;
   label?: string;
   labelStyle?: string;
+  overallClassName?: string;
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
@@ -49,7 +51,7 @@ const Select = ({
   };
 
   return (
-    <View className="relative mb-4">
+    <View className={clsx("relative mb-4", overallClassName)}>
       {label ? (
         <Text
           className={clsx(
@@ -62,8 +64,8 @@ const Select = ({
       ) : null}
       <Pressable
         className={clsx(
-          "w-full h-12 bg-white flex-row items-center justify-between px-3 rounded-lg border border-input-border",
-          className
+          "  bg-white flex-row items-center justify-between px-3 rounded-lg border border-input-border",
+          inputStyle
         )}
         onPress={() => setShowDropdown(!showDropdown)}
       >

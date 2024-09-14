@@ -326,3 +326,62 @@ export type TQuizAnswerProps = {
   isCorrect: boolean;
   tag: string;
 };
+export type Subject = keyof typeof SUBJECT_COLORS;
+export interface AttemptedWeeklyQuiz {
+  id: number;
+  description: string;
+  startDate: string;
+  endDate: string;
+  subject: Subject;
+  completedDate: string;
+  efficiency: number;
+  questions: number;
+}
+export interface AttemptedQuizProps {
+  id: number;
+  chapterName: string;
+  description: string;
+  subject: string;
+  questions: number;
+  completedDate: string;
+  efficiency: number;
+}
+export type WeeklyQuizProps = {
+  _id: string;
+  user: string;
+  questions: {
+    [key: string]: {
+      _id: string;
+      question: string;
+      options: {
+        name: string;
+        tag: string;
+        images: string | null;
+        _id: string;
+      }[];
+      standard: number;
+      subject: string;
+      chapter: string[];
+      topics: string[];
+      subtopics: string[];
+      level: string;
+      images: [];
+      createdBy: string;
+      createdAt: string;
+    }[];
+  };
+  quizType: string;
+  attempted: boolean;
+  reattempted: number;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+};
+
+export type UnattemptedChapterQuizProps = {
+  id: number;
+  chapterName: string;
+  description: string;
+  subject: string
+  questions: number;
+};

@@ -7,12 +7,13 @@ import {
   TouchableOpacity,
   Dimensions,
   Linking,
+  ActivityIndicator,
 } from "react-native";
 import { TMeetingsProps } from "../../../types/types";
 import { convertDateString, formatDate } from "../../../helpers/utils";
 import { AntDesign } from "@expo/vector-icons";
 import { useGetMeetings } from "../../../services/queries/meetingQuery";
-import { ActivityIndicator } from "react-native-paper";
+
 import { colors } from "../../../constants/constants";
 
 const UpcomingMeetings = () => {
