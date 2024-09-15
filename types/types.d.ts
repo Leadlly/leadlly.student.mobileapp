@@ -326,3 +326,11 @@ export type TQuizAnswerProps = {
   isCorrect: boolean;
   tag: string;
 };
+
+export interface Plan {
+  id: number;
+  name: string;
+  price: string;
+  planType: string;
+  duration: string;
+}

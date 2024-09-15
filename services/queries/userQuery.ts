@@ -88,6 +88,25 @@ export const useLogoutUser = () => {
   });
 };
 
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: async (data: { email: string }) => {
+      try {
+        const res = await axiosClient.post("/api/auth/forgetpassword", data);
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error(
+            "An unknown error while sending reset password link!!"
+          );
+        }
+      }
+    },
+  });
+};
+
 export const useGetUser = () => {
   return useQuery({
     queryKey: ["user"],
