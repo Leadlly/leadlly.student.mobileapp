@@ -1,3 +1,5 @@
+import { Plan } from "../types/types";
+
 export const colors = Object.freeze({
   primary: "#9654F4",
   primary200: "rgba(150, 84, 244, 0.5)",
@@ -101,5 +103,49 @@ export const progressAnalyticsMenus = [
   {
     id: "overall",
     name: "overall",
+  },
+];
+
+export const features = [
+  {
+    title: "Planning & Organization",
+    details: [
+      "Goal Setting & Tracking",
+      "Schedule Builder",
+      "To-Do List & Reminders",
+      "Subject, Chapter & Topic Tracking",
+    ],
+  },
+  {
+    title: "Expert Guidance & Support",
+    details: ["Connect with a Mentor", "Live & On-Demand Workshops"],
+  },
+  {
+    title: "Learning Optimization",
+    details: ["Growth Meter", "Points & Levels", "Know Your Mistakes"],
+  },
+];
+
+export const plans: Plan[] = [
+  {
+    id: 1,
+    name: "3 Months",
+    price: "499",
+    planType: "Basic Plan",
+    duration: "3",
+  },
+  {
+    id: 2,
+    name: "6 Months",
+    price: "416",
+    planType: "Professional Plan",
+    duration: "6",
+  },
+  {
+    id: 3,
+    name: "1 Year",
+    price: "333",
+    planType: "Ultimate Plan",
+    duration: "12",
   },
 ];

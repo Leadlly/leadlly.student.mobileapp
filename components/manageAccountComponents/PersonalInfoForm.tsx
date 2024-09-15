@@ -100,7 +100,7 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
         ...formattedPersonalData,
       });
 
-      dispatch(setUser(res.user));
+      dispatch(setUser({ ...user, ...res.user }));
 
       Toast.show({
         type: "success",

@@ -1,5 +1,5 @@
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   View,
@@ -7,64 +7,61 @@ import {
   TouchableOpacity,
   Modal,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
-import { colors } from "../../constants/constants";
-
-interface Plan {
-  id: number;
-  name: string;
-  price: string;
-  planType: string;
-  duration: string;
-}
-
-const features = [
-  {
-    title: "Planning & Organization",
-    details: [
-      "Goal Setting & Tracking",
-      "Schedule Builder",
-      "To-Do List & Reminders",
-      "Subject, Chapter & Topic Tracking",
-    ],
-  },
-  {
-    title: "Expert Guidance & Support",
-    details: ["Connect with a Mentor", "Live & On-Demand Workshops"],
-  },
-  {
-    title: "Learning Optimization",
-    details: ["Growth Meter", "Points & Levels", "Know Your Mistakes"],
-  },
-];
-
-const plans: Plan[] = [
-  {
-    id: 1,
-    name: "3 Months",
-    price: "499",
-    planType: "Basic Plan",
-    duration: "3",
-  },
-  {
-    id: 2,
-    name: "6 Months",
-    price: "416",
-    planType: "Professional Plan",
-    duration:"6",
-  },
-  {
-    id: 3,
-    name: "1 Year",
-    price: "333",
-    planType: "Ultimate Plan",
-    duration: "12",
-  },
-];
+import { colors, features, plans } from "../../constants/constants";
+import { Plan } from "../../types/types";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { useAppSelector } from "../../services/redux/hooks";
+import { useBuySubscription } from "../../services/queries/subscriptionQuery";
+import Toast from "react-native-toast-message";
+import ModalComponent from "../../components/shared/ModalComponent";
 
 const SubscriptionPlansScreen: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<Plan>(plans[1]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [transactionCancelled, setIsTransactionCancelled] = useState(false);
+
+  const userToken = useAppSelector((state) => state.user.user?.token);
+
+  const { mutateAsync: buySubscription, isPending: isBuyingSubscription } =
+    useBuySubscription();
+
+  const handleProceedButton = async () => {
+    try {
+      const res = await buySubscription(selectedPlan.duration);
+
+      const redirectUrl = Linking.createURL("subscription-plans");
+
+      const subscriptionUrl = `http://192.168.1.4:3000/subscription-plans?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
+
+      await WebBrowser.openBrowserAsync(subscriptionUrl);
+    } catch (error: any) {
+      return Toast.show({
+        type: "error",
+        text1: error.message,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const handleDeepLink = async (event: Linking.EventType) => {
+      const url = Linking.parse(event.url);
+      console.log(url);
+      const { queryParams } = url;
+
+      if (queryParams && queryParams.transaction === "cancelled") {
+        return setIsTransactionCancelled(true);
+      }
+    };
+
+    const submit = Linking.addEventListener("url", handleDeepLink);
+
+    return () => {
+      submit.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView className=" bg-white/50 pt-5 flex-1">
@@ -81,7 +78,11 @@ const SubscriptionPlansScreen: React.FC = () => {
               key={index}
               className="flex-row justify-start items-center gap-2 mb-3"
             >
-              <AntDesign name="checkcircle" size={18} color="#13E42B" />
+              <AntDesign
+                name="checkcircle"
+                size={18}
+                color={colors.leadllyGreen}
+              />
               <Text className="text-lg font-mada-medium text-black ">
                 {feature.title}
               </Text>
@@ -136,10 +137,17 @@ const SubscriptionPlansScreen: React.FC = () => {
           </TouchableOpacity>
         ))}
 
-        <TouchableOpacity className="mt-20 p-4 bg-primary rounded-lg">
-          <Text className="text-white text-center text-lg font-mada-Bold">
-            Proceed
-          </Text>
+        <TouchableOpacity
+          onPress={handleProceedButton}
+          className="mt-20 p-4 bg-primary rounded-lg items-center justify-center"
+        >
+          {isBuyingSubscription ? (
+            <ActivityIndicator size={"small"} color={"#fff"} />
+          ) : (
+            <Text className="text-white text-center text-lg font-mada-Bold">
+              Proceed
+            </Text>
+          )}
         </TouchableOpacity>
 
         <Modal visible={isModalVisible} animationType="slide">
@@ -187,6 +195,18 @@ const SubscriptionPlansScreen: React.FC = () => {
           </ScrollView>
         </Modal>
       </ScrollView>
+
+      {transactionCancelled && (
+        <ModalComponent
+          modalVisible={transactionCancelled}
+          setModalVisible={setIsTransactionCancelled}
+          className="flex-1"
+        >
+          <View>
+            <Text>Cancelled</Text>
+          </View>
+        </ModalComponent>
+      )}
     </SafeAreaView>
   );
 };
