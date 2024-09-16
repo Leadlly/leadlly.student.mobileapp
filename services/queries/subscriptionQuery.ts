@@ -8,7 +8,7 @@ export const useActivateFreeTrial = () => {
   return useMutation({
     mutationFn: async () => {
       try {
-        const res = await axiosClient.get("/api/subscribe/freetrial");
+        const res = await axiosClient.get("/api/subscription/freetrial");
         return res.data;
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -34,7 +34,7 @@ export const useBuySubscription = () => {
     mutationFn: async (duration: string) => {
       try {
         const res = await axiosClient.post(
-          `/api/subscribe/create?duration=${duration}`
+          `/api/subscription/create?duration=${duration}`
         );
 
         return res.data;
