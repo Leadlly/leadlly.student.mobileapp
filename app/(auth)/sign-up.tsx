@@ -5,8 +5,9 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { SignUpFormSchema } from "../../schemas/loginSchema";
@@ -21,9 +22,11 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Input from "../../components/shared/Input";
 import GoogleSignInButton from "../../components/AuthComponents/GoogleSignInButton";
+import LottieView from "lottie-react-native";
 
 const SignUp = () => {
   const [toggleShowPassword, setToggleShowPassword] = useState(false);
+  const signUp_animation = useRef<LottieView>(null);
 
   const router = useRouter();
 
@@ -60,18 +63,39 @@ const SignUp = () => {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView
         contentContainerStyle={{
-          flex: 1,
           alignItems: "center",
           justifyContent: "center",
           paddingHorizontal: 25,
         }}
+        automaticallyAdjustKeyboardInsets={true}
       >
+        <View className="w-full pt-3 mb-2">
+          <View className="w-11 h-11">
+            <Image
+              source={require("../../assets/images/leadlly_logo.png")}
+              resizeMode="contain"
+              className="absolute w-11 h-11"
+            />
+          </View>
+        </View>
+        <View className="w-full h-48 mb-4">
+          <LottieView
+            ref={signUp_animation}
+            source={require("../../assets/signup_animation.json")}
+            autoPlay
+            loop={true}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </View>
         <View className="w-full">
-          <View className="w-full mb-10">
+          <View className="w-full mb-8">
             <Text className="text-3xl font-mada-Bold leading-tight text-center">
               Create an account
             </Text>
-            <Text className="text-base leading-tight font-mada-regular text-center w-72 mx-auto">
+            <Text className="text-base leading-tight font-mada-regular text-center w-80 mx-auto">
               Unlock your potential with expert guidance sign up for mentorship
               today!
             </Text>
@@ -133,7 +157,7 @@ const SignUp = () => {
               rules={{ required: true }}
               render={({ field }) => (
                 <Input
-                  placeholder="Password"
+                  placeholder="Create Password"
                   secureTextEntry={toggleShowPassword ? false : true}
                   onBlur={field.onBlur}
                   onChangeText={field.onChange}
@@ -179,7 +203,9 @@ const SignUp = () => {
 
           <View className="flex-row items-center justify-center space-x-5 mb-4">
             <View className="w-10 h-[1px] bg-input-border" />
-            <Text className="text-base font-mada-medium">OR</Text>
+            <Text className="text-base font-mada-medium text-tab-item-gray">
+              OR
+            </Text>
             <View className="w-10 h-[1px] bg-input-border" />
           </View>
 

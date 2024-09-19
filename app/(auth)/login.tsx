@@ -6,8 +6,9 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { LoginFormSchema } from "../../schemas/loginSchema";
@@ -23,9 +24,11 @@ import { loginAction } from "../../services/redux/slices/userSlice";
 import Toast from "react-native-toast-message";
 import Input from "../../components/shared/Input";
 import GoogleSignInButton from "../../components/AuthComponents/GoogleSignInButton";
+import LottieView from "lottie-react-native";
 
 const Login = () => {
   const [toggleShowPassword, setToggleShowPassword] = useState(false);
+  const login_animation = useRef<LottieView>(null);
 
   const router = useRouter();
 
@@ -63,12 +66,30 @@ const Login = () => {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView
         contentContainerStyle={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
           paddingHorizontal: 25,
         }}
       >
+        <View className="w-full pt-3 mb-2">
+          <View className="w-11 h-11">
+            <Image
+              source={require("../../assets/images/leadlly_logo.png")}
+              resizeMode="contain"
+              className="absolute w-11 h-11"
+            />
+          </View>
+        </View>
+        <View className="w-full h-48 mb-4">
+          <LottieView
+            ref={login_animation}
+            source={require("../../assets/login_animation.json")}
+            autoPlay
+            loop={true}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </View>
         <View className="w-full">
           <View className="mb-10">
             <Text className="text-5xl font-mada-Bold leading-tight text-center">

@@ -9,32 +9,48 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
-import { colors, features, plans } from "../../constants/constants";
+import { colors, features } from "../../constants/constants";
 import { Plan } from "../../types/types";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { useAppSelector } from "../../services/redux/hooks";
-import { useBuySubscription } from "../../services/queries/subscriptionQuery";
+import {
+  useBuySubscription,
+  useGetSubscriptionPricing,
+} from "../../services/queries/subscriptionQuery";
 import Toast from "react-native-toast-message";
 import ModalComponent from "../../components/shared/ModalComponent";
+import PaymentSuccessModal from "../../components/subscriptionComponents/PaymentSuccessModal";
 
 const SubscriptionPlansScreen: React.FC = () => {
-  const [selectedPlan, setSelectedPlan] = useState<Plan>(plans[1]);
+  const {
+    data: pricingData,
+    isLoading: fetchingPricing,
+    isError,
+  } = useGetSubscriptionPricing("main");
+
+  const [selectedPlan, setSelectedPlan] = useState<Plan>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [transactionCancelled, setIsTransactionCancelled] = useState(false);
+  const [transactionSuccess, setIsTransactionSuccess] = useState(false);
+  const [transactionFailed, setIsTransactionFailed] = useState(false);
+  const [referenceId, setReferenceId] = useState<string | string[] | undefined>(
+    ""
+  );
 
-  const userToken = useAppSelector((state) => state.user.user?.token);
+  const user = useAppSelector((state) => state.user.user);
+  const userToken = user?.token;
 
   const { mutateAsync: buySubscription, isPending: isBuyingSubscription } =
     useBuySubscription();
 
   const handleProceedButton = async () => {
     try {
-      const res = await buySubscription(selectedPlan.duration);
+      const res = await buySubscription(selectedPlan?.planId!);
 
       const redirectUrl = Linking.createURL("subscription-plans");
 
-      const subscriptionUrl = `http://192.168.1.4:3000/subscription-plans?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
+      const subscriptionUrl = `${process.env.EXPO_PUBLIC_WEB_APP_URL}/subscription-plans?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
 
       await WebBrowser.openBrowserAsync(subscriptionUrl);
     } catch (error: any) {
@@ -53,6 +69,16 @@ const SubscriptionPlansScreen: React.FC = () => {
 
       if (queryParams && queryParams.transaction === "cancelled") {
         return setIsTransactionCancelled(true);
+      }
+
+      if (queryParams && queryParams.payment === "success") {
+        const referenceIdParam = queryParams.reference;
+        setReferenceId(referenceIdParam);
+        return setIsTransactionSuccess(true);
+      }
+
+      if (queryParams && queryParams.payment === "failed") {
+        return setIsTransactionFailed(true);
       }
     };
 
@@ -98,44 +124,80 @@ const SubscriptionPlansScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        {plans.map((plan) => (
-          <TouchableOpacity
-            key={plan.id}
-            className={`p-4 mb-4 rounded-xl border shadow-xl flex flex-row items-center justify-between ${
-              selectedPlan.id === plan.id
-                ? "border-primary bg-primary/10"
-                : "border-gray-300 bg-white"
-            }`}
-            onPress={() => setSelectedPlan(plan)}
-          >
-            <View className="flex flex-row items-center gap-4">
-              {selectedPlan.id === plan.id ? (
-                <AntDesign
-                  name="checkcircle"
-                  size={20}
-                  color={colors.primary}
-                />
-              ) : (
-                <Feather name="circle" size={20} color="#B6B6B6" />
-              )}
-              <View>
-                <Text className="text-xl font-mada-semibold text-black">
-                  {plan.name}
-                </Text>
-                <Text className="text-gray-500 font-mada-semibold">
-                  {plan.price}/- per month
+        {fetchingPricing ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size={"small"} color={colors.primary} />
+          </View>
+        ) : isError ? (
+          <View className="flex-1 items-center justify-center px-5">
+            <Text className="text-sm text-secondary-text font-mada-medium leading-tight">
+              No Pricing Found
+            </Text>
+          </View>
+        ) : (
+          <>
+            {pricingData?.pricing && pricingData.pricing.length > 0 ? (
+              pricingData?.pricing.map((plan) => (
+                <TouchableOpacity
+                  key={plan.planId}
+                  className={`p-4 mb-4 rounded-xl border shadow-xl flex flex-row items-center justify-between ${
+                    selectedPlan === plan
+                      ? "border-primary bg-primary/10"
+                      : "border-gray-300 bg-white"
+                  }`}
+                  onPress={() => setSelectedPlan(plan)}
+                >
+                  <View className="flex flex-row items-center gap-4">
+                    {selectedPlan === plan ? (
+                      <AntDesign
+                        name="checkcircle"
+                        size={20}
+                        color={colors.primary}
+                      />
+                    ) : (
+                      <Feather name="circle" size={20} color="#B6B6B6" />
+                    )}
+                    <View>
+                      <Text className="text-xl font-mada-semibold text-black capitalize">
+                        {Number(plan["duration(months)"]) < 12
+                          ? plan["duration(months)"]
+                          : Math.floor(
+                              Number(plan["duration(months)"]) / 12
+                            )}{" "}
+                        {Number(plan["duration(months)"]) < 12
+                          ? "months"
+                          : `year${Math.floor(Number(plan["duration(months)"]) / 12) === 1 ? "" : "s"}`}
+                      </Text>
+                      <Text className="text-gray-500 font-mada-semibold">
+                        {Math.round(
+                          plan.amount / Number(plan["duration(months)"])
+                        )}
+                        /- per month
+                      </Text>
+                    </View>
+                  </View>
+                  <Text
+                    className={` font-mada-semibold capitalize ${
+                      selectedPlan === plan ? "text-primary" : "text-gray-600"
+                    }`}
+                  >
+                    {plan["duration(months)"] === "3"
+                      ? "basic plan"
+                      : plan["duration(months)"] === "6"
+                        ? "professional plan"
+                        : "ultimate plan"}
+                  </Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <View className="flex-1 items-center justify-center">
+                <Text className="text-base text-secondary-text font-mada-medium leading-tight">
+                  No Price Available!
                 </Text>
               </View>
-            </View>
-            <Text
-              className={` font-mada-semibold   ${
-                selectedPlan.id === plan.id ? "text-primary" : "text-gray-600"
-              }`}
-            >
-              {plan.planType}
-            </Text>
-          </TouchableOpacity>
-        ))}
+            )}
+          </>
+        )}
 
         <TouchableOpacity
           onPress={handleProceedButton}
@@ -206,6 +268,15 @@ const SubscriptionPlansScreen: React.FC = () => {
             <Text>Cancelled</Text>
           </View>
         </ModalComponent>
+      )}
+
+      {transactionSuccess && (
+        <PaymentSuccessModal
+          transactionSuccess={transactionSuccess}
+          setIsTransactionSuccess={setIsTransactionSuccess}
+          referenceId={referenceId}
+          user={user}
+        />
       )}
     </SafeAreaView>
   );
