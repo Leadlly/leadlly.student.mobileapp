@@ -328,9 +328,10 @@ export type TQuizAnswerProps = {
 };
 
 export interface Plan {
-  id: number;
-  name: string;
-  price: string;
-  planType: string;
-  duration: string;
+  id: string;
+  amount: number;
+  currency: string;
+  "duration(months)": string;
+  planId: string;
+  type: string;
 }

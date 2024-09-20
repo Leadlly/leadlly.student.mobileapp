@@ -6,6 +6,7 @@ import { logoutAction } from "../../services/redux/slices/userSlice";
 import { colors } from "../../constants/constants";
 import { removeTodaysPlan } from "../../services/redux/slices/plannerSlice";
 import { useRouter } from "expo-router";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const LogoutButton = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     try {
       const res = await logout();
+      await GoogleSignin.signOut();
       router.replace("/welcome");
 
       dispatch(logoutAction());
