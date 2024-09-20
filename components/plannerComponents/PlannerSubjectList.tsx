@@ -16,7 +16,7 @@ const PlannerSubjectList = ({
   getBackRevisionTopicsForSubject: (subject: string) => string | undefined;
 }) => {
   return (
-    <View key={item.name} className="px-4 py-2 justify-center">
+    <View key={item.name} className="p-4 justify-center">
       <Text className="text-[17px] font-mada-medium capitalize text-black leading-tight">
         {item.name}
       </Text>
