@@ -21,6 +21,7 @@ import {
 import Toast from "react-native-toast-message";
 import ModalComponent from "../../components/shared/ModalComponent";
 import PaymentSuccessModal from "../../components/subscriptionComponents/PaymentSuccessModal";
+import PaymentCancelledModal from "../../components/subscriptionComponents/PaymentCancelledModal";
 
 const SubscriptionPlansScreen: React.FC = () => {
   const {
@@ -259,15 +260,10 @@ const SubscriptionPlansScreen: React.FC = () => {
       </ScrollView>
 
       {transactionCancelled && (
-        <ModalComponent
-          modalVisible={transactionCancelled}
-          setModalVisible={setIsTransactionCancelled}
-          className="flex-1"
-        >
-          <View>
-            <Text>Cancelled</Text>
-          </View>
-        </ModalComponent>
+        <PaymentCancelledModal
+          transactionCancelled={transactionCancelled}
+          setIsTransactionCancelled={setIsTransactionCancelled}
+        />
       )}
 
       {transactionSuccess && (
