@@ -15,7 +15,8 @@ import Toast from "react-native-toast-message";
 const GoogleSignInButton = () => {
   const configureGoogleSignIn = () => {
     GoogleSignin.configure({
-      webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
+      webClientId:
+        "258318847833-nhj328434mfn6vbba3siv642ota6e09p.apps.googleusercontent.com",
     });
   };
 

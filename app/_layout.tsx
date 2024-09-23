@@ -6,6 +6,7 @@ import { store } from "../services/redux/store";
 import AppWrapper from "../components/AppWrapper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import NotificationHandler from "../components/NotificationHandler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -33,6 +34,7 @@ const RootLayout = () => {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
+        <NotificationHandler />
         <AppWrapper />
         <Toast />
       </QueryClientProvider>
