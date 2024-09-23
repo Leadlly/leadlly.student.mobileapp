@@ -67,7 +67,7 @@ const ToDoListItem = ({
               </Text>
             ) : null}
           </View>
-          <Text className="text-base font-mada-semibold leading-tight">
+          <Text className="flex-1 text-base font-mada-semibold leading-tight">
             {capitalizeFirstLetter(item.topic.name)}
           </Text>
         </TouchableOpacity>

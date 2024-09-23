@@ -7,8 +7,20 @@ import { colors } from "../../constants/constants";
 import { removeTodaysPlan } from "../../services/redux/slices/plannerSlice";
 import { useRouter } from "expo-router";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { useEffect } from "react";
 
 const LogoutButton = () => {
+  const configureGoogleSignIn = () => {
+    GoogleSignin.configure({
+      webClientId:
+        "258318847833-nhj328434mfn6vbba3siv642ota6e09p.apps.googleusercontent.com",
+    });
+  };
+
+  useEffect(() => {
+    configureGoogleSignIn();
+  }, []);
+
   const router = useRouter();
 
   const dispatch = useAppDispatch();

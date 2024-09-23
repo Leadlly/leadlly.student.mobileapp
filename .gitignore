@@ -17,6 +17,8 @@ web-build/
 *.mobileprovision
 
 /android
+google-services.json
+leadlly-mobile-app-firebase-adminsdk-i6s11-f32ad229fa.json
 
 # Metro
 .metro-health-check*

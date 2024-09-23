@@ -123,7 +123,29 @@ export const useForgotPassword = () => {
           throw new Error(`${error.response?.data.message}`);
         } else {
           throw new Error(
-            "An unknown error while sending reset password link!!"
+            "An unknown error occurred while sending reset password link!!"
+          );
+        }
+      }
+    },
+  });
+};
+
+export const useResetPassword = (token: string) => {
+  return useMutation({
+    mutationFn: async (data: { password: string }) => {
+      try {
+        const res = await axiosClient.post(
+          `/api/auth/resetpassword/${token}`,
+          data
+        );
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error(
+            "An unknown error occurred while resetting password!!"
           );
         }
       }
