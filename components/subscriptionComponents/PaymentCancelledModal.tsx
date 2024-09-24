@@ -1,15 +1,15 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { colors } from "../../constants/constants";
 import ModalComponent from "../shared/ModalComponent";
 
 const PaymentCancelledModal = ({
   setIsTransactionCancelled,
   transactionCancelled,
+  label,
 }: {
   transactionCancelled: boolean;
   setIsTransactionCancelled: (transactionCancelled: boolean) => void;
+  label: string;
 }) => {
   return (
     <ModalComponent
@@ -25,7 +25,7 @@ const PaymentCancelledModal = ({
         />
         <View className="items-center justify-center">
           <Text className="text-2xl font-mada-Bold leading-tight text-center">
-            Transaction Cancelled
+            Transaction {label}
           </Text>
           <Text className="text-base font-mada-medium leading-tight text-center">
             No payment was made.

@@ -202,7 +202,7 @@ const SubscriptionPlansScreen: React.FC = () => {
 
         <TouchableOpacity
           onPress={handleProceedButton}
-          className="mt-20 p-4 bg-primary rounded-lg items-center justify-center"
+          className="mt-10 p-4 bg-primary rounded-lg items-center justify-center"
         >
           {isBuyingSubscription ? (
             <ActivityIndicator size={"small"} color={"#fff"} />
@@ -263,6 +263,15 @@ const SubscriptionPlansScreen: React.FC = () => {
         <PaymentCancelledModal
           transactionCancelled={transactionCancelled}
           setIsTransactionCancelled={setIsTransactionCancelled}
+          label={"Cancelled"}
+        />
+      )}
+
+      {transactionFailed && (
+        <PaymentCancelledModal
+          transactionCancelled={transactionFailed}
+          setIsTransactionCancelled={setIsTransactionFailed}
+          label={"Failed"}
         />
       )}
 
