@@ -51,7 +51,7 @@ const SubscriptionPlansScreen: React.FC = () => {
 
       const redirectUrl = Linking.createURL("subscription-plans");
 
-      const subscriptionUrl = `${process.env.EXPO_PUBLIC_WEB_APP_URL}/subscription-plans?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
+      const subscriptionUrl = `https://education.leadlly.in/subscription-plans?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
 
       await WebBrowser.openBrowserAsync(subscriptionUrl);
     } catch (error: any) {

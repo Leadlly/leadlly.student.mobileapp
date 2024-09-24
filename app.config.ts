@@ -1,7 +1,7 @@
 export default {
   expo: {
     name: "Leadlly",
-    slug: "Leadlly",
+    slug: "leadlly",
     version: "1.0.0",
     scheme: "leadlly-student-app",
     orientation: "portrait",
@@ -36,7 +36,7 @@ export default {
         origin: false,
       },
       eas: {
-        projectId: "78f78cdf-4ea8-4a4c-bdec-fe3346d22725",
+        projectId: "91b0599c-a56a-4e2e-87b0-a5614b4fd0ae",
       },
     },
   },
