@@ -4,6 +4,7 @@ import { AttemptedQuizProps } from "../../types/types";
 import { formatDate } from "../../helpers/utils";
 import { useAppSelector } from "../../services/redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 const AttemptedQuiz: React.FC<{
   quiz: AttemptedQuizProps;
@@ -48,18 +49,20 @@ const AttemptedQuiz: React.FC<{
             <Text className="text-gray-600 my-1 text-xs font-mada-regular">
               {quiz.questions} Quiz Questions
             </Text>
-            <TouchableOpacity
-              className="bg-white border px-2 py-1 rounded-md flex-row items-center"
-              onPress={() => {
-                // Navigate to quiz/${quiz.id}/report
-                // You'll need to implement navigation logic here
+            <Link
+              href={{
+                pathname: "/(quiz)/quiz/[quizId]/report",
+                params: { quizId: quiz.id },
               }}
+              asChild
             >
-              <Text className=" font-mada-semibold text-xs mr-1">
-                View Details
-              </Text>
-              <Ionicons name="chevron-forward" size={12} color="black" />
-            </TouchableOpacity>
+              <TouchableOpacity className="bg-white border px-2 py-1 rounded-md flex-row items-center">
+                <Text className="font-mada-semibold text-xs mr-1">
+                  View Details
+                </Text>
+                <Ionicons name="chevron-forward" size={12} color="black" />
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
       </View>

@@ -122,27 +122,28 @@ const CustomizedQuiz: React.FC = () => {
           </View>
         </View>
         <View className="flex flex-1 flex-row items-center ">
-          <Controller
-            name="subjectName"
-            control={form.control}
-            render={({ field }) => (
-              <Select
-                label="Subject Name"
-                inputStyle=" h-10 bg-bl mr-4 "
-                overallClassName=" flex-1"
-                labelStyle="text-sm ml-1 text-gray-500"
-                placeholder="Select subject"
-                items={
-                  userSubjects?.map((subject) => ({
-                    label: subject.name,
-                    value: subject.name,
-                  })) || []
-                }
-                defaultValue={field.value}
-                onValueChange={field.onChange}
-              />
-            )}
-          />
+          <View className="flex-1 mr-1">
+            <Controller
+              name="subjectName"
+              control={form.control}
+              render={({ field }) => (
+                <Select
+                  label="Subject Name"
+                  inputStyle="w-full text-xs h-10 px-0 pl-3"
+                  labelStyle="text-sm ml-1 text-gray-500"
+                  placeholder="Select subject"
+                  items={
+                    userSubjects?.map((subject) => ({
+                      label: subject.name,
+                      value: subject.name,
+                    })) || []
+                  }
+                  defaultValue={field.value}
+                  onValueChange={field.onChange}
+                />
+              )}
+            />
+          </View>
           <Controller
             name="numberOfQuestions"
             control={form.control}

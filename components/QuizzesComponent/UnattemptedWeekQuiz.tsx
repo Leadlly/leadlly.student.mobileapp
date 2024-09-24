@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { WeeklyQuizProps } from "../../types/types";
 import { useAppSelector } from "../../services/redux/hooks";
 import { calculateDaysLeft, formatDate } from "../../helpers/utils";
+import { Link } from "expo-router";
 
 type UnattemptedWeekQuizProps = {
   quiz: WeeklyQuizProps;
@@ -66,17 +67,18 @@ const UnattemptedWeekQuiz: React.FC<UnattemptedWeekQuizProps> = ({ quiz }) => {
               {Object.values(quiz.questions).flat().length} Quiz Questions
             </Text>
             {daysLeft > 0 && (
-              <TouchableOpacity
-                className="bg-primary  px-2 py-1 rounded-md"
-                onPress={() => {
-                  // Navigate to quiz attempt screen
-                  // You'll need to implement navigation logic here
+              <Link
+                href={{
+                  pathname: `/quiz/${quiz._id}/attempt`,
                 }}
+                asChild
               >
-                <Text className="text-white font-mada-semibold text-xs">
-                  Attempt Now
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity className="bg-primary  px-2 py-1 rounded-md">
+                  <Text className="text-white font-mada-semibold text-xs">
+                    Attempt Now
+                  </Text>
+                </TouchableOpacity>
+              </Link>
             )}
           </View>
         </View>

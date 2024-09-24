@@ -64,7 +64,7 @@ const Select = ({
       ) : null}
       <Pressable
         className={clsx(
-          "  bg-white flex-row items-center justify-between px-3 rounded-lg border border-input-border",
+          "  bg-white flex-row w-full h-12 items-center justify-between px-3 rounded-lg border border-input-border",
           inputStyle
         )}
         onPress={() => setShowDropdown(!showDropdown)}
@@ -72,7 +72,7 @@ const Select = ({
         <View className="flex-1">
           <Text
             className={clsx(
-              "font-mada-medium text-base leading-tight",
+              "font-mada-medium text-base  leading-tight",
               !selectedValue ? "text-tab-item-gray" : "text-black"
             )}
           >

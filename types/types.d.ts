@@ -382,6 +382,28 @@ export type UnattemptedChapterQuizProps = {
   id: number;
   chapterName: string;
   description: string;
-  subject: string
+  subject: string;
   questions: number;
+};
+export type QuizReportResponse = {
+  status: number;
+  topicsWithEfficiency: { topic: string; efficiency: string }[];
+  questions: Question[];
+  score: number;
+  correctAnswers: number;
+  inCorrectAnswers: number;
+  totalQuestions: number;
+};
+
+export type Question = {
+  _id: string;
+  question: string;
+  options: QuestionOption[];
+  selectedOption: string;
+};
+
+export type QuestionOption = {
+  _id: string;
+  name: string;
+  tag: string;
 };

@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { UnattemptedChapterQuizProps } from "../../types/types";
 import { useAppSelector } from "../../services/redux/hooks";
+import { Link } from "expo-router";
 
 const UnattemptedChapterQuiz: React.FC<{
   quiz: UnattemptedChapterQuizProps;
@@ -41,17 +42,18 @@ const UnattemptedChapterQuiz: React.FC<{
             <Text className="text-gray-600 my-1 text-xs font-mada-regular">
               {quiz.questions} Quiz Questions
             </Text>
-            <TouchableOpacity
-              className="bg-primary px-2 py-1 rounded-md"
-              onPress={() => {
-                // Navigate to quiz attempt screen
-                // You'll need to implement navigation logic here
+            <Link
+              href={{
+                pathname: `/quiz/${quiz.id}/attempt`,
               }}
+              asChild
             >
-              <Text className="text-white font-mada-semibold text-xs">
-                Attempt Now
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity className="bg-primary  px-2 py-1 rounded-md">
+                <Text className="text-white font-mada-semibold text-xs">
+                  Attempt Now
+                </Text>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
       </View>

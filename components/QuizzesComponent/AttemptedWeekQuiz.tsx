@@ -4,6 +4,7 @@ import { WeeklyQuizProps } from "../../types/types";
 import { formatDate } from "../../helpers/utils";
 import { useAppSelector } from "../../services/redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 const AttemptedWeekQuiz: React.FC<{
   quiz: WeeklyQuizProps;
@@ -17,7 +18,8 @@ const AttemptedWeekQuiz: React.FC<{
       <View className="flex-1 flex-col justify-start space-y-1">
         <View className="w-full flex-row items-center justify-between">
           <Text className="text-lg font-mada-semibold">
-            {formatDate(new Date(quiz.startDate))} - {formatDate(new Date(quiz.endDate))}
+            {formatDate(new Date(quiz.startDate))} -{" "}
+            {formatDate(new Date(quiz.endDate))}
           </Text>
         </View>
         <View className="flex-row justify-between flex-1 items-end">
@@ -49,18 +51,20 @@ const AttemptedWeekQuiz: React.FC<{
             <Text className="text-gray-600 my-1 text-xs font-mada-regular">
               {Object.values(quiz.questions).flat().length} Quiz Questions
             </Text>
-            <TouchableOpacity
-              className="bg-white border px-2 py-1 rounded-md flex-row items-center"
-              onPress={() => {
-                // Navigate to quiz/${quiz._id}/report
-                // You'll need to implement navigation logic here
+            <Link
+              href={{
+                pathname: "/(quiz)/quiz/[quizId]/report",
+                params: { quizId: quiz._id },
               }}
+              asChild
             >
-              <Text className=" font-mada-semibold text-xs mr-1">
-                View Details
-              </Text>
-              <Ionicons name="chevron-forward" size={12} color="black" />
-            </TouchableOpacity>
+              <TouchableOpacity className="bg-white border px-2 py-1 rounded-md flex-row items-center">
+                <Text className="font-mada-semibold text-xs mr-1">
+                  View Details
+                </Text>
+                <Ionicons name="chevron-forward" size={12} color="black" />
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
       </View>
