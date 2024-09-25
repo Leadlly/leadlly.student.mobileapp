@@ -1,5 +1,6 @@
 export default {
   expo: {
+    owner: "leadlly_edusolutions_private_limited",
     name: "Leadlly",
     slug: "leadlly",
     version: "1.0.0",

@@ -13,7 +13,7 @@ const LogoutButton = () => {
   const configureGoogleSignIn = () => {
     GoogleSignin.configure({
       webClientId:
-        "258318847833-nhj328434mfn6vbba3siv642ota6e09p.apps.googleusercontent.com",
+        "596938289665-5ls0gf4pts3cbtj1dm3nig6dkc4ttej6.apps.googleusercontent.com",
     });
   };
 

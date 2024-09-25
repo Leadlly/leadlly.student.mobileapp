@@ -1,8 +1,7 @@
 import axios from "axios";
 import { RootState, store } from "../redux/store";
 
-const apiBaseUrl =
-  "http://right-mayfly-vocal.ngrok-free.app" || "https://api.leadlly.in";
+const apiBaseUrl = "https://api.leadlly.in";
 
 const axiosClient = axios.create({
   baseURL: apiBaseUrl,
