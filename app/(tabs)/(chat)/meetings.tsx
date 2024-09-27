@@ -5,15 +5,13 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
+  ActivityIndicator,
   Linking,
   ActivityIndicator,
 } from "react-native";
-import { TMeetingsProps } from "../../../types/types";
 import { convertDateString, formatDate } from "../../../helpers/utils";
 import { AntDesign } from "@expo/vector-icons";
 import { useGetMeetings } from "../../../services/queries/meetingQuery";
-
 import { colors } from "../../../constants/constants";
 
 const UpcomingMeetings = () => {
@@ -151,7 +149,8 @@ const MeetingsComponent: React.FC = () => {
             className={` text-center  font-mada-semibold ${
               selectedTab === "upcoming" ? " text-white" : "text-black"
             } `}
-          >Upcoming
+          >
+            Upcoming
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

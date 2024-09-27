@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator, FlatList } from "react-native";
+import { View, Text, ActivityIndicator, FlatList, Image } from "react-native";
 import { useGetUserPlanner } from "../../../services/queries/plannerQuery";
 import { useAppDispatch, useAppSelector } from "../../../services/redux/hooks";
 import { useEffect } from "react";
@@ -123,6 +123,14 @@ const ActivePlannerPage = () => {
             />
           </>
         )}
+      </View>
+
+      <View className="items-center justify-center mt-8">
+        <Image
+          source={require("../../../assets/images/revision_zone.png")}
+          resizeMode="contain"
+          className="w-48 h-48"
+        />
       </View>
     </View>
   );

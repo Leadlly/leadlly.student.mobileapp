@@ -3,6 +3,30 @@ import axiosClient from "../axios/axios";
 import axios, { AxiosResponse } from "axios";
 import { StudentPersonalInfoProps } from "../../types/types";
 
+export const useGoogleSignIn = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { access_token: string }) => {
+      try {
+        const res = await axiosClient.post("/api/google/auth", data);
+        return res;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error("An unknown error while google signing in!!");
+        }
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+    },
+  });
+};
+
 export const useSignUpUser = () => {
   const queryClient = useQueryClient();
 
@@ -84,6 +108,47 @@ export const useLogoutUser = () => {
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });
+    },
+  });
+};
+
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: async (data: { email: string }) => {
+      try {
+        const res = await axiosClient.post("/api/auth/forgetpassword", data);
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error(
+            "An unknown error occurred while sending reset password link!!"
+          );
+        }
+      }
+    },
+  });
+};
+
+export const useResetPassword = (token: string) => {
+  return useMutation({
+    mutationFn: async (data: { password: string }) => {
+      try {
+        const res = await axiosClient.post(
+          `/api/auth/resetpassword/${token}`,
+          data
+        );
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error(
+            "An unknown error occurred while resetting password!!"
+          );
+        }
+      }
     },
   });
 };

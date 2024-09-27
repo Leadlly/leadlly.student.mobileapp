@@ -1,13 +1,14 @@
 import {
   View,
   Text,
-  TextInput,
-  Image,
   Pressable,
   StyleSheet,
   ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { LoginFormSchema } from "../../schemas/loginSchema";
@@ -21,11 +22,13 @@ import { useLoginUser } from "../../services/queries/userQuery";
 import { useAppDispatch } from "../../services/redux/hooks";
 import { loginAction } from "../../services/redux/slices/userSlice";
 import Toast from "react-native-toast-message";
-import { colors } from "../../constants/constants";
 import Input from "../../components/shared/Input";
+import GoogleSignInButton from "../../components/AuthComponents/GoogleSignInButton";
+import LottieView from "lottie-react-native";
 
 const Login = () => {
   const [toggleShowPassword, setToggleShowPassword] = useState(false);
+  const login_animation = useRef<LottieView>(null);
 
   const router = useRouter();
 
@@ -60,12 +63,34 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 px-5 bg-white">
-      <View className="flex-1 items-center justify-center">
-        <View
-          className="rounded-xl bg-white px-4 py-10 w-full"
-          style={styles.boxShadow}
-        >
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 25,
+        }}
+      >
+        <View className="w-full pt-3 mb-2">
+          <View className="w-11 h-11">
+            <Image
+              source={require("../../assets/images/leadlly_logo.png")}
+              resizeMode="contain"
+              className="absolute w-11 h-11"
+            />
+          </View>
+        </View>
+        <View className="w-full h-48 mb-4">
+          <LottieView
+            ref={login_animation}
+            source={require("../../assets/login_animation.json")}
+            autoPlay
+            loop={true}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </View>
+        <View className="w-full">
           <View className="mb-10">
             <Text className="text-5xl font-mada-Bold leading-tight text-center">
               Welcome
@@ -138,7 +163,7 @@ const Login = () => {
             )}
           </View>
 
-          <Pressable
+          <TouchableOpacity
             onPress={form.handleSubmit(onSubmit)}
             disabled={isPending}
             className="w-full h-12 bg-primary rounded-lg items-center justify-center mb-4 disabled:bg-primary/30"
@@ -150,7 +175,18 @@ const Login = () => {
                 Login
               </Text>
             )}
-          </Pressable>
+          </TouchableOpacity>
+
+          <View className="flex-row items-center justify-center space-x-5 mb-4">
+            <View className="w-10 h-[1px] bg-input-border" />
+            <Text className="text-base font-mada-medium text-tab-item-gray">
+              OR
+            </Text>
+            <View className="w-10 h-[1px] bg-input-border" />
+          </View>
+
+          <GoogleSignInButton />
+
           <View className="mb-2 flex-row justify-between">
             <Text className="text-center text-base text-[#7F7F7F]">
               No account yet?{" "}
@@ -166,7 +202,7 @@ const Login = () => {
             </Link>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

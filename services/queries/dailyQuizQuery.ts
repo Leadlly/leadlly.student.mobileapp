@@ -4,10 +4,13 @@ import axios from "axios";
 import axiosClient from "../axios/axios";
 import { useAppDispatch } from "../redux/hooks";
 import { setUser } from "../redux/slices/userSlice";
+import { RootState, store } from "../redux/store";
 
 export const useSaveDailyQuiz = () => {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+  const state: RootState = store.getState();
+  const user = state.user.user;
 
   return useMutation({
     mutationFn: async (data: {
@@ -53,7 +56,7 @@ export const useSaveDailyQuiz = () => {
       });
 
       if (userData) {
-        dispatch(setUser(userData.user));
+        dispatch(setUser({ ...user, ...userData.user }));
       }
     },
   });

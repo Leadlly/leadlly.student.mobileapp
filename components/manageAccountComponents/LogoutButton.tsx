@@ -6,8 +6,20 @@ import { logoutAction } from "../../services/redux/slices/userSlice";
 import { colors } from "../../constants/constants";
 import { removeTodaysPlan } from "../../services/redux/slices/plannerSlice";
 import { useRouter } from "expo-router";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { useEffect } from "react";
 
 const LogoutButton = () => {
+  const configureGoogleSignIn = () => {
+    GoogleSignin.configure({
+      webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+    });
+  };
+
+  useEffect(() => {
+    configureGoogleSignIn();
+  }, []);
+
   const router = useRouter();
 
   const dispatch = useAppDispatch();
@@ -17,6 +29,7 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     try {
       const res = await logout();
+      await GoogleSignin.signOut();
       router.replace("/welcome");
 
       dispatch(logoutAction());

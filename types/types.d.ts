@@ -407,3 +407,12 @@ export type QuestionOption = {
   name: string;
   tag: string;
 };
+
+export interface Plan {
+  id: string;
+  amount: number;
+  currency: string;
+  "duration(months)": string;
+  planId: string;
+  type: string;
+}
