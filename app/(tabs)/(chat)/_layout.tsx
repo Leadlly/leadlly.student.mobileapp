@@ -1,20 +1,6 @@
-import {
-	createMaterialTopTabNavigator,
-	MaterialTopTabNavigationOptions,
-	MaterialTopTabNavigationEventMap,
-} from '@react-navigation/material-top-tabs';
-import { ParamListBase, TabNavigationState } from '@react-navigation/native';
-import { withLayoutContext } from 'expo-router';
 import { colors } from '../../../constants/constants';
+import { MaterialTobTabs } from '../../../components/shared/MaterialTobTabsConfig';
 
-const { Navigator } = createMaterialTopTabNavigator();
-
-export const MaterialTobTabs = withLayoutContext<
-	MaterialTopTabNavigationOptions,
-	typeof Navigator,
-	TabNavigationState<ParamListBase>,
-	MaterialTopTabNavigationEventMap
->(Navigator);
 
 const PlannerLayout = () => {
 	return (

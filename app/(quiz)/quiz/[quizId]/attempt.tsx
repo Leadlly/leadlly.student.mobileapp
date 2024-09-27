@@ -1,11 +1,10 @@
 import React from "react";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import QuizDataCleaner from "../../../../components/AttemptQuizComponents/QuizDataCleaner";
 import Quiz from "../../../../components/AttemptQuizComponents/Quiz";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import { useGetWeeklyQuizQuestions } from "../../../../services/queries/WekklyQuizqueries";
-import { ActivityIndicator } from "react-native-paper";
 
 type Props = { params: { quizId: string } };
 

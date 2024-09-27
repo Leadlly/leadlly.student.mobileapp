@@ -66,9 +66,7 @@ const Attempted = () => {
             <AttemptedChapterWiseQuizzes quizzes={chapterQuizzes} />
           )}
           {activeTab === "customizedQuiz" && (
-            <View className="items-center lg:hidden">
               <AttemptedCustomizedQuizzes quizzes={chapterQuizzes} />
-            </View>
           )}
         </View>
       </View>

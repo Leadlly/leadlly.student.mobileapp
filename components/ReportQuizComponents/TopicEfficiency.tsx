@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { QuizReportResponse } from "../../types/types";
-import { ProgressBar } from "react-native-paper";
+import * as Progress from "react-native-progress";
 
 const getProgressBarColor = (efficiency: string) => {
   const efficiencyNumber = parseInt(efficiency);
@@ -33,10 +33,11 @@ const TopicsEfficiency: React.FC<{ report: QuizReportResponse | null }> = ({ rep
               </Text>
             </View>
             <View className="flex-row items-center w-[50%] justify-end">
-              <ProgressBar
+              <Progress.Bar
                 progress={parseInt(efficiency) / 100}
                 color={getProgressBarColor(efficiency)}
-                style={{ width: 120, height: 8 }}
+                width={120}
+                height={8}
               />
               <Text className="font-semibold text-[#9E9E9E] w-[40px] text-right ml-2">
                 {efficiency}%

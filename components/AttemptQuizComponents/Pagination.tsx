@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { ActivityIndicator, ProgressBar } from 'react-native-paper';
+import { View, Text, ActivityIndicator } from 'react-native';
+import * as Progress from "react-native-progress";
 import { colors } from '../../constants/constants';
 
 interface ProgressProps {
@@ -13,7 +13,7 @@ interface ProgressProps {
   currentQuestionId: string;
 }
 
-const Progress: React.FC<ProgressProps> = ({
+const ProgressComponent: React.FC<ProgressProps> = ({
   totalQuestions,
   currentQuestion,
   onPageChange,
@@ -30,7 +30,14 @@ const Progress: React.FC<ProgressProps> = ({
     <View className="py-2">
       <View className="mb-2 flex flex-row items-center gap-3">
         <View className="w-[70%] flex-1">
-          <ProgressBar progress={progress} color={colors.primary} className="h-1.5 rounded-lg" />
+          <Progress.Bar 
+            progress={progress} 
+            width={null} 
+            height={6} 
+            color={colors.primary} 
+            unfilledColor="#E0E0E0" 
+            borderWidth={0}
+          />
         </View>
     
           {isLoading ? (
@@ -49,4 +56,4 @@ const Progress: React.FC<ProgressProps> = ({
   );
 };
 
-export default Progress;
+export default ProgressComponent;

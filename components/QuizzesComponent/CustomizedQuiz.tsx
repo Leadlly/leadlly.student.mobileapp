@@ -23,8 +23,8 @@ import * as z from "zod";
 import { QuizDataFormSchema } from "../../schemas/QuizDataFromSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Toast from "react-native-toast-message";
-import { RadioButton } from "react-native-paper";
 import { colors } from "../../constants/constants";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import { useCreateCustomQuiz } from "../../services/queries/quizQuery"; // Assume this hook exists
 
 const CustomizedQuiz: React.FC = () => {
@@ -111,7 +111,7 @@ const CustomizedQuiz: React.FC = () => {
   };
 
   return (
-    <ScrollView className=" p-3">
+    <ScrollView className=" p-3" showsVerticalScrollIndicator={false}>
       <View className="flex-1 max-w-full  border-2 border-primary items-center p-5 bg-[#F4EBFF] rounded-lg">
         <View className="flex-row justify-between items-center w-full mb-4">
           <Text className="text-lg font-medium">Customized Quiz</Text>
@@ -213,49 +213,35 @@ const CustomizedQuiz: React.FC = () => {
           control={form.control}
           render={({ field }) => (
             <View className="w-full mb-4">
-              <Text className="text-sm ml-1 font-mada-semibold text-gray-500">
+              <Text className="text-sm ml-1 font-mada-semibold text-gray-500 mb-2">
                 Difficulty
               </Text>
-              <RadioButton.Group
-                onValueChange={field.onChange}
-                value={field.value}
-              >
-                <View className="flex-row justify-between">
-                  <RadioButton.Item
-                    label="Easy"
-                    color={colors.tabItemGray}
-                    labelStyle={{ color: colors.tabItemGray }}
-                    value="easy"
-                    style={{
-                      justifyContent: "flex-start",
-                      paddingHorizontal: 2,
-                    }}
-                    position="leading"
-                  />
-                  <RadioButton.Item
-                    label="Medium"
-                    color={colors.tabItemGray}
-                    labelStyle={{ color: colors.tabItemGray }}
-                    value="medium"
-                    style={{
-                      justifyContent: "flex-start",
-                      paddingHorizontal: 2,
-                    }}
-                    position="leading"
-                  />
-                  <RadioButton.Item
-                    label="Hard"
-                    value="hard"
-                    position="leading"
-                    color={colors.tabItemGray}
-                    labelStyle={{ color: colors.tabItemGray }}
-                    style={{
-                      justifyContent: "flex-start",
-                      paddingHorizontal: 2,
-                    }}
-                  />
-                </View>
-              </RadioButton.Group>
+              <View className="flex-row justify-between gap-5">
+                {["easy", "medium", "hard"].map((value) => (
+                  <TouchableOpacity
+                    key={value}
+                    onPress={() => field.onChange(value)}
+                    className="flex-1 items-center justify-between py-2 mx-1 rounded-lg flex-row "
+                  >
+                    {field.value === value ? (
+                      <MaterialCommunityIcons name="checkbox-outline" size={24} color={colors.primary} />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="checkbox-blank-outline"
+                        size={24}
+                        color="gray"
+                      />
+                    )}
+                    <Text
+                      className={`font-mada-semibold ${
+                        field.value === value ? "text-primary" : "text-gray-600"
+                      }`}
+                    >
+                      {capitalizeFirstLetter(value)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           )}
         />
