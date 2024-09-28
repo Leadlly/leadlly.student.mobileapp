@@ -17,7 +17,7 @@ const MultiSelect = ({
   items,
   defaultValue = [],
   onValueChange,
-  className,
+  inputStyle,
   label,
   labelStyle,
   placeholder = "Select options",
@@ -28,7 +28,7 @@ const MultiSelect = ({
   items: { label: string; value: string }[];
   defaultValue: string[];
   onValueChange: (value: string[]) => void;
-  className?: string;
+  inputStyle?: string;
   placeholder?: string;
   loading?: boolean;
   fetching?: boolean;
@@ -89,7 +89,7 @@ const MultiSelect = ({
       ) : null}
 
       <Pressable
-        className="w-full bg-white flex-row items-center justify-between p-3 rounded-lg border border-input-border"
+        className={clsx("w-full bg-white flex-row items-center justify-between p-3 rounded-lg border border-input-border", inputStyle)}
         onPress={(e) => {
           e.stopPropagation();
           setShowDropdown(!showDropdown);

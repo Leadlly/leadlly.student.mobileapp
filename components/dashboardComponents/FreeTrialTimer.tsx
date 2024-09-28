@@ -18,6 +18,7 @@ const FreeTrialTimer = () => {
       const trialStartDate = new Date(freeTrialActivation?.dateOfActivation!);
       const trialEndDate = new Date(
         trialStartDate.getTime() + 14 * 24 * 60 * 60 * 1000
+
       );
       const now = new Date();
 

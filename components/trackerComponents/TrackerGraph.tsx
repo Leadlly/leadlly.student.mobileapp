@@ -12,7 +12,7 @@ const GAP = 0.04;
 
 const TrackerGraph = ({ item }: { item: TTrackerProps }) => {
   const chartData = [
-    item.chapter.plannerFrequency!,
+    item.chapter.overall_progress!,
     item.chapter.overall_efficiency!,
     item.chapter.total_questions_solved.percentage!,
   ];
@@ -61,7 +61,7 @@ const TrackerGraph = ({ item }: { item: TTrackerProps }) => {
           <Text className="text-xs font-mada-medium leading-tight">
             Revision Completion -{" "}
             <Text className="font-mada-Bold">
-              {Math.round(item.chapter.plannerFrequency!)}%
+              {Math.round(item.chapter.overall_progress!)}%
             </Text>
           </Text>
         </View>

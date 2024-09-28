@@ -7,6 +7,7 @@ import ProtectRoute from "./ProtectRoute";
 import { TouchableOpacity, View } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import LogoutButton from "./manageAccountComponents/LogoutButton";
+import { loadQuizzes } from "../services/redux/slices/weeklyQuizSlice";
 
 const AppWrapper = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +15,7 @@ const AppWrapper = () => {
 
   useEffect(() => {
     dispatch(loadUser());
+    dispatch(loadQuizzes())
   }, [dispatch]);
 
   return (
@@ -63,6 +65,14 @@ const AppWrapper = () => {
               </View>
             ),
           }}
+        />
+        <Stack.Screen
+          name="(quiz)/quiz/[quizId]/attempt"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(quiz)/quiz/[quizId]/report"
+          options={{ headerShown: false }}
         />
       </Stack>
       <StatusBar style="auto" />

@@ -150,6 +150,7 @@ const StudyProgress = () => {
               <Select
                 label="Chapter"
                 labelStyle="text-xl ml-1"
+                inputStyle="w-full h-12"
                 placeholder="Select a chapter"
                 items={
                   chapterData?.chapters.map((chapter) => ({
