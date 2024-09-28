@@ -28,9 +28,8 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await logout();
       await GoogleSignin.signOut();
-      router.replace("/welcome");
+      const res = await logout();
 
       dispatch(logoutAction());
       dispatch(removeTodaysPlan());
@@ -38,6 +37,7 @@ const LogoutButton = () => {
         type: "success",
         text1: res.message,
       });
+      router.replace("/welcome");
     } catch (error: any) {
       Toast.show({
         type: "error",

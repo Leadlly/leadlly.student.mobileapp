@@ -37,6 +37,7 @@ export const useSaveDailyQuiz = () => {
           "overallReport",
           "plannerData",
         ],
+        refetchType: "all",
       });
 
       const userData = await queryClient.fetchQuery({

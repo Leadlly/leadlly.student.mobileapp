@@ -100,6 +100,17 @@ const SignUp = () => {
               today!
             </Text>
           </View>
+
+          <GoogleSignInButton />
+
+          <View className="flex-row items-center justify-center space-x-5 mb-4">
+            <View className="w-10 h-[1px] bg-input-border" />
+            <Text className="text-base font-mada-medium text-tab-item-gray">
+              OR
+            </Text>
+            <View className="w-10 h-[1px] bg-input-border" />
+          </View>
+
           <View className="mb-4">
             <Controller
               name="name"
@@ -200,16 +211,6 @@ const SignUp = () => {
               </Text>
             )}
           </TouchableOpacity>
-
-          <View className="flex-row items-center justify-center space-x-5 mb-4">
-            <View className="w-10 h-[1px] bg-input-border" />
-            <Text className="text-base font-mada-medium text-tab-item-gray">
-              OR
-            </Text>
-            <View className="w-10 h-[1px] bg-input-border" />
-          </View>
-
-          <GoogleSignInButton />
 
           <View className="mb-2 flex-row justify-center">
             <Text className="text-center text-base text-[#7F7F7F]">

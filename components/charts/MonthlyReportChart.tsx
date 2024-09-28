@@ -10,24 +10,34 @@ const MonthlyReportChart = ({
 }: {
   monthlyProgress: TStudentReportProps | null;
 }) => {
+  console.log("MonthlyProgressData ======> ", monthlyProgress);
+
   const sessionData =
     monthlyProgress && monthlyProgress.days && monthlyProgress.days.length > 0
-      ? monthlyProgress.days.map((data) => ({ value: data.session }))
+      ? monthlyProgress.days.map((data) => ({
+          value: data.session,
+          dataPointText: getMonthDate(new Date(data.date)),
+          dataPointColor: colors.primary,
+        }))
       : [{ value: 0 }];
 
   const quizData =
     monthlyProgress && monthlyProgress.days && monthlyProgress.days.length > 0
-      ? monthlyProgress.days.map((data) => ({ value: data.quiz }))
+      ? monthlyProgress.days.map((data) => ({
+          value: data.quiz,
+          dataPointText: getMonthDate(new Date(data.date)),
+          dataPointColor: colors.leadllyCyan,
+        }))
       : [{ value: 0 }];
 
   return (
-    <View className="flex-1">
+    <View>
       <LineChart
         areaChart
         curved
         data={sessionData}
         data2={quizData}
-        hideDataPoints
+        // hideDataPoints
         spacing={50}
         color1={colors.primary}
         color2={colors.leadllyCyan}

@@ -1,16 +1,23 @@
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ScrollView,
   View,
   Text,
   TouchableOpacity,
   Modal,
-  SafeAreaView,
   ActivityIndicator,
+  ImageBackground,
+  Pressable,
+  Dimensions,
+  Image,
 } from "react-native";
-import { colors, features } from "../../constants/constants";
-import { Plan } from "../../types/types";
+import {
+  colors,
+  features,
+  subscriptionDetails,
+} from "../../constants/constants";
+import { MergedPlanData, Plan } from "../../types/types";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { useAppSelector } from "../../services/redux/hooks";
@@ -22,6 +29,16 @@ import Toast from "react-native-toast-message";
 import ModalComponent from "../../components/shared/ModalComponent";
 import PaymentSuccessModal from "../../components/subscriptionComponents/PaymentSuccessModal";
 import PaymentCancelledModal from "../../components/subscriptionComponents/PaymentCancelledModal";
+import { SafeAreaView } from "react-native-safe-area-context";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import clsx from "clsx";
+import Animated, {
+  AnimatedRef,
+  runOnJS,
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated";
+import SubscriptionPlanCard from "../../components/subscriptionComponents/SubscriptionPlanCard";
 
 const SubscriptionPlansScreen: React.FC = () => {
   const {
@@ -29,6 +46,26 @@ const SubscriptionPlansScreen: React.FC = () => {
     isLoading: fetchingPricing,
     isError,
   } = useGetSubscriptionPricing("main");
+
+  const mergedPricingData = pricingData?.pricing.map((pricing) => {
+    const matchingDetails = subscriptionDetails.find(
+      (detail) => detail.category === pricing.category
+    );
+
+    if (matchingDetails) {
+      return {
+        ...pricing,
+        discountPercentage: matchingDetails.discountPercentage,
+        initialPrice: matchingDetails.initialPrice,
+        features: matchingDetails.details,
+        image: matchingDetails.image,
+      } as MergedPlanData;
+    }
+
+    return null;
+  });
+
+  const [paginationIndex, setPaginationIndex] = useState(0);
 
   const [selectedPlan, setSelectedPlan] = useState<Plan>();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,6 +78,31 @@ const SubscriptionPlansScreen: React.FC = () => {
 
   const user = useAppSelector((state) => state.user.user);
   const userToken = user?.token;
+
+  const scrollX = useSharedValue(0);
+
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  const cardWidth = Dimensions.get("screen").width;
+
+  const onScrollHandler = useAnimatedScrollHandler({
+    onScroll: (e) => {
+      scrollX.value = e.contentOffset.x;
+    },
+  });
+
+  const scrollTo = (index: number) => {
+    (scrollViewRef.current as ScrollView)?.scrollTo({
+      x: index * cardWidth,
+      animated: true,
+    });
+
+    setPaginationIndex(index);
+  };
+
+  useEffect(() => {
+    scrollTo(paginationIndex);
+  }, [paginationIndex]);
 
   const { mutateAsync: buySubscription, isPending: isBuyingSubscription } =
     useBuySubscription();
@@ -91,8 +153,8 @@ const SubscriptionPlansScreen: React.FC = () => {
   }, []);
 
   return (
-    <SafeAreaView className=" bg-white/50 pt-5 flex-1">
-      <ScrollView className=" p-7 ">
+    <SafeAreaView className="bg-white flex-1">
+      {/* <ScrollView className=" p-7 ">
         <View className="flex-row justify-center my-9">
           <Text className="text-2xl font-mada-Bold text-black">
             Our Subscription Plan
@@ -257,6 +319,86 @@ const SubscriptionPlansScreen: React.FC = () => {
             </View>
           </ScrollView>
         </Modal>
+      </ScrollView> */}
+
+      <ScrollView className="flex-1">
+        <View
+          className="relative m-5 bg-primary rounded-xl h-28 justify-center pl-6"
+          style={{ overflow: "hidden" }}
+        >
+          <ImageBackground
+            source={require("../../assets/images/subscription_header_img.png")}
+            resizeMode={"contain"}
+            className="w-32 h-28 absolute -right-1 -bottom-1"
+          />
+          <Text className="text-lg text-white font-mada-Bold leading-6 w-40">
+            Unlock Planning excellence with subscription
+          </Text>
+        </View>
+
+        <View className="items-center space-y-3 mt-4 mb-6">
+          <Text className="text-xl font-mada-Bold leading-tight">
+            Choose Your Plan
+          </Text>
+          <Text className="text-sm text-center leading-5 font-mada-regular max-w-sm">
+            Choose the plan that suits you to Unlock exclusive benefits tailored
+            to your needs!
+          </Text>
+        </View>
+
+        {fetchingPricing ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size={"small"} color={colors.primary} />
+          </View>
+        ) : (
+          <>
+            <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-between mb-8">
+              {pricingData?.pricing.map((item, index) => (
+                <Pressable
+                  key={item._id}
+                  onPress={() => setPaginationIndex(index)}
+                  className={clsx(
+                    paginationIndex === index && "border-b border-primary"
+                  )}
+                >
+                  <Text
+                    className={clsx(
+                      "capitalize text-base font-mada-semibold leading-tight",
+                      paginationIndex === index
+                        ? "text-primary"
+                        : "text-tab-item-gray"
+                    )}
+                  >
+                    {item.category}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+
+            {mergedPricingData && mergedPricingData.length > 0 ? (
+              <Animated.ScrollView
+                ref={scrollViewRef as React.RefObject<Animated.ScrollView>}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled
+                onScroll={onScrollHandler}
+                scrollEventThrottle={16}
+                scrollEnabled={false}
+              >
+                {mergedPricingData?.map((data, index) => (
+                  <SubscriptionPlanCard
+                    key={data?.planId}
+                    data={data}
+                    index={index}
+                    scrollX={scrollX}
+                    paginationIndex={paginationIndex}
+                    cardWidth={cardWidth}
+                  />
+                ))}
+              </Animated.ScrollView>
+            ) : null}
+          </>
+        )}
       </ScrollView>
 
       {transactionCancelled && (
