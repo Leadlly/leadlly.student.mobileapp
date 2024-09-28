@@ -32,7 +32,7 @@ export const tabBarItems = [
     title: "Chat",
   },
   {
-    name: "quizzes",
+    name: "(quizzes)",
     title: "Quizzes",
   },
   {

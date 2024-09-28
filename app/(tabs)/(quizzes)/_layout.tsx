@@ -1,15 +1,15 @@
-import { colors } from '../../../constants/constants';
-import { MaterialTobTabs } from '../../../components/shared/MaterialTobTabsConfig';
+import { MaterialTobTabs } from "../../../components/shared/MaterialTobTabsConfig";
+import { colors } from "../../../constants/constants";
 
 
-const PlannerLayout = () => {
-	return (
+const QuizzesLayout = () => {
+  return (
     <MaterialTobTabs
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: "#000000",
         tabBarLabelStyle: {
-          fontSize: 15,
+          fontSize: 18,
           paddingVertical: 2,
           fontFamily: "Mada-SemiBold",
           textTransform: "capitalize",
@@ -22,16 +22,20 @@ const PlannerLayout = () => {
         tabBarStyle: {
           borderBottomColor: colors.inputBorder,
           borderBottomWidth: 1,
+          backgroundColor: '#f6effe' 
         },
       }}
     >
-      <MaterialTobTabs.Screen name="meetings" options={{ title: "Meetings" }} />
       <MaterialTobTabs.Screen
-        name="requestMeeting"
-        options={{ title: "Request Meeting" }}
+        name="unattempted"
+        options={{ title: "Unattempted" }}
+      />
+      <MaterialTobTabs.Screen
+        name="attempted"
+        options={{ title: "Attempted" }}
       />
     </MaterialTobTabs>
   );
 };
 
-export default PlannerLayout;
+export default QuizzesLayout;
