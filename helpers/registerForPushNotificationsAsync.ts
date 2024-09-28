@@ -42,7 +42,6 @@ export async function registerForPushNotificationsAsync() {
         await Notifications.getExpoPushTokenAsync({ projectId })
       ).data;
 
-      console.log(pushTokenString);
       return pushTokenString;
     } catch (error: unknown) {
       throw new Error(`${error}`);

@@ -126,26 +126,80 @@ export const features = [
   },
 ];
 
-export const plans: Plan[] = [
+// export const plans: Plan[] = [
+//   {
+//     id: 1,
+//     name: "3 Months",
+//     price: "499",
+//     planType: "Basic Plan",
+//     duration: "3",
+//   },
+//   {
+//     id: 2,
+//     name: "6 Months",
+//     price: "416",
+//     planType: "Professional Plan",
+//     duration: "6",
+//   },
+//   {
+//     id: 3,
+//     name: "1 Year",
+//     price: "333",
+//     planType: "Ultimate Plan",
+//     duration: "12",
+//   },
+// ];
+
+export const subscriptionDetails = [
   {
-    id: 1,
-    name: "3 Months",
-    price: "499",
-    planType: "Basic Plan",
-    duration: "3",
+    category: "basic",
+    discountPercentage: 70,
+    initialPrice: 10999,
+    image: require("../assets/images/paper_plane.png"),
+    details: [
+      "Personalized self-study strategies",
+      "Subject chapter & topic tracking Daily",
+      "Weekly & monthly report",
+      "Weekly mentor sessions",
+    ],
   },
   {
-    id: 2,
-    name: "6 Months",
-    price: "416",
-    planType: "Professional Plan",
-    duration: "6",
+    category: "pro",
+    discountPercentage: 70,
+    initialPrice: 12999,
+    image: require("../assets/images/rocket.png"),
+    details: [
+      "Personalized self-study strategies",
+      "Subject chapter & topic tracking Daily",
+      "Weekly & monthly report",
+      "Weekly mentor sessions",
+      "Error book",
+      "Active monitoring by mentor",
+    ],
   },
   {
-    id: 3,
-    name: "1 Year",
-    price: "333",
-    planType: "Ultimate Plan",
-    duration: "12",
+    category: "premium",
+    discountPercentage: 70,
+    initialPrice: 15999,
+    image: require("../assets/images/small_satellite.png"),
+    details: [
+      "Personalized self-study strategies",
+      "Subject chapter & topic tracking Daily",
+      "Weekly & monthly report",
+      "Weekly mentor sessions",
+      "Error book",
+      "Active monitoring by mentor",
+      "On demand sessions with mentor",
+    ],
   },
+];
+
+export const subscriptionFeatures = [
+  "Personalized self-study strategies",
+  "Subject chapter & topic tracking Daily",
+  "Weekly & monthly report",
+  "Weekly mentor sessions",
+  "Error book",
+  "Active monitoring by mentor",
+  "On demand sessions with mentor",
 ];

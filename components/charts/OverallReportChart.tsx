@@ -3,21 +3,36 @@ import React from "react";
 import { TStudentOverallReportProps } from "../../types/types";
 import { LineChart } from "react-native-gifted-charts";
 import { colors } from "../../constants/constants";
+import { getMonthDate } from "../../helpers/utils";
 
 const OverallReportChart = ({
   overallProgress,
 }: {
   overallProgress: TStudentOverallReportProps[] | null;
 }) => {
+  console.log("OverallProgressData ======> ", overallProgress);
+
   const sessionData =
     overallProgress && overallProgress.length > 0
-      ? overallProgress.map((data) => ({ value: Math.round(data.session) }))
+      ? overallProgress.map((data) => ({
+          value: Math.round(data.session),
+          dataPointText: getMonthDate(new Date(data.date)),
+          dataPointColor: colors.primary,
+        }))
       : [{ value: 0 }];
+
+  console.log("overall Session Data ======> ", sessionData);
 
   const quizData =
     overallProgress && overallProgress.length > 0
-      ? overallProgress.map((data) => ({ value: Math.round(data.quiz) }))
+      ? overallProgress.map((data) => ({
+          value: Math.round(data.quiz),
+          dataPointText: getMonthDate(new Date(data.date)),
+          dataPointColor: colors.leadllyCyan,
+        }))
       : [{ value: 0 }];
+
+  console.log("overall Quiz Data ======> ", quizData);
 
   return (
     <View className="flex-1">
@@ -25,7 +40,7 @@ const OverallReportChart = ({
         areaChart
         data={sessionData}
         data2={quizData}
-        hideDataPoints
+        // hideDataPoints
         spacing={50}
         initialSpacing={0}
         hideYAxisText
@@ -40,6 +55,7 @@ const OverallReportChart = ({
         thickness={1}
         hideRules
         height={150}
+        width={300}
         isAnimated
         animationDuration={1000}
       />

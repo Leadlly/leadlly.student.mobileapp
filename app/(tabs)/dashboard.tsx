@@ -32,10 +32,7 @@ const Dashboard = () => {
 
       if (pushTokenString !== storedPushToken) {
         await savePushToken({ pushToken: pushTokenString });
-        await AsyncStorage.setItem(
-          "pushTokenInfo",
-          JSON.stringify(pushTokenString)
-        );
+        await AsyncStorage.setItem("pushTokenInfo", pushTokenString);
       }
     };
 

@@ -11,6 +11,7 @@ import { useAppDispatch } from "../../services/redux/hooks";
 import { useRouter } from "expo-router";
 import { loginAction } from "../../services/redux/slices/userSlice";
 import Toast from "react-native-toast-message";
+import { colors } from "../../constants/constants";
 
 const GoogleSignInButton = () => {
   const configureGoogleSignIn = () => {
@@ -64,14 +65,14 @@ const GoogleSignInButton = () => {
     <TouchableOpacity
       onPress={singIn}
       disabled={isPending}
-      className="w-full h-12 rounded-lg flex-row items-center justify-center space-x-2 mb-4 border"
+      className="w-full h-12 rounded-lg flex-row items-center justify-center space-x-2 mb-4 border border-primary"
     >
       {isPending ? (
-        <ActivityIndicator size={"small"} color={"black"} />
+        <ActivityIndicator size={"small"} color={colors.primary} />
       ) : (
         <>
           <GoogleIcon />
-          <Text className="text-base font-mada-semibold leading-none">
+          <Text className="text-base text-primary font-mada-semibold leading-none">
             Sign in with Google
           </Text>
         </>

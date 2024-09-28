@@ -22,10 +22,7 @@ const AppWrapper = () => {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(subscription)/subscription-plans"
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="(subscription)" options={{ headerShown: false }} />
         <Stack.Screen
           name="(profile)/profile"
           options={{

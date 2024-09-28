@@ -17,7 +17,7 @@ const UpcomingMeetings = () => {
   const { data, isError, isLoading, isFetching, error } = useGetMeetings("");
 
   return (
-    <ScrollView className="flex-1 bg-primary/5 p-4">
+    <ScrollView className="flex-1 bg-primary/5 p-4 mb-16">
       {isError ? (
         <View className="w-full h-full items-center justify-center px-4">
           <Text className="text-sm text-gray-400 font-mada-semibold text-center">
@@ -93,7 +93,7 @@ const DoneMeetings = () => {
     useGetMeetings("done");
 
   return (
-    <ScrollView className="flex-1 bg-primary/10 p-4">
+    <ScrollView className="flex-1 bg-primary/10 p-4 mb-16">
       {isError ? (
         <View className="w-full h-full items-center justify-center px-4">
           <Text className="text-sm text-gray-400 font-mada-semibold text-center">
@@ -141,12 +141,12 @@ const MeetingsComponent: React.FC = () => {
         <TouchableOpacity
           onPress={() => setSelectedTab("upcoming")}
           className={`w-28 rounded-3xl ${
-            selectedTab === "upcoming" ? "bg-primary " : "bg-transparent "
+            selectedTab === "upcoming" ? "bg-primary/10" : "bg-transparent "
           } p-2`}
         >
           <Text
             className={` text-center  font-mada-semibold ${
-              selectedTab === "upcoming" ? " text-white" : "text-black"
+              selectedTab === "upcoming" ? "text-primary" : "text-black"
             } `}
           >
             Upcoming

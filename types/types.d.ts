@@ -1,4 +1,4 @@
-import { TextInputProps } from "react-native";
+import { ImageSourcePropType, TextInputProps } from "react-native";
 
 export interface ISubject {
   name: string;
@@ -328,10 +328,20 @@ export type TQuizAnswerProps = {
 };
 
 export interface Plan {
-  id: string;
+  _id: string;
   amount: number;
+  category: string;
+  createdAt: string;
   currency: string;
-  "duration(months)": string;
+  "duration(months)": number;
   planId: string;
+  status: string;
   type: string;
+}
+
+export interface MergedPlanData extends Plan {
+  discountPercentage: number;
+  initialPrice: number;
+  features: string[];
+  image: ImageSourcePropType;
 }
