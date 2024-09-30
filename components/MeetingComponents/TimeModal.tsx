@@ -59,7 +59,13 @@ const TimeModal: React.FC<TimeModalProps> = ({
                       onClose();
                     }}
                   >
-                    <Text className="text-center text-lg font-mada-regular">{item}</Text>
+                    <Text 
+                      className={`text-center text-lg font-mada-regular ${
+                        item === value ? "text-primary" : ""
+                      }`}
+                    >
+                      {item}
+                    </Text>
                   </TouchableOpacity>
                 )}
               />
