@@ -15,6 +15,7 @@ import CalendarModal from "./CalendarModal";
 import TimeModal from "./TimeModal";
 import { RequestMeetingFormSchema } from "../../schemas/requestMeetingFormSchema";
 import { z } from "zod";
+import { Image } from "expo-image";
 
 interface RequestMeetingFormProps {
   onSuccess: () => void;
@@ -50,11 +51,19 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
 
   return (
     <ScrollView
-      className="bg-white px-5 mb-16"
+      className="bg-white  mb-16"
       showsVerticalScrollIndicator={false}
+      automaticallyAdjustKeyboardInsets={true}
     >
-      <ImageBackground source={require("../../assets/images/programmer.png")}>
-        <View className="flex justify-center gap-x-2 py-3 flex-row my-6">
+      <ImageBackground
+        source={require("../../assets/images/programmer.png")}
+        className="px-5"
+      >
+        <View className="flex justify-center gap-x-2 py-3 flex-row my-4 items-baseline">
+          <Image
+            source={require("../../assets/images/video_call.png")}
+            className="w-8  h-[18px]"
+          />
           <Text className="font-mada-Bold text-2xl">
             Request <Text className="text-primary font-mada-medium">Meet</Text>
           </Text>
@@ -143,7 +152,7 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
                     multiline={true}
                     textAlignVertical="top"
                     numberOfLines={8}
-                    className="text-lg font-mada-regular max-h-60 flex-1"
+                    className="text-lg font-mada-regular max-h-[20vh] flex-1 "
                   />
                 </View>
               )}
