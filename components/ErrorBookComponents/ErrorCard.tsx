@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useToggleErrorNote } from "../../services/queries/errorBookQuery";
 import Toast from "react-native-toast-message";
+import { MaterialIcons } from "@expo/vector-icons";
 
 interface ErrorCardProps {
   note: string;
@@ -36,24 +37,20 @@ const ErrorCard: React.FC<ErrorCardProps> = ({
   };
 
   return (
-    <View
+    <TouchableOpacity
+    
+      onPress={handleToggle}
       className={`flex-row items-center justify-start bg-white rounded-lg mb-4 border border-[#b690ec] ${
         isMinimized ? "px-2 py-2" : "px-3 py-4"
       } shadow-purple shadow-opacity-18 shadow-radius-16.8 elevation-5`}
     >
-      <TouchableOpacity onPress={handleToggle} className="mr-5">
-        <View
-          className={`w-6 h-6 rounded-full border-2 justify-center items-center ${
-            isCompleted
-              ? "border-[#9654F4] bg-[#9654F4]"
-              : "border-[#b690ec] bg-transparent"
-          }`}
-        >
-          {isCompleted && (
-            <Text className="text-white text-base">✓</Text>
-          )}
-        </View>
-      </TouchableOpacity>
+      <View className="mr-5">
+        {isCompleted ? (
+          <MaterialIcons name="check-box" size={24} color="#90EE90" />
+        ) : (
+          <MaterialIcons name="check-box-outline-blank" size={24} color="#b690ec" />
+        )}
+      </View>
       <Text
         className={`flex-1 text-[#333333] ${
           isMinimized ? "text-xs" : "text-sm"
@@ -62,7 +59,7 @@ const ErrorCard: React.FC<ErrorCardProps> = ({
       >
         {note}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

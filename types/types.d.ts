@@ -32,14 +32,13 @@ export type UserDataProps = {
     personal?: number;
     other?: number;
   };
-
   password: string;
   salt: string;
   avatar?: {
     public_id?: string;
     url?: string;
   };
-  planner: Boolean;
+  planner: boolean;
   parent: {
     name?: string;
     phone?: string;
@@ -84,8 +83,8 @@ export type UserDataProps = {
     dateOfActivation?: Date;
   };
   freeTrial: {
-    availed?: Boolean;
-    active?: Boolean;
+    availed?: boolean;
+    active?: boolean;
     dateOfActivation?: Date;
     dateOfDeactivation?: Date;
   };
@@ -180,7 +179,7 @@ export type TLevelPointProps = {
   progressIndicatorBg?: string;
 };
 
-export type subjectChaptersProps = {
+export type SubjectChaptersProps = {
   _id: string;
   exam: string[];
   name: string;
@@ -193,7 +192,7 @@ export type subjectChaptersProps = {
   }[];
 };
 
-export type chapterTopicsProps = {
+export type ChapterTopicsProps = {
   _id: string;
   chapterName: string;
   createdAt: string;
@@ -236,6 +235,7 @@ export type FormType = UseFormReturn<
   any,
   undefined
 >;
+
 export type StudentPersonalInfoProps = {
   address?: string;
   class?: number | null;
@@ -296,27 +296,8 @@ export type TMeetingsProps = {
 
 export type TQuizQuestionOptionsProps = {
   name: string;
-  tag: string;
-  images: string | null;
-  _id: string;
-};
-
-export type TQuizQuestionProps = {
-  chapter: string[];
-  createdAt: string;
-  createdBy: string;
-  images: Array<{
-    key: string;
-    url: string;
-    _id: string;
-  }>;
-  level: string;
-  options: TQuizQuestionOptionsProps[];
-  question: string;
-  standard: number;
-  subject: string;
-  subtopics: string[];
-  topics: string[];
+  tag: "Correct" | "Incorrect";
+  images?: Image[];
   _id: string;
 };
 
@@ -326,7 +307,9 @@ export type TQuizAnswerProps = {
   isCorrect: boolean;
   tag: string;
 };
+
 export type Subject = keyof typeof SUBJECT_COLORS;
+
 export interface AttemptedWeeklyQuiz {
   id: number;
   description: string;
@@ -337,6 +320,7 @@ export interface AttemptedWeeklyQuiz {
   efficiency: number;
   questions: number;
 }
+
 export interface AttemptedQuizProps {
   id: number;
   chapterName: string;
@@ -346,6 +330,7 @@ export interface AttemptedQuizProps {
   completedDate: string;
   efficiency: number;
 }
+
 export type WeeklyQuizProps = {
   _id: string;
   user: string;
@@ -385,6 +370,7 @@ export type UnattemptedChapterQuizProps = {
   subject: string;
   questions: number;
 };
+
 export type QuizReportResponse = {
   status: number;
   topicsWithEfficiency: { topic: string; efficiency: string }[];
@@ -400,12 +386,6 @@ export type Question = {
   question: string;
   options: QuestionOption[];
   selectedOption: string;
-};
-
-export type QuestionOption = {
-  _id: string;
-  name: string;
-  tag: string;
 };
 
 export interface Plan {
@@ -426,6 +406,7 @@ export interface MergedPlanData extends Plan {
   features: string[];
   image: ImageSourcePropType;
 }
+
 export type ChapterProps = {
   chapter: string;
   totalQuestions: number;
@@ -435,6 +416,7 @@ export type SubjectProps = {
   subject: string;
   chapters: ChapterProps[];
 };
+
 export type ErrorNoteProps = {
   _id: string;
   note: string;
@@ -445,4 +427,42 @@ export type ErrorNoteProps = {
 export type ErrorBookProps = {
   errorBook?: SubjectProps[];
   errorNotes?: ErrorNoteProps[];
+};
+
+export interface QuestionOption {
+  name: string;
+  tag: "Correct" | "Incorrect";
+  images?: Image[];
+  _id: string;
+}
+
+export interface Image {
+  url: string;
+  key: string;
+  _id: string;
+}
+
+export type TQuizQuestionProps = {
+  chapter: string[];
+  createdAt: string;
+  createdBy: string;
+  images: Image[];
+  level: string;
+  options: TQuizQuestionOptionsProps[];
+  question: string;
+  standard: number;
+  subject: string;
+  subtopics: string[];
+  topics: string[];
+  _id: string;
+};
+
+export interface ErrorBookQuestion {
+  _id: string;
+  question: TQuizQuestionProps;
+}
+
+export type ChapterErrorBookProps = {
+  chapterErrorBook: ErrorBookQuestion[];
+  chapterName: string;
 };

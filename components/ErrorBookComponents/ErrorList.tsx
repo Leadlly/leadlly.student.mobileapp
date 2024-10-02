@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { ErrorBookProps } from "../../types/types";
 import { Image } from "expo-image";
+import ChapterCard from "./ChapterCard";
 
 type CustomTabsProps = {
   tabs: string[];
@@ -23,15 +24,15 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
       <TouchableOpacity
         key={tab}
         onPress={() => onTabPress(tab)}
-        className={`rounded-lg font-semibold border-2 px-3 py-2 mr-4 ${
+        className={`rounded-xl  border-2 px-5 py-2 mr-4 ${
           activeTab === tab
-            ? "border-[#9654F4] bg-[#9654F412] text-[#9654F4]"
+            ? "border-primary bg-primary/10 text-primary"
             : "border-[#A2A2A2] text-[#A2A2A2]"
         }`}
       >
         <Text
-          className={`font-semibold capitalize ${
-            activeTab === tab ? "text-[#9654F4]" : "text-[#A2A2A2]"
+          className={`font-mada-semibold capitalize ${
+            activeTab === tab ? "text-primary" : "text-[#A2A2A2]"
           }`}
         >
           {tab}
@@ -41,29 +42,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   </ScrollView>
 );
 
-const CustomSeparator: React.FC = () => (
-  <View className="h-[1px] bg-[#A7A7A7B0] my-5" />
-);
 
-type ChapterCardProps = {
-  number: number;
-  title: string;
-  questions: number;
-};
-
-const ChapterCard: React.FC<ChapterCardProps> = ({
-  number,
-  title,
-  questions,
-}) => (
-  <View className="flex-row p-4 border-b border-[#E5E7EB]">
-    <Text className="text-base font-semibold mr-2">{number}.</Text>
-    <View className="flex-1">
-      <Text className="text-base font-medium">{title}</Text>
-      <Text className="text-sm text-[#6B7280] mt-1">{questions} questions</Text>
-    </View>
-  </View>
-);
 
 export default function ErrorList({ errorBook }: ErrorBookProps) {
   if (!errorBook || errorBook.length < 1) {
@@ -93,8 +72,7 @@ export default function ErrorList({ errorBook }: ErrorBookProps) {
         activeTab={activeTab}
         onTabPress={setActiveTab}
       />
-      <CustomSeparator />
-      <ScrollView>
+      <ScrollView className="p-5">
         {errorBook.map(
           (tab) =>
             activeTab === tab.subject && (

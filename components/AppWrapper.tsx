@@ -92,6 +92,42 @@ const AppWrapper = () => {
             ),
           }}
         />
+        <Stack.Screen
+          name="errorBook/chapter/[chapterName]/erroredQuestions"
+          options={{
+            headerTitle: "Error Book",
+            headerTitleAlign: "left",
+            headerTitleStyle: {
+              fontFamily: "Mada-SemiBold",
+              fontSize: 20,
+            },
+            headerLeft: (props) => (
+              <View className="mr-4">
+                <TouchableOpacity onPress={() => router.back()}>
+                  <AntDesign name="arrowleft" size={22} color="black" />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="errorBook/chapter/[chapterName]/attempt"
+          options={{
+            headerTitle: "Attempt Quiz",
+            headerTitleAlign: "left",
+            headerTitleStyle: {
+              fontFamily: "Mada-SemiBold",
+              fontSize: 20,
+            },
+            headerLeft: (props) => (
+              <View className="mr-4">
+                <TouchableOpacity onPress={() => router.back()}>
+                  <AntDesign name="arrowleft" size={22} color="black" />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ProtectRoute>

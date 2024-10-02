@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
 
-type Props = { quizId: string };
+type Props = { onSubmit: () => void };
 
-const SubmitDialog = ({ quizId }: Props) => {
+const SubmitDialog = ({ onSubmit }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = () => {
     setModalVisible(false);
-    router.replace(`/quiz/${quizId}/report`);
+    onSubmit();
   };
 
   return (

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "../axios/axios";
 import axios from "axios";
-import { chapterTopicsProps, subjectChaptersProps } from "../../types/types";
+import { ChapterTopicsProps, SubjectChaptersProps } from "../../types/types";
 
 export const useGetSubjectChapters = (
   subject: string | string[],
@@ -16,7 +16,7 @@ export const useGetSubjectChapters = (
         );
 
         const responseData: {
-          chapters: subjectChaptersProps[];
+          chapters: SubjectChaptersProps[];
           success: boolean;
         } = res.data;
 
@@ -46,7 +46,7 @@ export const useGetChapterTopics = (
         );
 
         const responseData: {
-          topics: chapterTopicsProps[];
+          topics: ChapterTopicsProps[];
           success: boolean;
         } = res.data;
 

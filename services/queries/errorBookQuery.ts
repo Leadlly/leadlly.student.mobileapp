@@ -83,7 +83,9 @@ export const useUpdateErrorNote = () => {
   return useMutation({
     mutationFn: async (questionIds: string[]) => {
       const res: AxiosResponse = await axiosClient.put('/api/errorBook/update', { solvedQuestions: questionIds });
+      console.log(res.data,questionIds)
       return res.data;
+
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['errorBookData'] });
