@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import React from "react";
 import { TStudentOverallReportProps } from "../../types/types";
 import { LineChart } from "react-native-gifted-charts";
@@ -10,7 +10,7 @@ const OverallReportChart = ({
 }: {
   overallProgress: TStudentOverallReportProps[] | null;
 }) => {
-  console.log("OverallProgressData ======> ", overallProgress);
+  const { width } = Dimensions.get("window");
 
   const sessionData =
     overallProgress && overallProgress.length > 0
@@ -21,8 +21,6 @@ const OverallReportChart = ({
         }))
       : [{ value: 0 }];
 
-  console.log("overall Session Data ======> ", sessionData);
-
   const quizData =
     overallProgress && overallProgress.length > 0
       ? overallProgress.map((data) => ({
@@ -31,8 +29,6 @@ const OverallReportChart = ({
           dataPointColor: colors.leadllyCyan,
         }))
       : [{ value: 0 }];
-
-  console.log("overall Quiz Data ======> ", quizData);
 
   return (
     <View className="flex-1">
@@ -55,7 +51,7 @@ const OverallReportChart = ({
         thickness={1}
         hideRules
         height={150}
-        width={300}
+        width={width - 100}
         isAnimated
         animationDuration={1000}
       />

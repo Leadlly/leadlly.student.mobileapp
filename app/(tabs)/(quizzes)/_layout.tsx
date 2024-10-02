@@ -1,7 +1,6 @@
 import { MaterialTobTabs } from "../../../components/shared/MaterialTobTabsConfig";
 import { colors } from "../../../constants/constants";
 
-
 const QuizzesLayout = () => {
   return (
     <MaterialTobTabs
@@ -22,7 +21,6 @@ const QuizzesLayout = () => {
         tabBarStyle: {
           borderBottomColor: colors.inputBorder,
           borderBottomWidth: 1,
-          backgroundColor: '#f6effe' 
         },
       }}
     >

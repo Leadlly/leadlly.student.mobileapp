@@ -21,8 +21,7 @@ const ToDoList = () => {
 
   const animation = useRef<LottieView>(null);
 
-  const { data, isLoading, isFetching, isSuccess, refetch } =
-    useGetUserPlanner();
+  const { data, isLoading, isFetching, isSuccess } = useGetUserPlanner();
 
   useEffect(() => {
     if (!data) return;
@@ -36,7 +35,7 @@ const ToDoList = () => {
         )[0]
       );
     }
-  }, [data, isSuccess, refetch]);
+  }, [data, isSuccess]);
 
   return (
     <View className="h-72 rounded-xl p-4 bg-primary/5 my-1.5">
@@ -117,7 +116,6 @@ const ToDoList = () => {
           modalVisible={modalVisible}
           questions={todaysTopics?.questions?.[topic?.name!]}
           topic={topic}
-          refetchPlannerData={refetch}
         />
       )}
     </View>

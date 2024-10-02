@@ -89,7 +89,10 @@ const MultiSelect = ({
       ) : null}
 
       <Pressable
-        className={clsx("w-full bg-white flex-row items-center justify-between p-3 rounded-lg border border-input-border", inputStyle)}
+        className={clsx(
+          "w-full bg-white flex-row items-center justify-between p-3 rounded-lg border border-input-border",
+          inputStyle
+        )}
         onPress={(e) => {
           e.stopPropagation();
           setShowDropdown(!showDropdown);
@@ -108,7 +111,7 @@ const MultiSelect = ({
                     <Text
                       numberOfLines={1}
                       ellipsizeMode="tail"
-                      className="text-white text-xs font-mada-medium leading-tight"
+                      className="max-w-[250px] text-white text-xs font-mada-medium leading-tight"
                     >
                       {option?.label}
                     </Text>
@@ -147,13 +150,9 @@ const MultiSelect = ({
                   e.stopPropagation();
                   handleClear();
                 }}
+                style={{ marginHorizontal: 5 }}
               >
-                <AntDesign
-                  name="close"
-                  size={18}
-                  color="black"
-                  style={{ marginHorizontal: 5 }}
-                />
+                <AntDesign name="close" size={18} color="black" />
               </Pressable>
             )}
             <Feather name="chevron-down" size={20} color="black" />
@@ -225,7 +224,7 @@ const MultiSelect = ({
                     )}
                   </View>
 
-                  <Text className="ml-3 text-base font-mada-regular leading-tight">
+                  <Text className="ml-3 mr-2 text-base font-mada-regular leading-tight">
                     {capitalizeFirstLetter(item.label)}
                   </Text>
                 </Pressable>

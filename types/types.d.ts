@@ -28,21 +28,24 @@ export type UserDataProps = {
   firstname: string;
   lastname?: string;
   email: string;
+  category: "basic" | "pro" | "premium" | "free" | null;
   phone: {
     personal?: number;
     other?: number;
   };
-
   password: string;
   salt: string;
   avatar?: {
     public_id?: string;
     url?: string;
   };
-  planner: Boolean;
+  planner: boolean;
   parent: {
     name?: string;
     phone?: string;
+  };
+  mentor: {
+    id?: string;
   };
   address: {
     country?: string;
@@ -55,10 +58,10 @@ export type UserDataProps = {
     gender: string;
   };
   role?: string;
-  details?: {
+  details: {
     level?: { number: number };
     points?: { number: number };
-    streak?: { number: number };
+    streak?: { number: number; updatedAt: Date };
     mood?: Array<{
       day: string;
       emoji: string;
@@ -78,14 +81,24 @@ export type UserDataProps = {
   }>;
   points?: number;
   subscription: {
-    type?: string;
     id?: string;
     status?: string;
+    planId?: string;
+    duration: number;
     dateOfActivation?: Date;
+    dateOfDeactivation?: Date;
+    coupon?: string;
+
+    upgradation?: {
+      previousPlanId?: string;
+      previousDuration?: number;
+      dateOfUpgradation?: Date;
+      addedDuration?: number;
+    };
   };
   freeTrial: {
-    availed?: Boolean;
-    active?: Boolean;
+    availed?: boolean;
+    active?: boolean;
     dateOfActivation?: Date;
     dateOfDeactivation?: Date;
   };
@@ -95,7 +108,11 @@ export type UserDataProps = {
     status?: string;
     amount?: string;
   };
+  disabled: boolean;
+  resetPasswordToken?: string | null;
+  resetTokenExpiry?: Date | null;
   createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type Topic = {
@@ -321,7 +338,7 @@ export type TQuizQuestionProps = {
 };
 
 export type TQuizAnswerProps = {
-  question: TQuizQuestionProps;
+  question: string;
   studentAnswer: string;
   isCorrect: boolean;
   tag: string;
@@ -425,4 +442,16 @@ export interface MergedPlanData extends Plan {
   initialPrice: number;
   features: string[];
   image: ImageSourcePropType;
+}
+
+export interface ICoupon {
+  _id: string;
+  category: string;
+  code: string;
+  createdAt: string;
+  discountType: string;
+  discountValue: number;
+  expiryDate: string;
+  plan: string;
+  usageLimit: number;
 }

@@ -30,15 +30,12 @@ export const useSaveDailyQuiz = () => {
     },
 
     onSuccess: async () => {
-      queryClient.invalidateQueries({
-        queryKey: [
-          "weeklyReport",
-          "monthlyReport",
-          "overallReport",
-          "plannerData",
-        ],
-        refetchType: "all",
-      });
+      await Promise.all([
+        queryClient.refetchQueries({ queryKey: ["weeklyReport"] }),
+        queryClient.refetchQueries({ queryKey: ["monthlyReport"] }),
+        queryClient.refetchQueries({ queryKey: ["overallReport"] }),
+        queryClient.refetchQueries({ queryKey: ["plannerData"] }),
+      ]);
 
       const userData = await queryClient.fetchQuery({
         queryKey: ["user"],

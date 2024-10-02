@@ -12,7 +12,7 @@ const NewTopicLearnt = () => {
   return (
     <View className="relative z-[999] my-1.5 border border-input-border rounded-xl py-4 px-6 space-y-4">
       <Text className="text-primary text-xl leading-tight font-mada-Bold">
-        What did you Learnt New Today?
+        What Did You Learned New Today?
       </Text>
 
       <Text className="text-sm leading-tight font-mada-regular">

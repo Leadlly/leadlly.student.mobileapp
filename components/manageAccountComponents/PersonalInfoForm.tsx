@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Platform,
   Pressable,
   ActivityIndicator,
 } from "react-native";
@@ -17,12 +16,8 @@ import Input from "../shared/Input";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Feather from "@expo/vector-icons/Feather";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "../../constants/constants";
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
 import PersonalInfoFormDropdown from "./PersonalInfoFormDropdown";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import clsx from "clsx";
@@ -30,7 +25,6 @@ import { useStudentPersonalInfo } from "../../services/queries/userQuery";
 import Toast from "react-native-toast-message";
 import { useAppDispatch } from "../../services/redux/hooks";
 import { setUser } from "../../services/redux/slices/userSlice";
-import { parse, toDate } from "date-fns";
 
 const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
   const [showCalendar, setShowCalendar] = useState(false);

@@ -203,3 +203,9 @@ export const subscriptionFeatures = [
   "Active monitoring by mentor",
   "On demand sessions with mentor",
 ];
+
+export const unattemptedQuizTabs = [
+  { id: "weeklyQuiz", label: "Weekly Quiz", mobileOnly: false },
+  { id: "chapterQuiz", label: "Chapter Quiz", mobileOnly: false },
+  { id: "customizedQuiz", label: "Custom Quiz", mobileOnly: true },
+];

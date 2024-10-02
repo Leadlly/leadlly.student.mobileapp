@@ -20,24 +20,17 @@ import clsx from "clsx";
 import Feather from "@expo/vector-icons/Feather";
 import { useSaveDailyQuiz } from "../../services/queries/dailyQuizQuery";
 import Toast from "react-native-toast-message";
-import { useAppDispatch } from "../../services/redux/hooks";
-import { UseQueryResult } from "@tanstack/react-query";
 
 const QuestionsModal = ({
   modalVisible,
   setModalVisible,
   questions,
   topic,
-  refetchPlannerData,
 }: {
   modalVisible: boolean;
   setModalVisible: (modalVisible: boolean) => void;
   topic: { name: string; _id: string } | null;
   questions: TQuizQuestionProps[];
-  refetchPlannerData: (options?: {
-    throwOnError: boolean;
-    cancelRefetch: boolean;
-  }) => Promise<UseQueryResult>;
 }) => {
   const { width } = useWindowDimensions();
 
@@ -54,8 +47,6 @@ const QuestionsModal = ({
   );
   const [optionSelected, setOptionSelected] = useState(false);
 
-  const dispatch = useAppDispatch();
-
   const onAnswerSelect = (answer: string, optionTag: string, index: number) => {
     setSelectedAnswerIndex(index);
 
@@ -67,7 +58,7 @@ const QuestionsModal = ({
     }
 
     const formattedData: TQuizAnswerProps = {
-      question: questions[activeQuestion],
+      question: questions[activeQuestion]._id,
       studentAnswer: answer,
       isCorrect: optionTag === "Correct",
       tag: "daily_quiz",
@@ -99,7 +90,6 @@ const QuestionsModal = ({
       });
 
       if (res.success) {
-        refetchPlannerData();
         Toast.show({
           type: "success",
           text1: res.message,
@@ -144,6 +134,7 @@ const QuestionsModal = ({
               </View>
               <TouchableOpacity
                 onPress={onHandleSubmit}
+                disabled={attemptedQuestion.length <= 0 || savingDailyQuiz}
                 className="w-[72px] h-9 rounded-md bg-primary items-center justify-center"
               >
                 {savingDailyQuiz ? (
