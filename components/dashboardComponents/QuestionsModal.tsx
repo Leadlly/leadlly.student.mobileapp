@@ -135,7 +135,11 @@ const QuestionsModal = ({
               <TouchableOpacity
                 onPress={onHandleSubmit}
                 disabled={attemptedQuestion.length <= 0 || savingDailyQuiz}
-                className="w-[72px] h-9 rounded-md bg-primary items-center justify-center"
+                className={clsx(
+                  "w-[72px] h-9 rounded-md bg-primary items-center justify-center",
+                  (attemptedQuestion.length <= 0 || savingDailyQuiz) &&
+                    "opacity-70"
+                )}
               >
                 {savingDailyQuiz ? (
                   <ActivityIndicator size={"small"} color={"#fff"} />
@@ -147,10 +151,10 @@ const QuestionsModal = ({
               </TouchableOpacity>
             </View>
 
-            <View className="flex-row items-center gap-x-3 my-5">
+            <View className="flex-row items-center justify-center gap-x-3 my-5">
               <Progress.Bar
                 progress={attemptedQuestionIndex?.length / questions?.length}
-                width={widthPercentage(73)}
+                width={widthPercentage(65)}
                 unfilledColor={colors.inputBorder}
                 borderWidth={0}
                 color={colors.primary}
@@ -181,7 +185,7 @@ const QuestionsModal = ({
                   >
                     <Text
                       className={clsx(
-                        "font-mada-medium text-base leading-none",
+                        "font-mada-medium text-[15px] leading-tight -mt-0.5",
                         activeQuestion === index && "text-white"
                       )}
                     >

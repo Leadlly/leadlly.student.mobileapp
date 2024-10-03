@@ -225,6 +225,9 @@ const ApplyCoupon = () => {
         planId={planId}
         selectedCoupon={selectedCoupon}
         setSubTotalBlockHeight={setSubTotalBlockHeight}
+        resetCustomCouponForm={form.reset}
+        setIsCustomCouponValid={setIsCustomCouponValid}
+        setSelectedCoupon={setSelectedCoupon}
       />
     </SafeAreaView>
   );

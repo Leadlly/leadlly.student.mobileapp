@@ -46,18 +46,20 @@ const Tracker = () => {
             key={subject.name}
             onPress={() => router.setParams({ subject: subject.name })}
             className={clsx(
-              "h-8 w-20 border items-center justify-center rounded-lg",
+              "h-9 px-4 border items-center justify-center rounded-lg",
               subject.name === activeSubject
                 ? "border-primary bg-primary/10"
                 : "border-tab-item-gray bg-transparent"
-            )}>
+            )}
+          >
             <Text
               className={clsx(
                 "capitalize text-sm font-mada-semibold",
                 subject.name === activeSubject
                   ? "text-primary"
                   : "text-tab-item-gray"
-              )}>
+              )}
+            >
               {subject.name}
             </Text>
           </Pressable>

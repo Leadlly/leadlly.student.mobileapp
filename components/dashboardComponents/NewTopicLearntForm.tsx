@@ -4,9 +4,8 @@ import {
   Pressable,
   TouchableOpacity,
   ActivityIndicator,
-  Dimensions,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ISubject } from "../../types/types";
 import clsx from "clsx";
 import {
@@ -26,7 +25,6 @@ import { StudyDataFormSchema } from "../../schemas/studyDataFormSchema";
 import ModalComponent from "../shared/ModalComponent";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { colors } from "../../constants/constants";
-import TabNav from "../shared/TabNav";
 
 const NewTopicLearntForm = ({
   activeSubject,

@@ -26,7 +26,7 @@ const ProgressAnalytics = () => {
   return (
     <View className="my-1.5 border border-input-border rounded-xl p-4">
       <View className="flex-row items-center justify-between">
-        <Text className="text-base font-mada-Bold leading-tight">
+        <Text className="text-[15px] font-mada-Bold leading-tight">
           Progress Analytics
         </Text>
 

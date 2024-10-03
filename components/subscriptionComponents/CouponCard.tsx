@@ -92,8 +92,9 @@ const CouponCard = ({
               <Text
                 className={clsx(
                   "text-xs font-mada-semibold text-primary",
-                  (!!selectedCoupon && selectedCoupon._id === coupon._id) ||
-                    (isCustomCouponValid === true && "opacity-50")
+                  ((!!selectedCoupon && selectedCoupon._id === coupon._id) ||
+                    isCustomCouponValid === true) &&
+                    "opacity-50"
                 )}
               >
                 {!!selectedCoupon && selectedCoupon._id === coupon._id

@@ -27,7 +27,7 @@ const NewTopicLearnt = () => {
               setActiveSubject(subject.name);
               setModalVisible(!modalVisible);
             }}
-            className="w-20 h-8 items-center justify-center rounded-lg border border-input-border"
+            className="h-8 items-center justify-center rounded-lg border border-input-border px-4"
           >
             <Text className="capitalize text-sm font-mada-medium leading-tight text-tab-item-gray">
               {subject.name}

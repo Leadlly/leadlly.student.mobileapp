@@ -39,22 +39,22 @@ export const tabBarItems = [
     name: "errorbook",
     title: "Errorbook",
   },
-  {
-    name: "growth-meter",
-    title: "Growth Meter",
-  },
-  {
-    name: "workshops",
-    title: "Workshops",
-  },
-  {
-    name: "library",
-    title: "Library",
-  },
-  {
-    name: "study-room",
-    title: "Study Room",
-  },
+  // {
+  //   name: "growth-meter",
+  //   title: "Growth Meter",
+  // },
+  // {
+  //   name: "workshops",
+  //   title: "Workshops",
+  // },
+  // {
+  //   name: "library",
+  //   title: "Library",
+  // },
+  // {
+  //   name: "study-room",
+  //   title: "Study Room",
+  // },
 ];
 
 export const plannerSubjectProgressString = [
@@ -125,30 +125,6 @@ export const features = [
     details: ["Growth Meter", "Points & Levels", "Know Your Mistakes"],
   },
 ];
-
-// export const plans: Plan[] = [
-//   {
-//     id: 1,
-//     name: "3 Months",
-//     price: "499",
-//     planType: "Basic Plan",
-//     duration: "3",
-//   },
-//   {
-//     id: 2,
-//     name: "6 Months",
-//     price: "416",
-//     planType: "Professional Plan",
-//     duration: "6",
-//   },
-//   {
-//     id: 3,
-//     name: "1 Year",
-//     price: "333",
-//     planType: "Ultimate Plan",
-//     duration: "12",
-//   },
-// ];
 
 export const subscriptionDetails = [
   {

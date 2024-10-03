@@ -17,7 +17,7 @@ const BarChart = ({
             value: day.session,
             label: day.day.slice(0, 3),
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -34,7 +34,7 @@ const BarChart = ({
             value: 0,
             label: "Mon",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -47,7 +47,7 @@ const BarChart = ({
             value: 0,
             label: "Tue",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -60,7 +60,7 @@ const BarChart = ({
             value: 0,
             label: "Wed",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -73,7 +73,7 @@ const BarChart = ({
             value: 0,
             label: "Thu",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -86,7 +86,7 @@ const BarChart = ({
             value: 0,
             label: "Fri",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -99,7 +99,7 @@ const BarChart = ({
             value: 0,
             label: "Sat",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -112,7 +112,7 @@ const BarChart = ({
             value: 0,
             label: "Sun",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",

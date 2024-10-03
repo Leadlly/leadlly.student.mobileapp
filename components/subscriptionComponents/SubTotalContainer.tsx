@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
 import React, { useRef } from "react";
 import clsx from "clsx";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -9,6 +15,7 @@ import * as Linking from "expo-linking";
 import { useBuySubscription } from "../../services/queries/subscriptionQuery";
 import Toast from "react-native-toast-message";
 import { useAppSelector } from "../../services/redux/hooks";
+import { UseFormReset } from "react-hook-form";
 
 const SubTotalContainer = ({
   selectedCoupon,
@@ -16,12 +23,20 @@ const SubTotalContainer = ({
   category,
   price,
   planId,
+  resetCustomCouponForm,
+  setIsCustomCouponValid,
+  setSelectedCoupon,
 }: {
   selectedCoupon: ICoupon | null;
   setSubTotalBlockHeight: React.Dispatch<React.SetStateAction<number>>;
   category: string;
   price: string;
   planId: string;
+  resetCustomCouponForm: UseFormReset<{
+    code: string;
+  }>;
+  setIsCustomCouponValid: React.Dispatch<React.SetStateAction<boolean | null>>;
+  setSelectedCoupon: React.Dispatch<React.SetStateAction<ICoupon | null>>;
 }) => {
   const subTotalBlockRef = useRef<View>(null);
 
@@ -83,6 +98,20 @@ const SubTotalContainer = ({
                   color={colors.leadllyGreen}
                 />
               </View>
+              <Pressable
+                onPress={() => {
+                  resetCustomCouponForm();
+                  setIsCustomCouponValid(null);
+                  setSelectedCoupon(null);
+                }}
+                className="items-center justify-center"
+              >
+                <MaterialCommunityIcons
+                  name="trash-can-outline"
+                  size={13}
+                  color={colors.primary}
+                />
+              </Pressable>
             </View>
           </View>
         )}
