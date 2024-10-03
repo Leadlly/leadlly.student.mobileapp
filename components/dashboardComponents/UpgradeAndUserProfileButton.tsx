@@ -10,7 +10,7 @@ const UpgradeAndUserProfileButton = () => {
   return (
     <View className="mr-4 flex-row items-center gap-4">
       <Link href="/subscription-plans" asChild>
-        <TouchableOpacity className="w-[100px] h-9 bg-primary rounded-md items-center justify-center">
+        <TouchableOpacity className="px-4 h-9 bg-primary rounded-md items-center justify-center">
           <Text className="text-white leading-tight font-mada-semibold text-xs">
             Upgrade
           </Text>

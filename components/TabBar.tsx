@@ -22,10 +22,8 @@ import LibraryIcon from "./icons/LibraryIcon";
 import StudyRoomIcon from "./icons/StudyRoomIcon";
 import { colors } from "../constants/constants";
 import { useAppSelector } from "../services/redux/hooks";
-import { BlurView } from "expo-blur";
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
-  const user = useAppSelector((state) => state.user.user);
   const [visibleItems, setVisibleItems] = useState<ViewToken[]>([]);
 
   const flatListRef = useRef<FlatList<any>>(null);
@@ -96,10 +94,10 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
       "(chat)": (props: SvgProps) => <ChatIcon {...props} />,
       "(quizzes)": (props: SvgProps) => <QuizzesIcon {...props} />,
       errorbook: (props: SvgProps) => <ErrorBookIcon {...props} />,
-      "growth-meter": (props: SvgProps) => <GrowthMeterIcon {...props} />,
-      workshops: (props: SvgProps) => <WorkshopsIcon {...props} />,
-      library: (props: SvgProps) => <LibraryIcon {...props} />,
-      "study-room": (props: SvgProps) => <StudyRoomIcon {...props} />,
+      // "growth-meter": (props: SvgProps) => <GrowthMeterIcon {...props} />,
+      // workshops: (props: SvgProps) => <WorkshopsIcon {...props} />,
+      // library: (props: SvgProps) => <LibraryIcon {...props} />,
+      // "study-room": (props: SvgProps) => <StudyRoomIcon {...props} />,
     };
 
     return (
@@ -154,12 +152,5 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  blurOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 9999,
-  },
-});
 
 export default TabBar;

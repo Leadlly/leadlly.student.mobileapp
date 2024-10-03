@@ -28,7 +28,7 @@ const SemiRadialChart = ({
         style={{ marginBottom: -30 }}
       >
         {(fill) => (
-          <Text className="text-2xl font-mada-Bold leading-tight">
+          <Text className="text-xl font-mada-Bold leading-tight">
             {Math.round(fill)}%
           </Text>
         )}

@@ -80,7 +80,7 @@ const TabNav = ({
               borderRadius: 5,
               marginHorizontal: 2,
               height: dimensions.height - 6,
-              width: tabWidth - 6,
+              width: tabWidth - 5,
             },
           ]}
         />
@@ -98,7 +98,7 @@ const TabNav = ({
         >
           <Text
             className={clsx(
-              "capitalize text-xs font-mada-semibold leading-tight",
+              "capitalize text-[10px] font-mada-semibold leading-tight",
               itemTextClassName,
               activeItem === item.name && "text-white"
             )}

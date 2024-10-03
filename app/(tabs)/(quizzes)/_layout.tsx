@@ -1,7 +1,6 @@
 import { MaterialTobTabs } from "../../../components/shared/MaterialTobTabsConfig";
 import { colors } from "../../../constants/constants";
 
-
 const QuizzesLayout = () => {
   return (
     <MaterialTobTabs

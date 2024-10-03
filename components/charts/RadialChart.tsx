@@ -1,7 +1,6 @@
 import { Text, View } from "react-native";
 import React from "react";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { colors } from "../../constants/constants";
 
 const RadialChart = ({
   bgColor1,
@@ -31,7 +30,8 @@ const RadialChart = ({
         tintColor={color1}
         backgroundColor={bgColor1}
         rotation={360}
-        lineCap="round">
+        lineCap="round"
+      >
         {(fill1) => (
           <AnimatedCircularProgress
             size={110}
@@ -40,7 +40,8 @@ const RadialChart = ({
             tintColor={color2}
             backgroundColor={bgColor2}
             rotation={360}
-            lineCap="round">
+            lineCap="round"
+          >
             {(fill2) => {
               const dataArray = [fill1, fill2];
               const sum = dataArray.reduce(
@@ -54,10 +55,10 @@ const RadialChart = ({
 
               return (
                 <View className="items-center justify-center">
-                  <Text className="text-2xl leading-tight font-mada-Bold -mb-1.5">
+                  <Text className="text-xl leading-tight font-mada-Bold -mb-1.5">
                     {averagePercentage}%
                   </Text>
-                  <Text className="text-xs leading-tight font-mada-medium text-tab-item-gray">
+                  <Text className="text-[10px] leading-tight font-mada-medium text-tab-item-gray">
                     Overall
                   </Text>
                 </View>

@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
-  ActivityIndicator,
 } from "react-native";
 import { convertDateString, formatDate } from "../../../helpers/utils";
 import { AntDesign } from "@expo/vector-icons";
