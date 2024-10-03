@@ -85,7 +85,6 @@ const DonutChart = ({
           y={radius + fontSize.height / 1.5}
           text={targetText}
           font={font}
-          color={"black"}
         />
       </Canvas>
     </View>

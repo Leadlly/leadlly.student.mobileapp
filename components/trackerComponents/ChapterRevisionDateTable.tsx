@@ -13,18 +13,21 @@ const ChapterRevisionDateTable = ({
   setViewMore: (viewMore: boolean) => void;
 }) => {
   return (
-    <View className="relative ">
-      <Pressable
-        className="absolute top-0.5 left-0 z-50"
-        onPress={() => setViewMore(false)}>
-        <AntDesign name="arrowleft" size={20} color="black" />
-      </Pressable>
-      <Text
-        className="capitalize text-center text-lg leading-tight font-mada-semibold mb-4"
-        numberOfLines={1}
-        ellipsizeMode="tail">
-        {item.chapter.name}
-      </Text>
+    <View>
+      <View className="flex-row items-center gap-x-3 mb-5">
+        <Pressable className="" onPress={() => setViewMore(false)}>
+          <AntDesign name="arrowleft" size={20} color="black" />
+        </Pressable>
+        <View className="flex-1">
+          <Text
+            className="capitalize text-center text-lg leading-tight font-mada-semibold"
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {item.chapter.name}
+          </Text>
+        </View>
+      </View>
 
       <View className="border border-input-border rounded-lg h-56">
         <View className="bg-primary/10 p-3 rounded-t-lg">
@@ -35,14 +38,16 @@ const ChapterRevisionDateTable = ({
         <ScrollView
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
-          className="flex-1 px-3">
+          className="flex-1 px-3"
+        >
           {item && item.topics.length > 0 ? (
             item.topics.map((topic) => (
               <View key={topic.name} className="py-2">
                 <Text
                   className="text-sm leading-tight font-mada-regular mb-1"
                   numberOfLines={1}
-                  ellipsizeMode="tail">
+                  ellipsizeMode="tail"
+                >
                   {capitalizeFirstLetter(topic.name)}
                 </Text>
                 <ScrollView
@@ -52,32 +57,35 @@ const ChapterRevisionDateTable = ({
                   contentContainerStyle={{
                     flexDirection: "row",
                     alignItems: "center",
-                  }}>
+                  }}
+                >
                   {topic.studiedAt.map((date) => (
                     <View
                       key={date.date?.toString()}
                       className={clsx(
-                        "w-[74px] h-6 rounded items-center justify-center mr-2",
+                        "px-2 h-8 rounded items-center justify-center mr-2",
                         date.efficiency! <= 40
                           ? "bg-leadlly-red/10"
                           : date.efficiency! > 40 && date.efficiency! < 80
-                          ? "bg-leadlly-yellow/10"
-                          : "bg-leadlly-green/10"
-                      )}>
+                            ? "bg-leadlly-yellow/10"
+                            : "bg-leadlly-green/10"
+                      )}
+                    >
                       <Text
                         className={clsx(
                           "text-xs leading-tight font-mada-semibold",
                           date.efficiency! <= 40
                             ? "text-leadlly-red"
                             : date.efficiency! > 40 && date.efficiency! < 80
-                            ? "text-leadlly-yellow"
-                            : "text-leadlly-green"
-                        )}>
+                              ? "text-leadlly-yellow"
+                              : "text-leadlly-green"
+                        )}
+                      >
                         {getFormattedDate(new Date(date.date!))}
                       </Text>
                     </View>
                   ))}
-                  <View className="bg-primary/10 rounded w-[90px] h-8 items-start justify-center px-2">
+                  <View className="bg-primary/10 rounded items-start justify-center px-2 py-1">
                     <Text className="text-[9px] font-mada-medium">
                       Overall Eff:{" "}
                       <Text
@@ -85,10 +93,11 @@ const ChapterRevisionDateTable = ({
                           topic.overall_efficiency! <= 40
                             ? "text-leadlly-red"
                             : topic.overall_efficiency! > 40 &&
-                              topic.overall_efficiency! < 80
-                            ? "text-leadlly-yellow"
-                            : "text-leadlly-green"
-                        )}>
+                                topic.overall_efficiency! < 80
+                              ? "text-leadlly-yellow"
+                              : "text-leadlly-green"
+                        )}
+                      >
                         {Math.round(topic.overall_efficiency!)}%
                       </Text>
                     </Text>

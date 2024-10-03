@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Question from "./Question";
@@ -63,7 +69,7 @@ const Quiz = ({
       quizId,
       topic: { name: questions[currentQuestion].topics[0] },
       question: {
-        question: questions[currentQuestion],
+        question: questions[currentQuestion]._id,
         studentAnswer: selectedOption?.name!,
         isCorrect: selectedOption?.tag === "Correct",
         tag: "weekly_quiz",
@@ -149,13 +155,13 @@ const Quiz = ({
             Question {currentQuestion + 1} of {questions.length}:
           </Text>
           <ScrollView className="p-4 pb-10 mb-20">
-             <Question question={questions[currentQuestion]} />
+            <Question question={questions[currentQuestion]} />
             <Options
               options={questions[currentQuestion]?.options}
               selectedOption={selectedOption}
               handleOptionChange={handleOptionChange}
               attemptedOption={attemptedQuestionAnswers}
-            /> 
+            />
           </ScrollView>
         </View>
       </View>
@@ -165,7 +171,9 @@ const Quiz = ({
           className="mr-2 flex items-center flex-row justify-center bg-white border-2 border-gray-400 rounded-lg p-2"
         >
           <AntDesign name="left" size={12} color="gray" />
-          <Text className="text-gray-400 font-mada-semibold ml-2">Previous</Text>
+          <Text className="text-gray-400 font-mada-semibold ml-2">
+            Previous
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleNextQuestion}

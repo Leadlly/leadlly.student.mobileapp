@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
 import axiosClient from "../axios/axios";
-import { Plan } from "../../types/types";
+import { ICoupon, Plan } from "../../types/types";
 
 export const useActivateFreeTrial = () => {
   const queryClient = useQueryClient();
@@ -53,14 +53,65 @@ export const useGetSubscriptionPricing = (pricingType: string) => {
   });
 };
 
-export const useBuySubscription = () => {
+export const useGetCoupon = (data: { plan: string; category: string }) => {
+  return useQuery({
+    queryKey: ["coupon"],
+    queryFn: async () => {
+      try {
+        const res: AxiosResponse = await axiosClient.get(
+          `/api/subscription/coupons/get?plan=${data.plan}&category=${data.category}`
+        );
+
+        const responseData: { coupons: ICoupon[]; success: boolean } = res.data;
+
+        return responseData;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error("An unknown error while fetching coupons!");
+        }
+      }
+    },
+  });
+};
+
+export const useCheckCustomCoupon = () => {
+  return useMutation({
+    mutationFn: async (data: { code: string }) => {
+      try {
+        const res = await axiosClient.post(
+          "/api/subscription/coupons/check",
+          data
+        );
+
+        const responseData: { coupon: ICoupon; success: boolean } = res.data;
+
+        return responseData;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error(
+            "An unknown error occurred while checking custom coupon!"
+          );
+        }
+      }
+    },
+  });
+};
+
+export const useBuySubscription = (data: {
+  planId: string;
+  coupon?: string;
+}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (planId: string) => {
+    mutationFn: async () => {
       try {
         const res = await axiosClient.post(
-          `/api/subscription/create?planId=${planId}`
+          `/api/subscription/create?planId=${data.planId}&coupon=${data.coupon}`
         );
 
         return res.data;

@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import React from "react";
 import { TStudentReportProps } from "../../types/types";
 import { LineChart } from "react-native-gifted-charts";
@@ -10,7 +10,7 @@ const MonthlyReportChart = ({
 }: {
   monthlyProgress: TStudentReportProps | null;
 }) => {
-  console.log("MonthlyProgressData ======> ", monthlyProgress);
+  const { width } = Dimensions.get("window");
 
   const sessionData =
     monthlyProgress && monthlyProgress.days && monthlyProgress.days.length > 0
@@ -52,6 +52,7 @@ const MonthlyReportChart = ({
         hideYAxisText
         thickness={1}
         height={150}
+        width={width - 100}
         isAnimated
         animationDuration={1000}
       />

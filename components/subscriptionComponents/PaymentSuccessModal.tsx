@@ -6,21 +6,21 @@ import { Feather } from "@expo/vector-icons";
 import { colors } from "../../constants/constants";
 import { UserDataProps } from "../../types/types";
 import { useGetUser } from "../../services/queries/userQuery";
-import { useAppDispatch } from "../../services/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/redux/hooks";
 import { setUser } from "../../services/redux/slices/userSlice";
 
 const PaymentSuccessModal = ({
   setIsTransactionSuccess,
   transactionSuccess,
   referenceId,
-  user,
 }: {
   transactionSuccess: boolean;
   setIsTransactionSuccess: (transactionSuccess: boolean) => void;
   referenceId: string | string[] | undefined;
-  user: UserDataProps | null;
 }) => {
   const { data: userData, isLoading: loadingUserData } = useGetUser();
+
+  const user = useAppSelector((state) => state.user.user);
 
   const dispatch = useAppDispatch();
 

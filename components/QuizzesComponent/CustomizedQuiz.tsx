@@ -133,8 +133,9 @@ const CustomizedQuiz: React.FC = () => {
               render={({ field }) => (
                 <Select
                   label="Subject Name"
-                  inputStyle="w-full text-xs h-10 px-0 pl-3"
+                  inputStyle="text-xs h-10"
                   labelStyle="text-sm ml-1 text-gray-500"
+                  listContainerStyle="h-36"
                   placeholder="Select subject"
                   items={
                     userSubjects?.map((subject) => ({
@@ -195,7 +196,7 @@ const CustomizedQuiz: React.FC = () => {
           render={({ field }) => (
             <MultiSelect
               label="Topic Name"
-              inputStyle="h-10 p-2 px-3"
+              inputStyle="p-2 px-3"
               labelStyle="text-sm ml-1 text-gray-500"
               placeholder="Select topics"
               defaultValue={field.value}
@@ -225,7 +226,7 @@ const CustomizedQuiz: React.FC = () => {
                   <TouchableOpacity
                     key={value}
                     onPress={() => field.onChange(value)}
-                    className="flex-1 items-center justify-between py-2 mx-1 rounded-lg flex-row "
+                    className="flex-1 items-center flex-row space-x-1"
                   >
                     {field.value === value ? (
                       <MaterialCommunityIcons

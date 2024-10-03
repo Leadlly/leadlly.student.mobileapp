@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { MergedPlanData } from "../../types/types";
 import Animated, {
@@ -148,7 +141,11 @@ const SubscriptionPlanCard = ({
           <Link
             href={{
               pathname: "/apply-coupon",
-              params: { category: data?.category, planId: data?.planId },
+              params: {
+                category: data?.category,
+                planId: data?.planId,
+                price: String(data?.amount),
+              },
             }}
             asChild
           >

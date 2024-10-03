@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { BarChart as Chart } from "react-native-gifted-charts";
 import { TStudentReportProps } from "../../types/types";
 import { colors } from "../../constants/constants";
@@ -8,6 +8,8 @@ const BarChart = ({
 }: {
   weeklyProgress: TStudentReportProps | null;
 }) => {
+  const { width } = Dimensions.get("window");
+
   const data =
     weeklyProgress && weeklyProgress.days && weeklyProgress.days.length > 0
       ? weeklyProgress?.days.flatMap((day) => [
@@ -15,7 +17,7 @@ const BarChart = ({
             value: day.session,
             label: day.day.slice(0, 3),
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -32,7 +34,7 @@ const BarChart = ({
             value: 0,
             label: "Mon",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -45,7 +47,7 @@ const BarChart = ({
             value: 0,
             label: "Tue",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -58,7 +60,7 @@ const BarChart = ({
             value: 0,
             label: "Wed",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -71,7 +73,7 @@ const BarChart = ({
             value: 0,
             label: "Thu",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -84,7 +86,7 @@ const BarChart = ({
             value: 0,
             label: "Fri",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -97,7 +99,7 @@ const BarChart = ({
             value: 0,
             label: "Sat",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -110,7 +112,7 @@ const BarChart = ({
             value: 0,
             label: "Sun",
             spacing: 2,
-            labelWidth: 24,
+            labelWidth: 30,
             labelTextStyle: {
               color: colors.tabItemGray,
               fontFamily: "Mada-Medium",
@@ -126,10 +128,11 @@ const BarChart = ({
       <Chart
         data={data}
         barWidth={10}
-        spacing={17}
-        barBorderTopLeftRadius={5}
-        barBorderTopRightRadius={5}
+        spacing={20}
+        barBorderTopLeftRadius={3}
+        barBorderTopRightRadius={3}
         height={150}
+        width={width - 100}
         hideRules={true}
         hideYAxisText={true}
         isAnimated

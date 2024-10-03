@@ -18,13 +18,15 @@ const ChapterTracker = ({ item }: { item: TTrackerProps }) => {
             <Text
               numberOfLines={1}
               ellipsizeMode="tail"
-              className="basis-[60%] capitalize text-lg font-mada-semibold">
+              className="basis-[60%] capitalize text-lg font-mada-semibold"
+            >
               {item.chapter.name}
             </Text>
             <View className="flex-1 items-end justify-end">
               <TouchableOpacity
-                className="w-20 h-8 bg-primary/10 rounded-md items-center justify-center"
-                onPress={() => setViewMore(true)}>
+                className="px-3 h-8 bg-primary/10 rounded-md items-center justify-center"
+                onPress={() => setViewMore(true)}
+              >
                 <Text className="text-xs text-primary font-mada-semibold leading-tight">
                   View More
                 </Text>
@@ -34,18 +36,18 @@ const ChapterTracker = ({ item }: { item: TTrackerProps }) => {
 
           <TrackerGraph item={item} />
 
-          <View className="border border-input-border rounded-lg h-56">
-            <View className="flex-row items-center justify-between p-3 bg-primary/10 rounded-t-lg">
-              <Text className="text-center w-28 text-xs leading-tight font-mada-medium">
+          <View className="border border-input-border rounded-lg h-56 overflow-hidden">
+            <View className="flex-row items-center justify-between gap-x-1 p-3 bg-primary/10 rounded-t-lg">
+              <Text className="text-center flex-1 text-xs leading-tight font-mada-medium">
                 Topics
               </Text>
-              <Text className="w-20 text-center text-xs font-mada-medium leading-tight">
+              <Text className="flex-1 text-center text-[11px] font-mada-medium leading-tight">
                 Revision Freq
               </Text>
-              <Text className=" w-20 text-center text-xs font-mada-medium leading-tight">
+              <Text className=" flex-1 text-center text-[11px] font-mada-medium leading-tight">
                 Last Revision
               </Text>
-              <Text className="w-20 text-center text-xs font-mada-medium leading-tight">
+              <Text className="flex-1 text-center text-[11px] font-mada-medium leading-tight">
                 Efficiency
               </Text>
             </View>
@@ -53,26 +55,28 @@ const ChapterTracker = ({ item }: { item: TTrackerProps }) => {
             <ScrollView
               className="flex-1"
               nestedScrollEnabled={true}
-              showsVerticalScrollIndicator={false}>
+              showsVerticalScrollIndicator={false}
+            >
               {item && item.topics.length > 0 ? (
                 item.topics.map((topic) => (
                   <View
                     key={topic.name}
-                    className="flex-row items-start justify-between p-2">
-                    <Text className="w-28 text-xs leading-tight font-mada-medium">
+                    className="flex-row items-start justify-between gap-x-1 p-2"
+                  >
+                    <Text className="flex-1 text-xs leading-tight font-mada-medium">
                       {capitalizeFirstLetter(topic.name)}
                     </Text>
-                    <Text className="w-20 text-center text-xs leading-tight font-mada-medium">
+                    <Text className="flex-1 text-center text-xs leading-tight font-mada-medium">
                       {topic.plannerFrequency}
                     </Text>
-                    <Text className="w-20 text-center text-xs leading-tight font-mada-medium">
+                    <Text className="flex-1 text-center text-xs leading-tight font-mada-medium">
                       {getFormattedDate(
                         new Date(
                           topic.studiedAt[topic.studiedAt.length - 1].date!
                         )
                       )}
                     </Text>
-                    <Text className="w-20 text-center text-xs leading-tight font-mada-medium">
+                    <Text className="flex-1 text-center text-xs leading-tight font-mada-medium">
                       {Math.round(topic.overall_efficiency!)}%
                     </Text>
                   </View>

@@ -5,56 +5,131 @@ import {
   ScrollView,
   StyleSheet,
   Image,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Input from "../../components/shared/Input";
-import { Circle, ClipPath, Defs, Line, Rect, Svg } from "react-native-svg";
 import { colors } from "../../constants/constants";
+import { LinearGradient } from "expo-linear-gradient";
+import {
+  useCheckCustomCoupon,
+  useGetCoupon,
+} from "../../services/queries/subscriptionQuery";
+import CouponCard from "../../components/subscriptionComponents/CouponCard";
+import { useEffect, useState } from "react";
+import { ICoupon } from "../../types/types";
+import SubTotalContainer from "../../components/subscriptionComponents/SubTotalContainer";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useDebouncedCallback } from "use-debounce";
+import clsx from "clsx";
+
+const CustomCouponSchema = z.object({
+  code: z.string().min(1, { message: "Coupon is Required" }),
+});
 
 const ApplyCoupon = () => {
+  const [availableCoupons, setAvailableCoupons] = useState<ICoupon[]>([]);
+  const [selectedCoupon, setSelectedCoupon] = useState<ICoupon | null>(null);
+  const [isCustomCouponValid, setIsCustomCouponValid] = useState<
+    boolean | null
+  >(null);
+  const [subTotalBlockHeight, setSubTotalBlockHeight] = useState(0);
+
   const router = useRouter();
-  const { category, planId } = useLocalSearchParams<{
+
+  const { category, planId, price } = useLocalSearchParams<{
     category: string;
     planId: string;
+    price: string;
   }>();
 
+  const form = useForm<z.infer<typeof CustomCouponSchema>>({
+    resolver: zodResolver(CustomCouponSchema),
+  });
+
+  const { mutateAsync: checkCustomCoupon, isPending: checkingCustomCoupon } =
+    useCheckCustomCoupon();
+
+  const validateCustomCoupon = useDebouncedCallback(async (value: string) => {
+    if (value.length > 0) {
+      try {
+        const res = await checkCustomCoupon({ code: value });
+
+        setSelectedCoupon(res.coupon);
+        setIsCustomCouponValid(true);
+      } catch (error) {
+        setSelectedCoupon(null);
+        setIsCustomCouponValid(false);
+      }
+    } else {
+      setSelectedCoupon(null);
+      setIsCustomCouponValid(null);
+    }
+  }, 500);
+
+  const {
+    data: listedCouponData,
+    isLoading,
+    isSuccess,
+  } = useGetCoupon({
+    plan: category,
+    category: "listed",
+  });
+
+  useEffect(() => {
+    if (!listedCouponData || !isSuccess) return;
+
+    const filteredCoupons = listedCouponData.coupons.filter(
+      (coupon) => coupon.usageLimit > 0
+    );
+
+    setAvailableCoupons(filteredCoupons);
+  }, [listedCouponData, isSuccess]);
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1 px-5">
-        <TouchableOpacity onPress={() => router.back()} className="py-4">
+    <SafeAreaView className="relative flex-1 bg-white">
+      <ScrollView
+        style={{ marginBottom: subTotalBlockHeight + 5 }}
+        showsVerticalScrollIndicator={false}
+        className="flex-1"
+      >
+        <TouchableOpacity onPress={() => router.back()} className="py-4 px-5">
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
 
-        <View className="relative h-56 bg-white border border-primary rounded-xl justify-between">
+        <LinearGradient
+          colors={["rgba(204, 162, 255, 0.51)", "rgba(150, 84, 244, 0.72)"]}
+          className="relative h-56 rounded-xl justify-between mx-5"
+        >
           <View
             style={{ transform: [{ translateY: -20 }] }}
-            className="absolute top-1/2 -left-6 bg-white rounded-full w-10 h-10 border border-primary"
+            className="absolute top-1/2 -left-6 bg-white rounded-full w-10 h-10"
           />
           <View
             style={{ transform: [{ translateY: -20 }] }}
-            className="absolute top-1/2 -right-6 bg-white rounded-full w-10 h-10 border border-primary"
+            className="absolute top-1/2 -right-6 bg-white rounded-full w-10 h-10"
           />
 
           <View className="absolute top-1/2 left-0 -z-10 w-full border-b border-dashed border-tab-item-gray" />
 
           <View className="flex-row items-center justify-between px-8 pt-2">
-            <View className="flex-1">
-              <Text className="text-xl font-mada-Bold">Get</Text>
+            <View className="flex-1 mt-5">
+              <Text className="text-xl font-mada-Bold leading-5">Get upto</Text>
               <View className="relative">
-                <Text
-                  style={{ transform: [{ translateY: -15 }] }}
-                  className="absolute top-1/2 text-5xl font-mada-ExtraBold text-primary/10 whitespace-nowrap"
-                >
+                <Text className="text-5xl font-mada-ExtraBold text-primary/10 tracking-widest whitespace-nowrap">
                   50%
                 </Text>
-                <Text className="text-2xl font-mada-semibold text-primary">
+                <Text
+                  style={{ transform: [{ translateY: 0 }] }}
+                  className="absolute top-0  text-3xl font-mada-Bold -tracking-widest text-primary"
+                >
                   50% OFF
                 </Text>
               </View>
-              <Text className="text-xl font-mada-Bold">for 12-months</Text>
             </View>
 
             <Image
@@ -65,49 +140,109 @@ const ApplyCoupon = () => {
           </View>
 
           <View className="px-8 pb-5">
-            <Text className="text-xs font-mada-semibold leading-10 text-secondary-text">
-              Use coupon code :
-            </Text>
-            <Input
-              placeholder="Enter the Coupon"
-              placeholderTextColor="gray"
-              inputStyle="text-base h-12"
-              containerStyle="px-3 border-dashed bg-primary/5"
+            <Controller
+              name="code"
+              control={form.control}
+              render={({ field }) => (
+                <Input
+                  label="Use coupon code :"
+                  labelStyle="text-xs font-mada-semibold leading-tight text-white mb-2"
+                  placeholder="Enter the Coupon"
+                  placeholderTextColor={colors.inputBorder}
+                  inputStyle="text-base h-12 pr-3 text-white"
+                  containerStyle="px-3 border-white"
+                  icon2={
+                    checkingCustomCoupon ? (
+                      <ActivityIndicator size={15} color={"#fff"} />
+                    ) : null
+                  }
+                  onBlur={field.onBlur}
+                  onChangeText={(value) => {
+                    field.onChange(value);
+                    validateCustomCoupon(value);
+                  }}
+                  value={field.value}
+                />
+              )}
             />
-          </View>
-        </View>
 
-        <View className="items-center justify-center py-6">
+            {form.formState.errors.code && (
+              <Text className="text-[10px] text-leadlly-red font-mada-medium leading-none">
+                {form.formState.errors.code.message}
+              </Text>
+            )}
+
+            {isCustomCouponValid !== null && !checkingCustomCoupon && (
+              <Text
+                className={clsx(
+                  "text-[10px] font-mada-medium leading-none -mb-3",
+                  !isCustomCouponValid && "text-leadlly-red"
+                )}
+              >
+                {!isCustomCouponValid && "Invalid coupon"}
+              </Text>
+            )}
+          </View>
+        </LinearGradient>
+
+        <View className="items-center justify-center pt-8 pb-4 px-5">
           <Text className="text-xl leading-6 font-mada-semibold">
             New Offers
           </Text>
         </View>
 
-        <View className="relative h-32 bg-white rounded-xl justify-between border border-input-border">
-          <View
-            style={{ transform: [{ translateY: -17 }] }}
-            className="absolute top-1/2 -left-5 bg-white rounded-full w-8 h-8 border border-input-border"
-          />
-          <View
-            style={{ transform: [{ translateY: -17 }] }}
-            className="absolute top-1/2 -right-5 bg-white rounded-full w-8 h-8 border border-input-border"
-          />
-        </View>
+        {isLoading ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size={"small"} color={colors.primary} />
+          </View>
+        ) : availableCoupons && availableCoupons.length > 0 ? (
+          <View className="flex-1 space-y-3">
+            {availableCoupons.map((coupon, index) => (
+              <CouponCard
+                key={coupon._id}
+                index={index}
+                coupon={coupon}
+                selectedCoupon={selectedCoupon}
+                setSelectedCoupon={setSelectedCoupon}
+                isCustomCouponValid={isCustomCouponValid}
+                resetCustomCouponForm={form.reset}
+                setIsCustomCouponValid={setIsCustomCouponValid}
+              />
+            ))}
+          </View>
+        ) : (
+          <View className="flex-1 items-center justify-center">
+            <Text className="text-base text-secondary-text font-mada-medium leading-tight">
+              No Coupons!
+            </Text>
+          </View>
+        )}
       </ScrollView>
+
+      <SubTotalContainer
+        category={category}
+        price={price}
+        planId={planId}
+        selectedCoupon={selectedCoupon}
+        setSubTotalBlockHeight={setSubTotalBlockHeight}
+        resetCustomCouponForm={form.reset}
+        setIsCustomCouponValid={setIsCustomCouponValid}
+        setSelectedCoupon={setSelectedCoupon}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   boxShadow: {
-    shadowColor: colors.primary,
+    shadowColor: "#000",
     shadowOffset: {
-      width: 10,
-      height: 10,
+      width: 0,
+      height: 0,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 2,
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 6,
   },
 });
 

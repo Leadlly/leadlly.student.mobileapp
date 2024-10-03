@@ -44,7 +44,7 @@ const ToDoListItem = ({
         >
           <View
             className={clsx(
-              "w-5 h-5 rounded border border-checkbox-gray items-center justify-center",
+              "w-[18px] h-[18px] rounded border border-checkbox-gray items-center justify-center",
               completedTopics &&
                 completedTopics.length > 0 &&
                 completedTopics.includes(item.topic.name) &&
@@ -58,7 +58,7 @@ const ToDoListItem = ({
             {completedTopics &&
             completedTopics.length > 0 &&
             completedTopics.includes(item.topic.name) ? (
-              <Feather name="check" size={15} color={colors.leadllyGreen} />
+              <Feather name="check" size={14} color={colors.leadllyGreen} />
             ) : incompleteTopics &&
               incompleteTopics.length > 0 &&
               incompleteTopics.includes(item.topic.name) ? (
@@ -67,7 +67,7 @@ const ToDoListItem = ({
               </Text>
             ) : null}
           </View>
-          <Text className="flex-1 text-base font-mada-semibold leading-tight">
+          <Text className="flex-1 text-[15px] font-mada-semibold leading-tight -mt-0.5">
             {capitalizeFirstLetter(item.topic.name)}
           </Text>
         </TouchableOpacity>
