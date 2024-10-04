@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  ActivityIndicator,
 } from "react-native";
 import { convertDateString, formatDate } from "../../../helpers/utils";
 import { AntDesign } from "@expo/vector-icons";
@@ -15,13 +16,7 @@ import { Image } from "expo-image";
 import { TMeetingsProps } from "../../../types/types";
 
 const UpcomingMeetings = () => {
-  const {
-    data,
-    isError,
-    isLoading,
-    isFetching,
-    error,
-  } = useGetMeetings("");
+  const { data, isError, isLoading, isFetching, error } = useGetMeetings("");
 
   const meetings = data?.meetings;
 
@@ -90,7 +85,7 @@ const UpcomingMeetings = () => {
         <View className="flex-1 items-center justify-center px-4">
           <Image
             source={require("../../../assets/images/No-meetings.png")}
-            className="w-64 h-64 mb-8"
+            className="w-64 h-64 my-5"
           />
           <Text className="text-center text-gray-800 text-xl font-mada-semibold mb-2">
             No Meetings Scheduled
@@ -105,13 +100,8 @@ const UpcomingMeetings = () => {
 };
 
 const DoneMeetings = () => {
-  const {
-    data,
-    isError,
-    isLoading,
-    isFetching,
-    error,
-  } = useGetMeetings("done");
+  const { data, isError, isLoading, isFetching, error } =
+    useGetMeetings("done");
 
   const meetings = data?.meetings;
 
@@ -162,7 +152,7 @@ const DoneMeetings = () => {
         <View className="flex-1 items-center justify-center px-4">
           <Image
             source={require("../../../assets/images/No-meetings.png")}
-            className="w-64 h-64 mb-8"
+            className="w-64 h-64 my-5"
           />
           <Text className="text-center text-gray-800 text-xl font-mada-semibold mb-2">
             No Completed Meetings
