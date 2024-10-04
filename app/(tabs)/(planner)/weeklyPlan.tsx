@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../../services/redux/hooks";
 import { TDayProps } from "../../../types/types";
 import { setTodaysPlan } from "../../../services/redux/slices/plannerSlice";
 import { colors } from "../../../constants/constants";
+import NoPlannerComponent from "../../../components/plannerComponents/NoPlannerComponent";
 
 const Planner = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>();
@@ -35,20 +36,14 @@ const Planner = () => {
 
   if (isLoading) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size={"large"} color={colors.primary} />
+      <View className="flex-1 bg-white justify-center items-center mb-16">
+        <ActivityIndicator size={"small"} color={colors.primary} />
       </View>
     );
   }
 
   if (isError) {
-    return (
-      <View className="flex-1 justify-center items-center bg-white px-4">
-        <Text className="text-gray-400 font-mada-semibold text-base text-center">
-          {error.message}
-        </Text>
-      </View>
-    );
+    return <NoPlannerComponent />;
   }
 
   return (

@@ -12,6 +12,9 @@ import {
 import PlannerSubjectList from "../../../components/plannerComponents/PlannerSubjectList";
 import { colors } from "../../../constants/constants";
 import InitialTodoBox from "../../../components/dashboardComponents/InitialTodoBox";
+import LottieView from "lottie-react-native";
+import NoPlannerComponent from "../../../components/plannerComponents/NoPlannerComponent";
+import { TRevisionProps } from "../../../types/types";
 
 const ActivePlannerPage = () => {
   const { data, isError, isLoading, isFetching, isSuccess, error } =
@@ -25,24 +28,28 @@ const ActivePlannerPage = () => {
 
   const userSubjects = user?.academic.subjects;
 
-  function getBackRevisionTopicsForSubject(subject: string) {
-    const topics = plan?.backRevisionTopics
-      .filter((topic) => topic.subject.name === subject)
-      .map((topic) => capitalizeFirstLetter(topic.topic.name));
+  function getBackRevisionTopicsForSubject(subject: string): TRevisionProps[] {
+    const topics =
+      plan?.backRevisionTopics.filter(
+        (topic) => topic.subject.name === subject
+      ) ?? [];
 
-    return !topics?.length && !plan?.continuousRevisionTopics.length
-      ? "No plans today!"
-      : topics?.join(", ");
+    return topics?.length || (plan?.continuousRevisionTopics.length ?? 0) > 0
+      ? topics
+      : [];
   }
 
-  function getContinuousRevisionTopicsForSubject(subject: string) {
-    const topics = plan?.continuousRevisionTopics
-      .filter((topic) => topic.subject.name === subject)
-      .map((topic) => capitalizeFirstLetter(topic.topic.name));
+  function getContinuousRevisionTopicsForSubject(
+    subject: string
+  ): TRevisionProps[] {
+    const topics =
+      plan?.continuousRevisionTopics.filter(
+        (topic) => topic.subject.name === subject
+      ) ?? [];
 
-    return !topics?.length && !plan?.backRevisionTopics.length
-      ? "No plans today!"
-      : topics?.join(", ");
+    return topics?.length || (plan?.backRevisionTopics.length ?? 0) > 0
+      ? topics
+      : [];
   }
 
   useEffect(() => {
@@ -67,69 +74,52 @@ const ActivePlannerPage = () => {
     );
   }
 
-  return (
-    <View className="flex-1 bg-white p-3">
-      <View className="border border-[#d8d5d5] rounded-2xl max-h-[400px] mb-4">
-        {isError ? (
-          <View className="w-full h-full items-center justify-center px-4">
-            <Text className="text-sm text-gray-400 font-mada-semibold text-center">
-              {error.message}
-            </Text>
-          </View>
-        ) : null}
+  if (isError) {
+    return <NoPlannerComponent />;
+  }
 
-        {isLoading || isFetching || loading ? (
-          <View className="w-full h-full items-center justify-center">
-            <ActivityIndicator size={"small"} color={colors.primary} />
-          </View>
-        ) : (
-          <>
-            <View className="h-16 bg-primary/5 px-4 justify-center">
-              <Text className="text-lg font-mada-semibold leading-tight">
-                {!plan?.day && plan?.day !== getTodaysDay()
-                  ? "Today"
-                  : plan?.day && plan.day === getTodaysDay()
-                    ? "Today"
-                    : plan.day}
-                &apos;s Plan
-              </Text>
-              <Text className="text-sm leading-tight font-mada-semibold text-[#888]">
-                {plan?.day ? plan.day : getTodaysDay()}{" "}
-                {plan?.date
-                  ? getFormattedDate(new Date(plan?.date!))
-                  : getTodaysFormattedDate()}
-              </Text>
-            </View>
-
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={userSubjects}
-              keyExtractor={(item) => item.name}
-              renderItem={(item) => (
-                <PlannerSubjectList
-                  item={item.item}
-                  plan={plan!}
-                  getBackRevisionTopicsForSubject={
-                    getBackRevisionTopicsForSubject
-                  }
-                  getContinuousRevisionTopicsForSubject={
-                    getContinuousRevisionTopicsForSubject
-                  }
-                />
-              )}
-              ItemSeparatorComponent={() => (
-                <View className=" border-b border-input-border" />
-              )}
-            />
-          </>
-        )}
+  if (isLoading || isFetching || loading) {
+    return (
+      <View className="flex-1 bg-white items-center justify-center mb-16">
+        <ActivityIndicator size={"small"} color={colors.primary} />
       </View>
+    );
+  }
 
-      <View className="items-center justify-center mt-8">
-        <Image
-          source={require("../../../assets/images/revision_zone.png")}
-          resizeMode="contain"
-          className="w-48 h-48"
+  return (
+    <View className="flex-1 bg-white p-3 mb-16">
+      <View className="pb-16">
+        <View className="h-16 bg-primary/10 px-4 rounded-lg justify-center mb-3">
+          <Text className="text-lg font-mada-semibold leading-tight">
+            {!plan?.day && plan?.day !== getTodaysDay()
+              ? "Today"
+              : plan?.day && plan.day === getTodaysDay()
+                ? "Today"
+                : plan.day}
+            &apos;s Plan
+          </Text>
+          <Text className="text-sm leading-tight font-mada-semibold text-[#888]">
+            {plan?.day ? plan.day : getTodaysDay()}{" "}
+            {plan?.date
+              ? getFormattedDate(new Date(plan?.date!))
+              : getTodaysFormattedDate()}
+          </Text>
+        </View>
+
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={userSubjects}
+          keyExtractor={(item) => item.name}
+          renderItem={(item) => (
+            <PlannerSubjectList
+              item={item.item}
+              plan={plan!}
+              getBackRevisionTopicsForSubject={getBackRevisionTopicsForSubject}
+              getContinuousRevisionTopicsForSubject={
+                getContinuousRevisionTopicsForSubject
+              }
+            />
+          )}
         />
       </View>
     </View>

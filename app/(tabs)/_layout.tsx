@@ -13,7 +13,7 @@ const TabsLayout = () => {
           key={item.name}
           name={item.name}
           options={{
-            title: item.title,
+            title: item.title === "Chat" ? "Mentor" : item.title,
             headerShadowVisible: false,
             headerTitleStyle: {
               fontSize: 25,
