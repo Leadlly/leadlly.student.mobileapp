@@ -5,51 +5,58 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
   Linking,
 } from "react-native";
 import { convertDateString, formatDate } from "../../../helpers/utils";
 import { AntDesign } from "@expo/vector-icons";
 import { useGetMeetings } from "../../../services/queries/meetingQuery";
 import { colors } from "../../../constants/constants";
+import { Image } from "expo-image";
+import { TMeetingsProps } from "../../../types/types";
 
 const UpcomingMeetings = () => {
-  const { data, isError, isLoading, isFetching, error } = useGetMeetings("");
+  const {
+    data,
+    isError,
+    isLoading,
+    isFetching,
+    error,
+  } = useGetMeetings("");
+
+  const meetings = data?.meetings;
 
   return (
     <ScrollView className="flex-1 bg-white p-4 mb-16">
       {isError ? (
-        <View className="w-full h-full items-center justify-center px-4">
+        <View className="h-[50vh] w-full items-center justify-center px-4">
           <Text className="text-sm text-gray-400 font-mada-semibold text-center">
-            {error.message}
+            {error?.message}
           </Text>
         </View>
       ) : null}
 
       {isLoading || isFetching ? (
-        <View className="w-full h-full items-center justify-center">
+        <View className="h-[50vh] w-full items-center justify-center">
           <ActivityIndicator size={"small"} color={colors.primary} />
         </View>
-      ) : data?.meetings.length ? (
-        data?.meetings.map((meeting) => (
+      ) : meetings && meetings.length ? (
+        meetings.map((meeting: TMeetingsProps) => (
           <View
             key={meeting._id}
-            className="flex-row border border-gray-200 rounded-lg p-4 my-2 bg-white shadow"
+            className="flex-row border-2 border-gray-200 rounded-lg p-3 my-2 bg-white shadow shadow-primary/70"
           >
-            <View className="bg-primary/10 rounded-lg w-24 items-center justify-center p-2">
-              <Text className="text-lg font-mada-semibold">
+            <View className="bg-primary/10 rounded-lg w-24 h-24 items-center justify-center p-2">
+              <Text className="text-sm font-mada-semibold">
                 {meeting.rescheduled.isRescheduled
-                  ? formatDate(meeting.rescheduled.date)
+                  ? formatDate(new Date(meeting.date))
                   : formatDate(new Date(meeting.date))}
               </Text>
-              <Text className="text-sm text-gray-600 font-mada-semibold">
-                {meeting.rescheduled.isRescheduled
-                  ? meeting.rescheduled.time
-                  : meeting.time}
+              <Text className="text-xs text-gray-600 font-mada-semibold">
+                {meeting.time}
               </Text>
             </View>
-            <View className="flex-1 pl-4 justify-between">
-              <Text numberOfLines={1} className="text-lg font-mada-semibold">
+            <View className="flex-1 pl-3 justify-between">
+              <Text numberOfLines={1} className="text-base font-mada-semibold">
                 {meeting.message ? meeting.message : "New Meeting"}
               </Text>
               <View className="flex items-center gap-1 flex-row">
@@ -63,15 +70,15 @@ const UpcomingMeetings = () => {
                 <TouchableOpacity
                   onPress={() => Linking.openURL(meeting.gmeet.link || "#")}
                 >
-                  <View className="bg-primary rounded-md py-2 px-4 mt-4">
-                    <Text className="text-white text-center font-mada-semibold">
+                  <View className="bg-primary rounded-md py-2 px-4 mt-3">
+                    <Text className="text-white text-center text-sm font-mada-semibold">
                       Join Meeting
                     </Text>
                   </View>
                 </TouchableOpacity>
               ) : (
-                <View className="bg-primary/60 rounded-md py-2 px-4 mt-4">
-                  <Text className="text-white text-center font-mada-semibold">
+                <View className="bg-primary/60 rounded-md py-2 px-4 mt-3">
+                  <Text className="text-white text-center text-sm font-mada-semibold">
                     Join Meeting
                   </Text>
                 </View>
@@ -80,51 +87,90 @@ const UpcomingMeetings = () => {
           </View>
         ))
       ) : (
-        <Text className="text-center text-secondary-text text-base mt-5 font-mada-Bold">
-          No meetings scheduled!
-        </Text>
+        <View className="flex-1 items-center justify-center px-4">
+          <Image
+            source={require("../../../assets/images/No-meetings.png")}
+            className="w-64 h-64 mb-8"
+          />
+          <Text className="text-center text-gray-800 text-xl font-mada-semibold mb-2">
+            No Meetings Scheduled
+          </Text>
+          <Text className="text-center text-gray-700 text-base font-mada-medium">
+            You don't have any upcoming meetings at the moment.
+          </Text>
+        </View>
       )}
     </ScrollView>
   );
 };
 
 const DoneMeetings = () => {
-  const { data, isError, isLoading, isFetching, error } =
-    useGetMeetings("done");
+  const {
+    data,
+    isError,
+    isLoading,
+    isFetching,
+    error,
+  } = useGetMeetings("done");
+
+  const meetings = data?.meetings;
 
   return (
-    <ScrollView className="flex-1 bg-white p-4 mb-16">
+    <ScrollView className="flex-1 bg-white p-4 mb-16 ">
       {isError ? (
-        <View className="w-full h-full items-center justify-center px-4">
+        <View className="h-[50vh] w-full items-center justify-center px-4">
           <Text className="text-sm text-gray-400 font-mada-semibold text-center">
-            {error.message}
+            {error?.message}
           </Text>
         </View>
       ) : null}
 
       {isLoading || isFetching ? (
-        <View className="w-full h-full items-center justify-center">
+        <View className="h-[50vh] w-full items-center justify-center">
           <ActivityIndicator size={"small"} color={colors.primary} />
         </View>
-      ) : data?.meetings.length ? (
-        data?.meetings.map((meeting) => (
+      ) : meetings && meetings.length ? (
+        meetings.map((meeting: TMeetingsProps) => (
           <View
             key={meeting._id}
-            className="border border-gray-200 bg-white rounded-lg p-4 my-2"
+            className="flex-row border-2 border-gray-200 rounded-lg p-3 my-2 bg-white shadow shadow-primary/70"
           >
-            <Text className="text-lg font-semibold">{meeting.message}</Text>
-            <Text className="text-sm text-gray-600">
-              Date:{" "}
-              {meeting.rescheduled.isRescheduled
-                ? convertDateString(meeting.rescheduled.date)
-                : convertDateString(new Date(meeting.date))}
-            </Text>
+            <View className="bg-primary/10 rounded-lg w-24 h-24 items-center justify-center p-2">
+              <Text className="text-sm font-mada-semibold">
+                {meeting.rescheduled.isRescheduled
+                  ? formatDate(new Date(meeting.date))
+                  : formatDate(new Date(meeting.date))}
+              </Text>
+              <Text className="text-xs text-gray-600 font-mada-semibold">
+                {meeting.time}
+              </Text>
+            </View>
+            <View className="flex-1 pl-3 justify-between">
+              <Text numberOfLines={1} className="text-base font-mada-semibold">
+                {meeting.message ? meeting.message : "Completed Meeting"}
+              </Text>
+              <View className="flex items-center gap-1 flex-row">
+                <AntDesign name="checkcircleo" size={14} color="green" />
+                <Text className="text-sm text-green-600">
+                  Meeting Completed
+                </Text>
+              </View>
+            </View>
           </View>
         ))
       ) : (
-        <Text className="text-center text-secondary-text text-base mt-5 font-bold">
-          No meetings done yet!
-        </Text>
+        <View className="flex-1 items-center justify-center px-4">
+          <Image
+            source={require("../../../assets/images/No-meetings.png")}
+            className="w-64 h-64 mb-8"
+          />
+          <Text className="text-center text-gray-800 text-xl font-mada-semibold mb-2">
+            No Completed Meetings
+          </Text>
+          <Text className="text-center text-gray-700 text-base font-mada-medium">
+            You haven't completed any meetings yet.
+          </Text>
+        </View>
       )}
     </ScrollView>
   );
@@ -137,17 +183,19 @@ const MeetingsComponent: React.FC = () => {
 
   return (
     <View className="flex-1">
-      <View className="flex-row justify-around bg-white  shadow p-2">
+      <View className="flex-row justify-around bg-white shadow p-2">
         <TouchableOpacity
           onPress={() => setSelectedTab("upcoming")}
           className={`w-28 rounded-3xl ${
-            selectedTab === "upcoming" ? "bg-primary/10" : "bg-transparent"
+            selectedTab === "upcoming"
+              ? "bg-primary/80 border border-primary"
+              : "bg-transparent"
           } p-2`}
         >
           <Text
-            className={` text-center  font-mada-semibold ${
-              selectedTab === "upcoming" ? "text-primary" : "text-black"
-            } `}
+            className={`text-center font-mada-semibold ${
+              selectedTab === "upcoming" ? "text-white" : "text-black"
+            }`}
           >
             Upcoming
           </Text>
@@ -155,13 +203,15 @@ const MeetingsComponent: React.FC = () => {
         <TouchableOpacity
           onPress={() => setSelectedTab("done")}
           className={`w-28 rounded-3xl ${
-            selectedTab === "done" ? "bg-primary/10" : "bg-transparent"
+            selectedTab === "done"
+              ? "bg-primary/80 border border-primary"
+              : "bg-transparent"
           } p-2`}
         >
           <Text
-            className={` text-center  font-mada-semibold ${
-              selectedTab === "done" ? " text-primary" : "text-black"
-            } `}
+            className={`text-center font-mada-semibold ${
+              selectedTab === "done" ? "text-white" : "text-black"
+            }`}
           >
             Done
           </Text>

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import { TQuizAnswerProps, TQuizQuestionOptionsProps } from "../../types/types";
+import { TQuizAnswerProps, TQuizQuestionOptionsProps, TQuizQuestionProps } from "../../types/types";
 import RenderHtml from "react-native-render-html";
 import { useWindowDimensions } from "react-native";
 
@@ -9,10 +9,10 @@ interface OptionsProps {
   selectedOption: TQuizQuestionOptionsProps | null;
   handleOptionChange: (option: TQuizQuestionOptionsProps) => void;
   attemptedOption?: {
-    questionId: string;
-    quizId: string;
-    topic: { name: string };
-    question: TQuizAnswerProps;
+    question: {
+      question: TQuizQuestionProps;
+      studentAnswer: string;
+    };
   };
 }
 
@@ -67,13 +67,13 @@ const Options: React.FC<OptionsProps> = ({
                   source={{ html: option.name }}
                 />
               </View>
-              {option.images && (
+              {option.images?.map((image, imgIndex) => (
                 <Image
-                  source={{ uri: option.images }}
-                  className="w-[300px] h-[200px] mt-2"
-                  resizeMode="contain"
+                  key={imgIndex}
+                  source={{ uri: image.url }}
+                  className="w-[300px] h-[200px] mt-[5px]"
                 />
-              )}
+              ))}
             </View>
           </View>
         </TouchableOpacity>

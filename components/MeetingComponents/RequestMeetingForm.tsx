@@ -15,7 +15,7 @@ import CalendarModal from "./CalendarModal";
 import TimeModal from "./TimeModal";
 import { RequestMeetingFormSchema } from "../../schemas/requestMeetingFormSchema";
 import { z } from "zod";
-import { colors } from "../../constants/constants";
+import { Image } from "expo-image";
 
 interface RequestMeetingFormProps {
   onSuccess: () => void;
@@ -51,12 +51,33 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
 
   return (
     <ScrollView
-      className="bg-white px-5 mb-16"
+      className="bg-white  mb-16"
       showsVerticalScrollIndicator={false}
+      automaticallyAdjustKeyboardInsets={true}
     >
-      <View className="flex items-center justify-center mt-10 mb-6">
-        <Text className="font-mada-Bold text-2xl">Connect with Mentor</Text>
-      </View>
+      <ImageBackground
+        source={require("../../assets/images/programmer.png")}
+        className="px-5"
+      >
+        <View className="flex justify-center gap-x-2 py-3 flex-row my-4 items-baseline">
+          <Image
+            source={require("../../assets/images/video_call.png")}
+            className="w-8  h-[18px]"
+          />
+          <Text className="font-mada-Bold text-2xl">
+            Request <Text className="text-primary font-mada-medium">Meet</Text>
+          </Text>
+        </View>
+
+        <View className="text-center space-y-4 mx-8">
+          <Text className="font-mada-Bold text-xl text-center">
+            Embarking on a Journey Request for Mentorship Meeting
+          </Text>
+          <Text className="text-base font-mada-medium text-center text-gray-600">
+            A meeting request offers students tailored mentorship and support to
+            enhance personal development.
+          </Text>
+        </View>
 
       <Text className="text-base font-mada-medium text-center text-gray-600">
         A meeting request offers students tailored mentorship and support to
@@ -110,6 +131,21 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
                     </Text>
                   </View>
                 </TouchableOpacity>
+
+                <View className="bg-white border border-input-border p-3 rounded-lg flex">
+                  <TextInput
+                    placeholder="Type your doubt here..."
+                    onBlur={field.onBlur}
+                    onChangeText={field.onChange}
+                    value={field.value}
+                    cursorColor={"#9654F4"}
+                    multiline={true}
+                    textAlignVertical="top"
+                    numberOfLines={8}
+                    className="text-lg font-mada-regular max-h-[20vh] flex-1 "
+                  />
+                </View>
+
               )}
             />
             {form.formState.errors.time && (

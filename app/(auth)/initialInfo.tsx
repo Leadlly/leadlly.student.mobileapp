@@ -61,7 +61,11 @@ const initialInfo = () => {
         back={back}
       />
 
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        automaticallyAdjustKeyboardInsets={true}
+        className="flex-1"
+      >
         {steps[currentStepIndex]}
       </ScrollView>
     </SafeAreaView>

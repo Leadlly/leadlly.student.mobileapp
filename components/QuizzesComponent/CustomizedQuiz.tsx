@@ -111,8 +111,12 @@ const CustomizedQuiz: React.FC = () => {
   };
 
   return (
-    <ScrollView className=" p-3" showsVerticalScrollIndicator={false}>
-      <View className="flex-1 max-w-full  border-2 border-primary items-center p-5 bg-[#F4EBFF] rounded-lg">
+    <ScrollView
+      className="p-3"
+      showsVerticalScrollIndicator={false}
+      automaticallyAdjustKeyboardInsets={true}
+    >
+      <View className="flex-1 max-w-full border-2 border-primary items-center p-5 bg-[#F4EBFF] rounded-lg">
         <View className="flex-row justify-between items-center w-full mb-4">
           <Text className="text-lg font-medium">Customized Quiz</Text>
           <View className="flex-row items-center">
