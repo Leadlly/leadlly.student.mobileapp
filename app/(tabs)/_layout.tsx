@@ -1,7 +1,7 @@
-import { Tabs } from 'expo-router';
-import { tabBarItems } from '../../constants/constants';
-import TabBar from '../../components/TabBar';
-import UpgradeAndUserProfileButton from '../../components/dashboardComponents/UpgradeAndUserProfileButton';
+import { Tabs } from "expo-router";
+import { tabBarItems } from "../../constants/constants";
+import TabBar from "../../components/TabBar";
+import UpgradeAndUserProfileButton from "../../components/dashboardComponents/UpgradeAndUserProfileButton";
 
 const TabsLayout = () => {
   return (
@@ -11,7 +11,7 @@ const TabsLayout = () => {
           key={item.name}
           name={item.name}
           options={{
-            title: item.title,
+            title: item.title === "Chat" ? "Mentor" : item.title,
             headerShadowVisible: false,
             headerTitleStyle: {
               fontSize: 25,

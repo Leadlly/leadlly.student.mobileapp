@@ -1,4 +1,10 @@
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  Dimensions,
+} from "react-native";
 import { useEffect, useRef, useState } from "react";
 import {
   getFormattedDate,
@@ -11,6 +17,7 @@ import { TDayProps } from "../../types/types";
 import ToDoListItem from "./ToDoListItem";
 import { colors } from "../../constants/constants";
 import LottieView from "lottie-react-native";
+import DashboardSkeletonLoader from "./DashboardSkeletonLoader";
 
 const ToDoList = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,9 +47,7 @@ const ToDoList = () => {
   return (
     <View className="h-72 rounded-xl p-4 bg-primary/5 my-1.5">
       {isLoading || isFetching ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size={"small"} color={colors.primary} />
-        </View>
+        <DashboardSkeletonLoader />
       ) : (
         <>
           {todaysTopics &&

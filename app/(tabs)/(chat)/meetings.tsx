@@ -17,7 +17,7 @@ const UpcomingMeetings = () => {
   const { data, isError, isLoading, isFetching, error } = useGetMeetings("");
 
   return (
-    <ScrollView className="flex-1 bg-primary/5 p-4 mb-16">
+    <ScrollView className="flex-1 bg-white p-4 mb-16">
       {isError ? (
         <View className="w-full h-full items-center justify-center px-4">
           <Text className="text-sm text-gray-400 font-mada-semibold text-center">
@@ -80,8 +80,8 @@ const UpcomingMeetings = () => {
           </View>
         ))
       ) : (
-        <Text className="text-center text-black text-xl font-mada-Bold">
-          No meetings yet!
+        <Text className="text-center text-secondary-text text-base mt-5 font-mada-Bold">
+          No meetings scheduled!
         </Text>
       )}
     </ScrollView>
@@ -93,7 +93,7 @@ const DoneMeetings = () => {
     useGetMeetings("done");
 
   return (
-    <ScrollView className="flex-1 bg-primary/10 p-4 mb-16">
+    <ScrollView className="flex-1 bg-white p-4 mb-16">
       {isError ? (
         <View className="w-full h-full items-center justify-center px-4">
           <Text className="text-sm text-gray-400 font-mada-semibold text-center">
@@ -122,7 +122,7 @@ const DoneMeetings = () => {
           </View>
         ))
       ) : (
-        <Text className="text-center text-black text-xl font-bold">
+        <Text className="text-center text-secondary-text text-base mt-5 font-bold">
           No meetings done yet!
         </Text>
       )}
@@ -141,7 +141,7 @@ const MeetingsComponent: React.FC = () => {
         <TouchableOpacity
           onPress={() => setSelectedTab("upcoming")}
           className={`w-28 rounded-3xl ${
-            selectedTab === "upcoming" ? "bg-primary/10" : "bg-transparent "
+            selectedTab === "upcoming" ? "bg-primary/10" : "bg-transparent"
           } p-2`}
         >
           <Text
@@ -155,12 +155,12 @@ const MeetingsComponent: React.FC = () => {
         <TouchableOpacity
           onPress={() => setSelectedTab("done")}
           className={`w-28 rounded-3xl ${
-            selectedTab === "done" ? "bg-primary " : "bg-transparent "
+            selectedTab === "done" ? "bg-primary/10" : "bg-transparent"
           } p-2`}
         >
           <Text
             className={` text-center  font-mada-semibold ${
-              selectedTab === "done" ? " text-white" : "text-black"
+              selectedTab === "done" ? " text-primary" : "text-black"
             } `}
           >
             Done
