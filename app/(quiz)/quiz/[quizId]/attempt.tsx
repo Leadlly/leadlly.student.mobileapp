@@ -25,7 +25,6 @@ const AttemptQuiz: React.FC = () => {
   }
 
   
-console.log(quizData)
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1">

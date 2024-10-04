@@ -5,21 +5,15 @@ import { colors } from '../../constants/constants';
 
 interface ProgressProps {
   totalQuestions: number;
-  currentQuestion: number;
-  onPageChange: (pageNumber: number) => void;
-  loading: string | null;
-  questionIds: string[];
   storedQuestionIds: string[];
+  loading?: string | null;
   currentQuestionId: string;
 }
 
 const ProgressComponent: React.FC<ProgressProps> = ({
   totalQuestions,
-  currentQuestion,
-  onPageChange,
-  loading,
-  questionIds,
   storedQuestionIds,
+  loading,
   currentQuestionId,
 }) => {
   const attemptedQuestions = storedQuestionIds.length;
@@ -40,17 +34,17 @@ const ProgressComponent: React.FC<ProgressProps> = ({
           />
         </View>
     
-          {isLoading ? (
-            <View className='size-5 flex items-center justify-center'>
-              <ActivityIndicator size={20} color="#6200EE" />
-            </View>
-          ) : (
-            <View className='size-5 flex items-center justify-center'>
-              <Text className="text-sm font-mada-Bold">
-                {attemptedQuestions} / {totalQuestions}
-              </Text>
-            </View>
-          )}
+        {isLoading ? (
+          <View className='size-5 flex items-center justify-center'>
+            <ActivityIndicator size={20} color="#6200EE" />
+          </View>
+        ) : (
+          <View className='size-5 flex items-center justify-center'>
+            <Text className="text-sm font-mada-Bold">
+              {attemptedQuestions} / {totalQuestions}
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

@@ -116,10 +116,6 @@ const Quiz = ({
     setCurrentQuestion((prev: number) => Math.max(prev - 1, 0));
   };
 
-  const handlePageChange = async (pageNumber: number) => {
-    setCurrentQuestion(pageNumber);
-  };
-
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
@@ -145,14 +141,11 @@ const Quiz = ({
             </Text>
           </View>
           <View className="flex-1 items-end">
-            <SubmitDialog quizId={quizId} />
+            <SubmitDialog onSubmit={() => router.replace(`/quiz/${quizId}/report`)} />
           </View>
         </View>
         <Progress
           totalQuestions={questions.length}
-          currentQuestion={currentQuestion}
-          onPageChange={handlePageChange}
-          questionIds={questionIds}
           storedQuestionIds={storedQuestionIds}
           currentQuestionId={questions[currentQuestion]?._id}
           loading={isSaving}

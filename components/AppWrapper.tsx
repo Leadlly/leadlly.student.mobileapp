@@ -15,7 +15,7 @@ const AppWrapper = () => {
 
   useEffect(() => {
     dispatch(loadUser());
-    dispatch(loadQuizzes())
+    dispatch(loadQuizzes());
   }, [dispatch]);
 
   return (
@@ -73,6 +73,60 @@ const AppWrapper = () => {
         <Stack.Screen
           name="(quiz)/quiz/[quizId]/report"
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(error-Notes)/error-notes"
+          options={{
+            headerTitle: "Error Notes",
+            headerTitleAlign: "left",
+            headerTitleStyle: {
+              fontFamily: "Mada-SemiBold",
+              fontSize: 20,
+            },
+            headerLeft: (props) => (
+              <View className="mr-4">
+                <TouchableOpacity onPress={() => router.back()}>
+                  <AntDesign name="arrowleft" size={22} color="black" />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="errorBook/chapter/[chapterName]/erroredQuestions"
+          options={{
+            headerTitle: "Error Book",
+            headerTitleAlign: "left",
+            headerTitleStyle: {
+              fontFamily: "Mada-SemiBold",
+              fontSize: 20,
+            },
+            headerLeft: (props) => (
+              <View className="mr-4">
+                <TouchableOpacity onPress={() => router.back()}>
+                  <AntDesign name="arrowleft" size={22} color="black" />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="errorBook/chapter/[chapterName]/attempt"
+          options={{
+            headerTitle: "Attempt Quiz",
+            headerTitleAlign: "left",
+            headerTitleStyle: {
+              fontFamily: "Mada-SemiBold",
+              fontSize: 20,
+            },
+            headerLeft: (props) => (
+              <View className="mr-4">
+                <TouchableOpacity onPress={() => router.back()}>
+                  <AntDesign name="arrowleft" size={22} color="black" />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
         />
       </Stack>
       <StatusBar style="auto" />
