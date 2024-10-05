@@ -60,7 +60,7 @@ const ProgressAnalytics = () => {
               <ActivityIndicator size={"small"} color={colors.primary} />
             </View>
           ) : (
-            <BarChart weeklyProgress={weeklyReportData.weeklyReport} />
+            <BarChart weeklyProgress={weeklyReportData?.weeklyReport} />
           )}
         </View>
       )}
@@ -73,7 +73,7 @@ const ProgressAnalytics = () => {
             </View>
           ) : (
             <MonthlyReportChart
-              monthlyProgress={monthlyReportData.monthlyReport}
+              monthlyProgress={monthlyReportData?.monthlyReport}
             />
           )}
         </View>
