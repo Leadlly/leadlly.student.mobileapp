@@ -27,7 +27,26 @@ const SubscriptionPlansScreen: React.FC = () => {
   const { data: pricingData, isLoading: fetchingPricing } =
     useGetSubscriptionPricing("main");
 
-  const mergedPricingData = pricingData?.pricing.map((pricing) => {
+  const { loading, user } = useAppSelector((state) => state.user);
+
+  // Plan hierarchy
+  const planHierarchy = ["basic", "pro", "premium"];
+
+  // Get the user's current plan
+  const userCategory = user?.category || "free"; // Assume "free" if user category is null or undefined
+
+  // Filter the plans based on userCategory
+  const filteredPlans = pricingData?.pricing.filter((plan) => {
+    const planIndex = planHierarchy.indexOf(plan.category);
+    const userIndex = planHierarchy.indexOf(userCategory);
+
+    // Show plans that are hierarchically above the user's plan
+    return userIndex === -1 || planIndex > userIndex;
+  });
+
+
+  const mergedPricingData = filteredPlans?.map((pricing) => {
+
     const matchingDetails = subscriptionDetails.find(
       (detail) => detail.category === pricing.category
     );
@@ -38,14 +57,16 @@ const SubscriptionPlansScreen: React.FC = () => {
         discountPercentage: matchingDetails.discountPercentage,
         initialPrice: matchingDetails.initialPrice,
         features: matchingDetails.details,
-        image: matchingDetails.image,
+        image: matchingDetails?.image,
       } as MergedPlanData;
     }
 
     return null;
   });
 
-  const [paginationIndex, setPaginationIndex] = useState(0);
+  const defaultPaginationIndex = filteredPlans?.findIndex(plan => plan.category === "pro") ?? 0;
+
+  const [paginationIndex, setPaginationIndex] = useState<number>(defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0);
 
   const [transactionCancelled, setIsTransactionCancelled] = useState(false);
   const [transactionSuccess, setIsTransactionSuccess] = useState(false);
@@ -134,14 +155,21 @@ const SubscriptionPlansScreen: React.FC = () => {
           </Text>
         </View>
 
-        {fetchingPricing ? (
+        {userCategory === "premium" ? (
+          <View className="bg-yellow-100 p-4 rounded-md mx-5 mb-5">
+            <Text className="text-base text-center font-mada-Bold">
+              Hi! You are a premium user. Further upgrades are not present.
+              If you want to extend your plan, please wait; it will be available soon. Thanks for choosing us!
+            </Text>
+          </View>
+        ) : fetchingPricing ? (
           <View className="flex-1 items-center justify-center">
             <ActivityIndicator size={"small"} color={colors.primary} />
           </View>
         ) : (
           <>
             <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-between mb-8">
-              {pricingData?.pricing.map((item, index) => (
+              {filteredPlans?.map((item, index) => (
                 <Pressable
                   key={item._id}
                   onPress={() => setPaginationIndex(index)}
