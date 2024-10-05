@@ -51,7 +51,7 @@ const SubTotalContainer = ({
   const userToken = useAppSelector((state) => state.user.user?.token);
 
   const { mutateAsync: buySubscription, isPending: isBuyingSubscription } =
-    useBuySubscription({ planId, coupon: selectedCoupon?.code });
+    useBuySubscription({ planId, coupon: selectedCoupon?.code || '' });
 
   const webBaseUrl =
     process.env.EXPO_PUBLIC_WEB_APP_URL || "https://education.leadlly.in";
@@ -72,6 +72,16 @@ const SubTotalContainer = ({
       });
     }
   };
+
+  // Calculate the discount value based on coupon type
+  const discountValue = selectedCoupon
+    ? selectedCoupon.discountType === "percentage"
+      ? (Number(price) * selectedCoupon.discountValue) / 100
+      : selectedCoupon.discountValue // Assume it's a fixed amount
+    : 0;
+
+  const subtotal = Number(price) - discountValue;
+
   return (
     <View
       ref={subTotalBlockRef}
@@ -139,10 +149,12 @@ const SubTotalContainer = ({
       {selectedCoupon && (
         <View className="flex-row items-center justify-between my-3 px-5">
           <Text className="text-sm font-mada-medium leading-tight text-secondary-text">
-            Discount {selectedCoupon.discountValue}% Off :
+            Discount {selectedCoupon.discountType === "percentage"
+              ? `${selectedCoupon.discountValue}% Off`
+              : `₹ ${selectedCoupon.discountValue} Off`} :
           </Text>
           <Text className="text-sm font-mada-medium leading-tight text-primary">
-            - ₹ {(Number(price) * selectedCoupon.discountValue) / 100}/-
+            - ₹ {discountValue}/-
           </Text>
         </View>
       )}
@@ -154,7 +166,7 @@ const SubTotalContainer = ({
 
         <Text className="text-base font-mada-Bold leading-tight">
           {selectedCoupon
-            ? `₹ ${Number(price) - (Number(price) * selectedCoupon.discountValue) / 100}/-`
+            ? `₹ ${subtotal}/-`
             : `₹ ${price}/-`}
         </Text>
       </View>
