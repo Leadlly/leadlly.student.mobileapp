@@ -8,6 +8,7 @@ import { TouchableOpacity, View } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import LogoutButton from "./manageAccountComponents/LogoutButton";
 import { loadQuizzes } from "../services/redux/slices/weeklyQuizSlice";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const AppWrapper = () => {
   const dispatch = useAppDispatch();
@@ -19,118 +20,123 @@ const AppWrapper = () => {
   }, [dispatch]);
 
   return (
-    <ProtectRoute>
-      <Stack screenOptions={{ headerShadowVisible: false }}>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(subscription)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(profile)/profile"
-          options={{
-            headerTitle: "Profile",
-            headerTitleAlign: "left",
-            headerTitleStyle: {
-              fontFamily: "Mada-SemiBold",
-              fontSize: 20,
-            },
-            headerLeft: (props) => (
-              <View className="mr-4">
-                <TouchableOpacity onPress={() => router.back()}>
-                  <AntDesign name="arrowleft" size={22} color="black" />
-                </TouchableOpacity>
-              </View>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="(manage-account)"
-          options={{
-            headerTitle: "My Account",
-            headerTitleAlign: "left",
-            headerTitleStyle: {
-              fontFamily: "Mada-SemiBold",
-              fontSize: 20,
-            },
-            headerLeft: (props) => (
-              <View className="mr-4">
-                <TouchableOpacity onPress={() => router.back()}>
-                  <AntDesign name="arrowleft" size={22} color="black" />
-                </TouchableOpacity>
-              </View>
-            ),
-            headerRight: () => (
-              <View>
-                <LogoutButton />
-              </View>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="(quiz)/quiz/[quizId]/attempt"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="(quiz)/quiz/[quizId]/report"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="(error-Notes)/error-notes"
-          options={{
-            headerTitle: "Error Notes",
-            headerTitleAlign: "left",
-            headerTitleStyle: {
-              fontFamily: "Mada-SemiBold",
-              fontSize: 20,
-            },
-            headerLeft: (props) => (
-              <View className="mr-4">
-                <TouchableOpacity onPress={() => router.back()}>
-                  <AntDesign name="arrowleft" size={22} color="black" />
-                </TouchableOpacity>
-              </View>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="errorBook/chapter/[chapterName]/erroredQuestions"
-          options={{
-            headerTitle: "Error Book",
-            headerTitleAlign: "left",
-            headerTitleStyle: {
-              fontFamily: "Mada-SemiBold",
-              fontSize: 20,
-            },
-            headerLeft: (props) => (
-              <View className="mr-4">
-                <TouchableOpacity onPress={() => router.back()}>
-                  <AntDesign name="arrowleft" size={22} color="black" />
-                </TouchableOpacity>
-              </View>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="errorBook/chapter/[chapterName]/attempt"
-          options={{
-            headerTitle: "Attempt Quiz",
-            headerTitleAlign: "left",
-            headerTitleStyle: {
-              fontFamily: "Mada-SemiBold",
-              fontSize: 20,
-            },
-            headerLeft: (props) => (
-              <View className="mr-4">
-                <TouchableOpacity onPress={() => router.back()}>
-                  <AntDesign name="arrowleft" size={22} color="black" />
-                </TouchableOpacity>
-              </View>
-            ),
-          }}
-        />
-      </Stack>
-      <StatusBar style="auto" />
-    </ProtectRoute>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ProtectRoute>
+        <Stack screenOptions={{ headerShadowVisible: false }}>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="(subscription)"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="(profile)/profile"
+            options={{
+              headerTitle: "Profile",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontFamily: "Mada-SemiBold",
+                fontSize: 20,
+              },
+              headerLeft: (props) => (
+                <View className="mr-4">
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <AntDesign name="arrowleft" size={22} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="(manage-account)"
+            options={{
+              headerTitle: "My Account",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontFamily: "Mada-SemiBold",
+                fontSize: 20,
+              },
+              headerLeft: (props) => (
+                <View className="mr-4">
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <AntDesign name="arrowleft" size={22} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ),
+              headerRight: () => (
+                <View>
+                  <LogoutButton />
+                </View>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="(quiz)/quiz/[quizId]/attempt"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="(quiz)/quiz/[quizId]/report"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="(error-Notes)"
+            options={{
+              headerTitle: "Error Notes",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontFamily: "Mada-SemiBold",
+                fontSize: 20,
+              },
+              headerLeft: (props) => (
+                <View className="mr-4">
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <AntDesign name="arrowleft" size={22} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="errorBook/chapter/[chapterName]/erroredQuestions"
+            options={{
+              headerTitle: "Error Book",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontFamily: "Mada-SemiBold",
+                fontSize: 20,
+              },
+              headerLeft: (props) => (
+                <View className="mr-4">
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <AntDesign name="arrowleft" size={22} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="errorBook/chapter/[chapterName]/attempt"
+            options={{
+              headerTitle: "Attempt Quiz",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontFamily: "Mada-SemiBold",
+                fontSize: 20,
+              },
+              headerLeft: (props) => (
+                <View className="mr-4">
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <AntDesign name="arrowleft" size={22} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ),
+            }}
+          />
+        </Stack>
+        <StatusBar style="auto" />
+      </ProtectRoute>
+    </GestureHandlerRootView>
   );
 };
 

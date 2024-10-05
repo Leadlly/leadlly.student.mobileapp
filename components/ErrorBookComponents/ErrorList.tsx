@@ -24,7 +24,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
       <TouchableOpacity
         key={tab}
         onPress={() => onTabPress(tab)}
-        className={`rounded-xl  border-2 px-5 py-2 mr-4 ${
+        className={`rounded-lg    border-2 px-6 py-1.5 mr-4 ${
           activeTab === tab
             ? "border-primary bg-primary/10 text-primary"
             : "border-[#A2A2A2] text-[#A2A2A2]"

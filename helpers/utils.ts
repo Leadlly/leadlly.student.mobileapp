@@ -110,9 +110,10 @@ export function convertDateString(inputDate: Date): string {
 	// Format the date as DD-MM-YYYY
 	return `${day}-${month}-${year}`;
 }
-export function formatDate(dateString: Date): string {
+export function formatDate(dateString: Date, showYear: boolean = false): string {
 	const date = new Date(dateString);
 	const day = date.getDate();
 	const month = date.toLocaleString('default', { month: 'short' });
-	return `${day} ${month}`;
+	const year = date.getFullYear();
+	return showYear ? `${day} ${month} ${year}` : `${day} ${month}`;
 }

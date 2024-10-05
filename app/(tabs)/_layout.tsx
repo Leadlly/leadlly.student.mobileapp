@@ -26,7 +26,7 @@ const TabsLayout = () => {
                   return <UpgradeAndUserProfileButton />;
                 case "errorbook":
                   return (
-                    <Link href="/error-notes" asChild>
+                    <Link href="(error-Notes)/error-notes" asChild>
                       <TouchableOpacity className="bg-primary px-3 py-1 mr-5 rounded-lg flex-row  items-center flex ">
                         <Octicons name="pencil" size={13} color="white" />
                         <Text className="text-white font-mada-semibold ml-1.5">

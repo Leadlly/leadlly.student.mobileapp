@@ -19,7 +19,7 @@ const ErroredQuestions: React.FC<{ chapterErrorBook: ErrorBookQuestion[] }> = ({
         contentWidth={width}
         source={{ html: item.question.question }}
         tagsStyles={{
-          body: { fontSize: 18, fontFamily: 'Mada-Bold', marginBottom: 10 },
+          body: { fontSize: 18, fontFamily: "Mada-Bold", marginBottom: 10 },
         }}
       />
 
@@ -28,6 +28,7 @@ const ErroredQuestions: React.FC<{ chapterErrorBook: ErrorBookQuestion[] }> = ({
           key={imgIndex}
           source={{ uri: image.url }}
           className="w-[300px] h-[200px] mb-2.5"
+          resizeMode="contain"
         />
       ))}
 
@@ -40,7 +41,7 @@ const ErroredQuestions: React.FC<{ chapterErrorBook: ErrorBookQuestion[] }> = ({
             contentWidth={width}
             source={{ html: option.name }}
             tagsStyles={{
-              body: { fontFamily: 'Mada-Bold' },
+              body: { fontFamily: "Mada-Bold" },
             }}
           />
           {option.images?.map((image, imgIndex) => (
@@ -48,6 +49,7 @@ const ErroredQuestions: React.FC<{ chapterErrorBook: ErrorBookQuestion[] }> = ({
               key={imgIndex}
               source={{ uri: image.url }}
               className="w-[300px] h-[200px] mt-1.5"
+              resizeMode="contain"
             />
           ))}
         </View>

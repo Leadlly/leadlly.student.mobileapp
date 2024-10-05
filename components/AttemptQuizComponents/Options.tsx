@@ -71,7 +71,8 @@ const Options: React.FC<OptionsProps> = ({
                 <Image
                   key={imgIndex}
                   source={{ uri: image.url }}
-                  className="w-[300px] h-[200px] mt-[5px]"
+                  className="w-full h-[200px] mt-[5px]"
+                  resizeMode="contain"
                 />
               ))}
             </View>

@@ -389,15 +389,7 @@ export type UnattemptedChapterQuizProps = {
   questions: number;
 };
 
-export type QuizReportResponse = {
-  status: number;
-  topicsWithEfficiency: { topic: string; efficiency: string }[];
-  questions: Question[];
-  score: number;
-  correctAnswers: number;
-  inCorrectAnswers: number;
-  totalQuestions: number;
-};
+
 
 export type Question = {
   _id: string;
@@ -497,4 +489,49 @@ export interface ICoupon {
   plan: string;
   usageLimit: number;
 }
+export type QuizReportSummary = {
+  user: string;
+  quizId: string;
+  totalMarks: number;
+  correctCount: number;
+  incorrectCount: number;
+  unattemptedCount: number;
+  maxScore: number;
+  overallEfficiency: number;
+  timeTaken: number;
+  updatedAt: string;
+  createdAt: string;
+};
 
+export type SubjectWiseReport = {
+  [subject: string]: {
+    efficiency: number;
+    topics: {
+      [topic: string]: {
+        totalQuestions: number;
+        correct: number;
+        incorrect: number;
+        unattempted: number;
+        totalMarks: number;
+        efficiency: number;
+      };
+    };
+  };
+};
+
+export type SolvedQuestion = {
+  _id: string;
+  student: string;
+  question: TQuizQuestionProps;
+  studentAnswer: string;
+  isCorrect: boolean;
+  tag: string;
+  quizId: string;
+  timeTaken: number;
+  createdAt: string;
+};
+
+export type QuizReport = QuizReportSummary & {
+  subjectWiseReport: SubjectWiseReport;
+  questions: SolvedQuestion[];
+};

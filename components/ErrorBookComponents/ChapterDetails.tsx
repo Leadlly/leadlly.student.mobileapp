@@ -15,7 +15,7 @@ const ChapterDetails: React.FC<ChapterDetailsProps> = ({
   return (
     <View className="flex-col items-center justify-center w-full">
       <View className="flex-col items-center mb-5">
-        <Text className="text-[#9654F4] font-mada-semibold text-xl capitalize text-center">
+        <Text className="text-primary font-mada-semibold text-xl capitalize text-center">
           {chapterName}
         </Text>
         <View className="flex-row items-center mt-2">
@@ -26,7 +26,7 @@ const ChapterDetails: React.FC<ChapterDetailsProps> = ({
         </View>
       </View>
       <Link href={`/errorBook/chapter/${chapterName}/attempt`} asChild>
-        <TouchableOpacity className="bg-blue-500 py-2 px-4 rounded-lg">
+        <TouchableOpacity className="bg-primary py-2 px-4 rounded-lg">
           <Text className="text-white font-mada-medium text-base">
             Attempt the quiz
           </Text>
