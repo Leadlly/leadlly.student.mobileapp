@@ -116,11 +116,11 @@ const CustomizedQuiz: React.FC = () => {
       showsVerticalScrollIndicator={false}
       automaticallyAdjustKeyboardInsets={true}
     >
-      <View className="flex-1 max-w-full border-2 border-primary items-center p-5 bg-[#F4EBFF] rounded-lg">
+      <View className="flex-1 max-w-full border border-primary items-center p-5 bg-primary/10 rounded-lg">
         <View className="flex-row justify-between items-center w-full mb-4">
           <Text className="text-lg font-medium">Customized Quiz</Text>
           <View className="flex-row items-center">
-            <Text className="text-sm font-mada-medium text-[#6200EE] mr-2">
+            <Text className="text-sm font-mada-medium text-primary mr-2">
               Drafts(0)
             </Text>
           </View>
@@ -238,12 +238,14 @@ const CustomizedQuiz: React.FC = () => {
                       <MaterialCommunityIcons
                         name="checkbox-blank-outline"
                         size={24}
-                        color="gray"
+                        color={colors.iconGray}
                       />
                     )}
                     <Text
                       className={`font-mada-semibold ${
-                        field.value === value ? "text-primary" : "text-gray-600"
+                        field.value === value
+                          ? "text-primary"
+                          : "text-secondary-text"
                       }`}
                     >
                       {capitalizeFirstLetter(value)}
@@ -265,23 +267,23 @@ const CustomizedQuiz: React.FC = () => {
           )}
           <View className="flex flex-row-reverse gap-5 items-center justify-between ">
             <TouchableOpacity
-              className="px-5 py-1 border-2 border-primary bg-primary rounded-lg"
+              className="px-5 py-1 border border-primary bg-primary rounded-lg"
               onPress={form.handleSubmit(onSubmitCustomQuiz)}
               // disabled={createCustomQuiz.isPending}
             >
               {/* {createCustomQuiz.isPending ? ( */}
               {/* <ActivityIndicator size="small" color="white" /> */}
               {/* ) : ( */}
-              <Text className="text-white text-center font-mada-semibold text-lg">
+              <Text className="text-white text-center font-mada-semibold text-base">
                 Create Now
               </Text>
               {/* )} */}
             </TouchableOpacity>
             <TouchableOpacity
-              className="px-5 py-1 border-gray-400 border-2 bg-white rounded-lg"
+              className="px-5 py-1 border-tab-item-gray border bg-white rounded-lg"
               onPress={onSaveDraft}
             >
-              <Text className="text-gray-400 text-center font-mada-semibold text-lg">
+              <Text className="text-secondary-text text-center font-mada-semibold text-base">
                 Save to Draft
               </Text>
             </TouchableOpacity>
@@ -291,10 +293,10 @@ const CustomizedQuiz: React.FC = () => {
       <View className="flex-1 justify-center items-center mb-20">
         <Image
           source={require("../../assets/images/customizequiz.png")}
-          style={{ width: 200, height: 200, marginBottom: 20 }}
+          style={{ width: 150, height: 150, marginBottom: 20 }}
           resizeMode="contain"
         />
-        <Text className="text-center text-gray-500 mt-2">
+        <Text className="text-center text-secondary-text font-mada-medium mt-2">
           Creating custom quizzes coming soon!
         </Text>
       </View>

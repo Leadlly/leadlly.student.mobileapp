@@ -15,7 +15,7 @@ const dummyQuizzes: AttemptedQuizProps[] = [
     subject: "maths",
     questions: 10,
     completedDate: "2023-06-01",
-    efficiency: 80
+    efficiency: 80,
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const dummyQuizzes: AttemptedQuizProps[] = [
     subject: "physics",
     questions: 15,
     completedDate: "2023-06-02",
-    efficiency: 75
+    efficiency: 75,
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const dummyQuizzes: AttemptedQuizProps[] = [
     subject: "biology",
     questions: 12,
     completedDate: "2023-06-03",
-    efficiency: 90
+    efficiency: 90,
   },
   {
     id: 4,
@@ -42,29 +42,25 @@ const dummyQuizzes: AttemptedQuizProps[] = [
     subject: "chemistry",
     questions: 20,
     completedDate: "2023-06-04",
-    efficiency: 85
-  }
+    efficiency: 85,
+  },
 ];
 
 const AttemptedChapterWiseQuizzes: React.FC<
   AttemptedChapterWiseQuizzesProps
 > = ({ quizzes = dummyQuizzes }) => {
-  
-  if (!quizzes || quizzes.length === 0) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-lg text-gray-500">
-          No attempted chapter quizzes available!
-        </Text>
-      </View>
-    );
-  }
-
   return (
     <FlatList
       data={quizzes}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => <AttemptedQuiz quiz={item} />}
+      ListEmptyComponent={() => (
+        <View className="flex-1 justify-center items-center my-10">
+          <Text className="text-sm text-secondary-text font-mada-medium">
+            No attempted chapter quizzes available!
+          </Text>
+        </View>
+      )}
       contentContainerStyle={styles.contentContainer}
       className="flex-1 w-full"
     />

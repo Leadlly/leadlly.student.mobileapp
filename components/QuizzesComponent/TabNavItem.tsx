@@ -19,7 +19,7 @@ const TabNavItem: React.FC<TabNavItemProps> = ({
     <Pressable
       onPress={() => setActiveTab(id)}
       className={clsx(
-        "text-xs leading-none capitalize px-3 py-2 rounded-xl",
+        "text-xs leading-none capitalize px-3 py-2 rounded-md",
         activeTab === id ? "bg-primary/20" : ""
       )}
     >
