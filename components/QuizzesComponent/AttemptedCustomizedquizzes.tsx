@@ -75,9 +75,11 @@ const AttemptedCustomizedQuizzes: React.FC<AttemptedCustomizedQuizzesProps> = ({
 }) => {
   return (
     <View className="flex-1 justify-center items-center">
-      <Text className="text-lg text-gray-500">Coming Soon</Text>
+      <Text className="text-sm text-secondary-text font-mada-medium">
+        Coming Soon
+      </Text>
     </View>
-  ); 
+  );
 };
 
 const styles = StyleSheet.create({

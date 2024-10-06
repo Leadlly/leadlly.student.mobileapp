@@ -8,23 +8,22 @@ type AttemptedWeeklyQuizzesProps = {
 };
 
 const AttemptedWeeklyQuizzes: React.FC<AttemptedWeeklyQuizzesProps> = ({
-  quizzes
+  quizzes,
 }) => {
-  if (!quizzes || quizzes.length === 0) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-lg text-gray-500">No attempted quizzes yet!</Text>
-      </View>
-    );
-  }
-
   return (
     <FlatList
       data={quizzes}
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => <AttemptedWeekQuiz quiz={item} />}
+      ListEmptyComponent={() => (
+        <View className="flex-1 justify-center items-center my-10">
+          <Text className="text-sm text-secondary-text font-mada-medium">
+            No attempted quizzes yet!
+          </Text>
+        </View>
+      )}
       contentContainerStyle={styles.contentContainer}
-      className="flex-1 w-full"
+      className="flex-1"
     />
   );
 };

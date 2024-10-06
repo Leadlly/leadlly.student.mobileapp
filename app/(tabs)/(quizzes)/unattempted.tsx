@@ -34,8 +34,8 @@ const Unattempted = () => {
 
   return (
     <View className="flex-1 bg-white p-4 pb-20">
-      <View className="py-2 border rounded-xl flex-1   border-gray-300">
-        <View className="flex-row justify-around px-4">
+      <View className="py-2 border rounded-xl flex-1 border-input-border">
+        <View className="flex-row justify-around pb-2 border-b border-input-border">
           {unattemptedQuizTabs.map((tab) => (
             <TabNavItem
               key={tab.id}
@@ -47,11 +47,9 @@ const Unattempted = () => {
           ))}
         </View>
 
-        <View className="h-px bg-gray-300 my-3" />
-
         <View className=" flex-1 min-h-[60vh] ">
           {activeTab === "weeklyQuiz" && (
-            <UnattemptedWeeklyQuizzes quizzes={data?.weeklyQuizzes} />
+            <UnattemptedWeeklyQuizzes quizzes={data?.weeklyQuiz} />
           )}
           {activeTab === "chapterQuiz" && (
             <UnattemptedChapterWiseQuizzes quizzes={chapterQuizzes} />

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, Text, ActivityIndicator } from "react-native";
-import {
-  AttemptedQuizProps,
-  WeeklyQuizProps,
-} from "../../../types/types";
+import { AttemptedQuizProps, WeeklyQuizProps } from "../../../types/types";
 import TabNavItem from "../../../components/QuizzesComponent/TabNavItem";
 import AttemptedWeeklyQuizzes from "../../../components/QuizzesComponent/AttemptedWeeklyQuizzes";
 import AttemptedChapterWiseQuizzes from "../../../components/QuizzesComponent/AttemptedChapterWiseQuiz";
@@ -19,11 +16,7 @@ const attemptedTabs = [
 const Attempted = () => {
   const [chapterQuizzes] = useState<AttemptedQuizProps[]>([]);
   const [activeTab, setActiveTab] = useState("weeklyQuiz");
-  const {
-    data,
-    error,
-    isLoading,
-  } = useGetWeeklyQuiz("attempted");
+  const { data, error, isLoading } = useGetWeeklyQuiz("attempted");
 
   if (isLoading) {
     return (
@@ -44,7 +37,7 @@ const Attempted = () => {
   return (
     <View className="flex-1 bg-white p-4 pb-20">
       <View className="py-2 border rounded-xl flex-1 border-gray-300">
-        <View className="flex-row justify-around px-4">
+        <View className="flex-row justify-around pb-2 border-b border-input-border">
           {attemptedTabs.map((tab) => (
             <TabNavItem
               key={tab.id}
@@ -56,17 +49,15 @@ const Attempted = () => {
           ))}
         </View>
 
-        <View className="h-px bg-gray-300 my-3" />
-
         <View className="flex-1 min-h-[60vh]">
           {activeTab === "weeklyQuiz" && (
-            <AttemptedWeeklyQuizzes quizzes={data?.weeklyQuizzes} />
+            <AttemptedWeeklyQuizzes quizzes={data?.weeklyQuiz} />
           )}
           {activeTab === "chapterQuiz" && (
             <AttemptedChapterWiseQuizzes quizzes={chapterQuizzes} />
           )}
           {activeTab === "customizedQuiz" && (
-              <AttemptedCustomizedQuizzes quizzes={chapterQuizzes} />
+            <AttemptedCustomizedQuizzes quizzes={chapterQuizzes} />
           )}
         </View>
       </View>

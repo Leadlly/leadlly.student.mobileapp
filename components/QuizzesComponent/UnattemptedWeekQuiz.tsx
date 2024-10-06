@@ -13,12 +13,13 @@ const UnattemptedWeekQuiz: React.FC<UnattemptedWeekQuizProps> = ({ quiz }) => {
   const userSubjects = useAppSelector(
     (state) => state.user.user?.academic.subjects
   );
+
   const daysLeft = calculateDaysLeft(new Date(quiz.endDate));
 
   return (
-    <View className="flex-row   rounded-xl border border-gray-300  p-3">
+    <View className="rounded-lg border border-gray-300 p-3">
       <View className="flex-1 flex-col justify-start space-y-1">
-        <View className="w-full flex-row items-center justify-between ">
+        <View className="w-full flex-row items-center justify-between">
           <Text className="text-lg font-mada-semibold">
             {formatDate(new Date(quiz.createdAt))} -{" "}
             {formatDate(new Date(quiz.endDate))}
@@ -37,17 +38,18 @@ const UnattemptedWeekQuiz: React.FC<UnattemptedWeekQuizProps> = ({ quiz }) => {
             </Text>
           )}
         </View>
-        <View className="flex-row justify-between  flex-1 items-end ">
-          <View className="flex-1 ">
-            <Text className="text-gray-600 text-xs md:text-sm my-1 capitalize">
-              {Object.keys(quiz.questions).slice(0, 10).join(", ")}
-              {Object.keys(quiz.questions).length > 10 ? "..." : "."}
-            </Text>
-            <View className="mt-5  flex-row items-center gap-2">
+        <View>
+          <Text className="text-gray-600 text-xs md:text-sm mb-3 capitalize">
+            {Object.keys(quiz.questions).slice(0, 10).join(", ")}
+            {Object.keys(quiz.questions).length > 10 ? "..." : "."}
+          </Text>
+
+          <View className="flex-row items-center justify-between">
+            <View className="flex-row items-center gap-2">
               {userSubjects?.map((subject, index) => (
                 <Text
                   key={index}
-                  className={`text-black text-xs  capitalize py-1 px-2 font-mada-medium  rounded ${
+                  className={`text-black text-[10px]  capitalize py-1 px-2 font-mada-medium  rounded ${
                     subject.name === "maths" || subject.name === "biology"
                       ? "bg-[#107FFC30]"
                       : subject.name === "physics"
@@ -61,25 +63,42 @@ const UnattemptedWeekQuiz: React.FC<UnattemptedWeekQuizProps> = ({ quiz }) => {
                 </Text>
               ))}
             </View>
+            <View>
+              <Text className="text-gray-600 my-1 text-[10px] font-mada-regular">
+                {Object.values(quiz.questions).flat().length} Quiz Questions
+              </Text>
+            </View>
           </View>
-          <View className="items-end">
-            <Text className="text-gray-600 my-1 text-xs font-mada-regular">
-              {Object.values(quiz.questions).flat().length} Quiz Questions
-            </Text>
-            {daysLeft > 0 && (
-              <Link
-                href={{
-                  pathname: `/quiz/${quiz._id}/attempt`,
-                }}
-                asChild
-              >
-                <TouchableOpacity className="bg-primary  px-2 py-1 rounded-md">
-                  <Text className="text-white font-mada-semibold text-xs">
-                    Attempt Now
-                  </Text>
-                </TouchableOpacity>
-              </Link>
-            )}
+          <View className="flex-row items-center justify-between mt-3">
+            {/* {daysLeft > 0 && ( */}
+            <Link
+              href={{
+                pathname: `/quiz/${quiz._id}/report`,
+              }}
+              asChild
+            >
+              <TouchableOpacity className="bg-primary h-8 items-center justify-center px-3 rounded-md">
+                <Text className="text-white font-mada-semibold text-xs">
+                  Report
+                </Text>
+              </TouchableOpacity>
+            </Link>
+            {/* )} */}
+
+            {/* {daysLeft > 0 && ( */}
+            <Link
+              href={{
+                pathname: `/quiz/${quiz._id}/attempt`,
+              }}
+              asChild
+            >
+              <TouchableOpacity className="bg-primary h-8 items-center justify-center px-3 rounded-md">
+                <Text className="text-white font-mada-semibold text-xs">
+                  Attempt Now
+                </Text>
+              </TouchableOpacity>
+            </Link>
+            {/* )} */}
           </View>
         </View>
       </View>
