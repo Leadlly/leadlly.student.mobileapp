@@ -4,19 +4,13 @@ import { useAppSelector } from "../../services/redux/hooks";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import FreeTrialTimer from "./FreeTrialTimer";
 import clsx from "clsx";
+import UpgradeButton from "../shared/UpgradeButton";
 
 const UpgradeAndUserProfileButton = () => {
   const user = useAppSelector((state) => state.user.user);
   return (
-    <View className="mr-4 flex-row items-center gap-4">
-      <Link href="/subscription-plans" asChild>
-        <TouchableOpacity className="px-4 h-9 bg-primary rounded-md items-center justify-center">
-          <Text className="text-white leading-tight font-mada-semibold text-xs">
-            Upgrade
-          </Text>
-          {user?.subscription.status !== "active" && <FreeTrialTimer />}
-        </TouchableOpacity>
-      </Link>
+    <View className="mr-4 flex-row items-center space-x-4">
+      <UpgradeButton />
 
       <Link href="/personalInfo" asChild>
         <TouchableOpacity

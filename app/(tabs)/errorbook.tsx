@@ -1,12 +1,23 @@
-import React from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import { View, ActivityIndicator } from "react-native";
 import { useGetErrorBook } from "../../services/queries/errorBookQuery";
 import ErrorList from "../../components/ErrorBookComponents/ErrorList";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAppSelector } from "../../services/redux/hooks";
+import { useEffect, useState } from "react";
+import UpgradePlanPopup from "../../components/shared/UpgradePlanPopup";
+
 const ErrorBook = () => {
-  const router = useRouter();
+  const [isCategory, setIsCategory] = useState(false);
+
+  const userCategory = useAppSelector((state) => state.user.user?.category);
+
   const { data: errorBookData, isLoading } = useGetErrorBook();
+
+  useEffect(() => {
+    if (userCategory === "basic") {
+      setIsCategory(true);
+    }
+  }, [userCategory]);
 
   if (isLoading) {
     return (
@@ -21,6 +32,7 @@ const ErrorBook = () => {
       <View className="flex-1">
         <ErrorList errorBook={errorBookData?.errorBook || []} />
       </View>
+      {isCategory && <UpgradePlanPopup />}
     </SafeAreaView>
   );
 };
