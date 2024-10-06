@@ -9,7 +9,7 @@ interface SuccessMessageProps {
 
 const SuccessMessage: React.FC<SuccessMessageProps> = ({ onBack }) => {
   return (
-    <View className="relative py-20 bg-white">
+    <View className="relative py-20 bg-white mb-16">
       <Image
         source={require("../../assets/images/girl_celebration.png")}
         className="h-[20vh] w-[13vh] opacity-70 mx-5"
@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 }, 
-    shadowOpacity: 0.7, 
-    shadowRadius: 8, 
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.7,
+    shadowRadius: 8,
   },
 });
 
