@@ -3,18 +3,20 @@ import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import TopicsCovered from "../../../../components/ReportQuizComponents/TopicCovered";
 import Score from "../../../../components/ReportQuizComponents/Score";
 import AttemptAnalysis from "../../../../components/ReportQuizComponents/AttemptAnalysis";
-import TopicsEfficiency from "../../../../components/ReportQuizComponents/TopicEfficiency";
 import SolutionAnalysis from "../../../../components/ReportQuizComponents/SolutionAnalysis";
 import QuizDetails from "../../../../components/ReportQuizComponents/QuizDetails";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import { useGetQuizReport } from "../../../../services/queries/reportQueries";
+import { QuizReport, SolvedQuestion } from "../../../../types/types";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 type Props = {};
 
 const Report = (props: Props) => {
   const { quizId } = useLocalSearchParams<{ quizId: string }>();
-  const { data: report, isLoading, error } = useGetQuizReport(quizId);
+   const { data: report, isLoading, error } = useGetQuizReport(quizId);
 
   if (isLoading) {
     return (
@@ -33,34 +35,43 @@ const Report = (props: Props) => {
   }
 
   return (
-    <SafeAreaView className="bg-white/50">
-      <ScrollView nestedScrollEnabled={true} keyboardShouldPersistTaps="always">
-        <View>
-          <View className="flex justify-center w-full p-4 mt-5 ">
-            <Text className="text-2xl md:text-4xl font-semibold text-center">
-              Quiz Report
-            </Text>
+    <BottomSheetModalProvider>
+      <SafeAreaView className="bg-white/50 min-h-screen">
+        <ScrollView
+          nestedScrollEnabled={true}
+          keyboardShouldPersistTaps="always"
+        >
+          <View className="p-5">
+            <View className="mb-5">
+              <Text className="text-2xl md:text-4xl font-semibold text-center">
+                Quiz Report
+              </Text>
+            </View>
+            <View className="bg-[#9654F42E] rounded-lg p-5 mb-5">
+              <QuizDetails
+                date={new Date(report.updatedAt || report.createdAt)}
+                timeTaken={Math.floor(report.timeTaken / 60).toString()}
+                totalQuestions={report.questions.length}
+                efficiency={report.overallEfficiency}
+                correctAnswers={report.correctCount}
+              />
+            </View>
+            <TopicsCovered subjectWiseReport={report.subjectWiseReport} />
+            <AttemptAnalysis
+              correctAnswers={report.correctCount}
+              incorrectAnswers={report.incorrectCount}
+              totalQuestions={report.questions.length}
+              efficiency={report.overallEfficiency}
+            />
+            <Score
+              totalMarks={report.totalMarks}
+              marksScored={report.correctCount * 4 - report.incorrectCount}
+            />
+            <SolutionAnalysis questions={report.questions} />
           </View>
-          <View className="flex flex-col items-start justify-between p-5 pb-6  bg-[#9654F42E] gap-16 rounded-lg m-5">
-            <QuizDetails />
-          </View>
-        </View>
-        <TopicsCovered />
-        <View className="flex">
-          <TopicsCovered />
-          <TopicsEfficiency report={report} />
-        </View>
-        <View className="flex flex-1 gap-5 max-md:mx-5">
-          <AttemptAnalysis
-            correctAnswers={report?.correctAnswers}
-            incorrectAnswers={report?.inCorrectAnswers}
-            totalQuestions={report?.totalQuestions}
-          />
-          <Score score={report?.score} questions={report?.totalQuestions} />
-        </View>
-        {report && <SolutionAnalysis questions={report.questions} />}
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </BottomSheetModalProvider>
   );
 };
 

@@ -23,15 +23,18 @@ const ChapterErroredQuestions: React.FC = () => {
   if (isError || chapterErrorBook.length === 0) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
-        <Image 
-          source={require('../../../../assets/images/error.png')} 
+        <Image
+          source={require("../../../../assets/images/error.png")}
           className="h-[50vh] w-full"
+          resizeMode="contain"
         />
         <Text className="mt-4 text-lg font-mada-medium text-gray-600">
           {isError ? "An error occurred" : "No questions available"}
         </Text>
         <Text className="mt-2 text-sm font-mada-medium text-gray-500">
-          {isError ? "Please try again later" : "Check back soon for new questions"}
+          {isError
+            ? "Please try again later"
+            : "Check back soon for new questions"}
         </Text>
       </View>
     );
