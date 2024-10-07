@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Image } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ErrorBookQuestion, TQuizQuestionOptionsProps } from '../../../../types/types';
-import { useGetChapterErrorBook, useUpdateErrorNote } from '../../../../services/queries/errorBookQuery';
-import SubmitDialog from '../../../../components/AttemptQuizComponents/SubmitDialog';
-import Question from '../../../../components/AttemptQuizComponents/Question';
-import Options from '../../../../components/AttemptQuizComponents/Options';
-import Progress from '../../../../components/AttemptQuizComponents/Pagination';
-import Toast from 'react-native-toast-message';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+} from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import {
+  ErrorBookQuestion,
+  TQuizQuestionOptionsProps,
+} from "../../../../types/types";
+import {
+  useGetChapterErrorBook,
+  useUpdateErrorNote,
+} from "../../../../services/queries/errorBookQuery";
+import SubmitDialog from "../../../../components/AttemptQuizComponents/SubmitDialog";
+import Question from "../../../../components/AttemptQuizComponents/Question";
+import Options from "../../../../components/AttemptQuizComponents/Options";
+import Progress from "../../../../components/AttemptQuizComponents/Pagination";
+import Toast from "react-native-toast-message";
+import clsx from "clsx";
 
 interface AnsweredQuestion {
   questionId: string;
@@ -24,7 +38,9 @@ const Attempt = () => {
   const updateErrorNoteMutation = useUpdateErrorNote();
 
   const chapterErrorBook: ErrorBookQuestion[] = data?.chapterErrorBook || [];
-  const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestion[]>(
+  const [answeredQuestions, setAnsweredQuestions] = useState<
+    AnsweredQuestion[]
+  >(
     chapterErrorBook.map((question) => ({
       questionId: question._id,
       selectedOption: null,
@@ -39,7 +55,7 @@ const Attempt = () => {
           ? {
               ...question,
               selectedOption: option,
-              isCorrect: option.tag === 'Correct',
+              isCorrect: option.tag === "Correct",
             }
           : question
       )
@@ -47,7 +63,9 @@ const Attempt = () => {
   };
 
   const handleNextQuestion = () => {
-    setCurrentQuestion((prev) => Math.min(prev + 1, chapterErrorBook.length - 1));
+    setCurrentQuestion((prev) =>
+      Math.min(prev + 1, chapterErrorBook.length - 1)
+    );
   };
 
   const handlePrevQuestion = () => {
@@ -57,23 +75,23 @@ const Attempt = () => {
   const handleSubmit = async () => {
     try {
       const solvedQuestionIds = answeredQuestions
-        .filter(question => question.isCorrect)
-        .map(question => question.questionId);
-        console.log(solvedQuestionIds)
-      
+        .filter((question) => question.isCorrect)
+        .map((question) => question.questionId);
+      console.log(solvedQuestionIds);
+
       await updateErrorNoteMutation.mutateAsync(solvedQuestionIds);
       Toast.show({
-        type: 'success',
-        text1: 'Quiz submitted successfully',
-        text2: 'Your progress has been saved',
+        type: "success",
+        text1: "Quiz submitted successfully",
+        text2: "Your progress has been saved",
       });
-      router.replace('/errorbook');
+      router.replace("/errorbook");
     } catch (error) {
-      console.error('Error submitting quiz:', error);
+      console.error("Error submitting quiz:", error);
       Toast.show({
-        type: 'error',
-        text1: 'Failed to submit quiz',
-        text2: 'Please try again',
+        type: "error",
+        text1: "Failed to submit quiz",
+        text2: "Please try again",
       });
     }
   };
@@ -90,25 +108,30 @@ const Attempt = () => {
     return (
       <View className="flex-1 justify-center items-center bg-white">
         <ActivityIndicator size="large" color="#4F9654" />
-        <Text className="mt-4 text-lg font-mada-medium text-gray-600">Submitting Quiz...</Text>
-        <Text className="mt-2 text-sm font-mada-medium text-gray-500">Please wait while we update your progress</Text>
+        <Text className="mt-4 text-lg font-mada-medium text-gray-600">
+          Submitting Quiz...
+        </Text>
+        <Text className="mt-2 text-sm font-mada-medium text-gray-500">
+          Please wait while we update your progress
+        </Text>
       </View>
     );
   }
 
-  
   if (isError || chapterErrorBook.length === 0) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
-        <Image 
-          source={require('../../../../assets/images/error.png')} 
+        <Image
+          source={require("../../../../assets/images/error.png")}
           className="h-[50vh] w-full"
         />
         <Text className="mt-4 text-lg font-mada-medium text-gray-600">
           {isError ? "An error occurred" : "No questions available"}
         </Text>
         <Text className="mt-2 text-sm font-mada-medium text-gray-500">
-          {isError ? "Please try again later" : "Check back soon for new questions"}
+          {isError
+            ? "Please try again later"
+            : "Check back soon for new questions"}
         </Text>
       </View>
     );
@@ -123,8 +146,12 @@ const Attempt = () => {
         nestedScrollEnabled={true}
       >
         <View className="items-center mb-5">
-          <Text className="text-2xl font-mada-Bold">{chapterName}</Text>
-          <Text className="text-lg text-gray-500 font-mada-medium">Error Book Quiz</Text>
+          <Text className="text-2xl font-mada-Bold capitalize">
+            {chapterName}
+          </Text>
+          <Text className="text-lg text-gray-500 font-mada-medium">
+            Error Book Quiz
+          </Text>
         </View>
         <View className="bg-[#9654F42E] p-2.5 rounded-lg flex-row justify-between items-center mb-5">
           <Text className="text-base text-gray-600 font-mada-medium">
@@ -152,6 +179,7 @@ const Attempt = () => {
           </Text>
           <ScrollView
             className="max-h-[48vh]"
+            showsVerticalScrollIndicator={false}
             automaticallyAdjustKeyboardInsets={true}
             nestedScrollEnabled={true}
           >
@@ -181,7 +209,11 @@ const Attempt = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleNextQuestion}
-          className="bg-[#9654F4] px-5 py-1 rounded"
+          disabled={currentQuestion === chapterErrorBook.length - 1}
+          className={clsx(
+            "bg-primary px-5 py-1 rounded",
+            currentQuestion === chapterErrorBook.length - 1 && "opacity-80"
+          )}
         >
           <Text className="text-white font-mada-Bold">Next</Text>
         </TouchableOpacity>

@@ -42,7 +42,7 @@ const PaymentSuccessModal = ({
           <ActivityIndicator size={"small"} color={colors.primary} />
         ) : (
           <>
-            <View className="w-52 h-52 absolute top-0 -left-10">
+            <View className="w-48 h-48 absolute top-0 -left-10">
               <ImageBackground
                 source={require("../../assets/images/girl_celebration.png")}
                 resizeMode="contain"

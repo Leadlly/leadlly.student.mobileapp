@@ -1,6 +1,10 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import { TQuizAnswerProps, TQuizQuestionOptionsProps, TQuizQuestionProps } from "../../types/types";
+import {
+  TQuizAnswerProps,
+  TQuizQuestionOptionsProps,
+  TQuizQuestionProps,
+} from "../../types/types";
 import RenderHtml from "react-native-render-html";
 import { useWindowDimensions } from "react-native";
 
@@ -8,12 +12,16 @@ interface OptionsProps {
   options: TQuizQuestionOptionsProps[];
   selectedOption: TQuizQuestionOptionsProps | null;
   handleOptionChange: (option: TQuizQuestionOptionsProps) => void;
-  attemptedOption?: {
-    question: {
-      question: TQuizQuestionProps;
-      studentAnswer: string;
-    };
-  };
+  attemptedOption:
+    | {
+        questionId: string;
+        quizId: string;
+        topic: {
+          name: string;
+        };
+        question: TQuizAnswerProps;
+      }
+    | undefined;
 }
 
 const Options: React.FC<OptionsProps> = ({
@@ -25,19 +33,19 @@ const Options: React.FC<OptionsProps> = ({
   const { width } = useWindowDimensions();
 
   return (
-    <View className="flex  justify-between">
+    <View className="justify-between">
       {options?.map((option) => (
         <TouchableOpacity
           key={option._id}
-          className={` border-2 rounded-lg p-4 mb-4 ${
+          className={`border rounded-lg p-4 mb-4 ${
             selectedOption
               ? selectedOption.name === option.name
                 ? "border-primary"
-                : "border-gray-200"
+                : "border-input-border"
               : attemptedOption &&
                   attemptedOption.question.studentAnswer === option.name
                 ? "border-primary"
-                : "border-gray-200"
+                : "border-input-border"
           }`}
           onPress={() => handleOptionChange(option)}
         >

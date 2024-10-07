@@ -8,7 +8,7 @@ import {
   Linking,
   ActivityIndicator,
 } from "react-native";
-import { convertDateString, formatDate } from "../../../helpers/utils";
+import { formatDate } from "../../../helpers/utils";
 import { AntDesign } from "@expo/vector-icons";
 import { useGetMeetings } from "../../../services/queries/meetingQuery";
 import { colors } from "../../../constants/constants";
@@ -16,20 +16,12 @@ import { Image } from "expo-image";
 import { TMeetingsProps } from "../../../types/types";
 
 const UpcomingMeetings = () => {
-  const { data, isError, isLoading, isFetching, error } = useGetMeetings("");
+  const { data, isLoading, isFetching } = useGetMeetings("");
 
   const meetings = data?.meetings;
 
   return (
     <ScrollView className="flex-1 bg-white p-4 mb-16">
-      {isError ? (
-        <View className="h-[50vh] w-full items-center justify-center px-4">
-          <Text className="text-sm text-gray-400 font-mada-semibold text-center">
-            {error?.message}
-          </Text>
-        </View>
-      ) : null}
-
       {isLoading || isFetching ? (
         <View className="h-[50vh] w-full items-center justify-center">
           <ActivityIndicator size={"small"} color={colors.primary} />
@@ -107,14 +99,6 @@ const DoneMeetings = () => {
 
   return (
     <ScrollView className="flex-1 bg-white p-4 mb-16 ">
-      {isError ? (
-        <View className="h-[50vh] w-full items-center justify-center px-4">
-          <Text className="text-sm text-gray-400 font-mada-semibold text-center">
-            {error?.message}
-          </Text>
-        </View>
-      ) : null}
-
       {isLoading || isFetching ? (
         <View className="h-[50vh] w-full items-center justify-center">
           <ActivityIndicator size={"small"} color={colors.primary} />

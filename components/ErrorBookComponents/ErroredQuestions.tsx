@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, ScrollView, Image } from 'react-native';
-import { ErrorBookQuestion } from '../../types/types';
-import RenderHtml from 'react-native-render-html';
-import { useWindowDimensions } from 'react-native';
+import React from "react";
+import { View, Text, ScrollView, Image } from "react-native";
+import { ErrorBookQuestion } from "../../types/types";
+import RenderHtml from "react-native-render-html";
+import { useWindowDimensions } from "react-native";
 
 const ErroredQuestions: React.FC<{ chapterErrorBook: ErrorBookQuestion[] }> = ({
   chapterErrorBook,
@@ -10,16 +10,19 @@ const ErroredQuestions: React.FC<{ chapterErrorBook: ErrorBookQuestion[] }> = ({
   const { width } = useWindowDimensions();
 
   const renderQuestion = (item: ErrorBookQuestion, index: number) => (
-    <View key={index} className="mb-5">
-      <Text className="font-mada-bold text-[#7C7C7C] text-lg mb-2.5">
-        {`Question ${index + 1}`}
+    <View
+      key={index}
+      className="mb-3 border border-input-border rounded-xl p-4"
+    >
+      <Text className="font-mada-bold text-secondary-text text-base mb-2">
+        {`Question ${index + 1}:`}
       </Text>
 
       <RenderHtml
         contentWidth={width}
         source={{ html: item.question.question }}
         tagsStyles={{
-          body: { fontSize: 18, fontFamily: "Mada-Bold", marginBottom: 10 },
+          body: { fontSize: 16, fontFamily: "Mada-Bold", marginBottom: 10 },
         }}
       />
 
@@ -27,28 +30,32 @@ const ErroredQuestions: React.FC<{ chapterErrorBook: ErrorBookQuestion[] }> = ({
         <Image
           key={imgIndex}
           source={{ uri: image.url }}
-          className="w-[300px] h-[200px] mb-2.5"
+          width={width - 72}
+          className="h-[200px] mb-2.5"
           resizeMode="contain"
         />
       ))}
 
       {item.question.options?.map((option, optIndex) => (
-        <View key={optIndex} className="ml-5 mb-2.5">
-          <Text className="font-mada-bold">
-            {`${String.fromCharCode(65 + optIndex)}. `}
-          </Text>
-          <RenderHtml
-            contentWidth={width}
-            source={{ html: option.name }}
-            tagsStyles={{
-              body: { fontFamily: "Mada-Bold" },
-            }}
-          />
+        <View key={optIndex} className="mb-2">
+          <View className="flex-row items-center">
+            <Text className="font-mada-bold mr-3">
+              {`${String.fromCharCode(65 + optIndex)}. `}
+            </Text>
+            <RenderHtml
+              contentWidth={width}
+              source={{ html: option.name }}
+              tagsStyles={{
+                body: { fontFamily: "Mada-Bold" },
+              }}
+            />
+          </View>
           {option.images?.map((image, imgIndex) => (
             <Image
               key={imgIndex}
               source={{ uri: image.url }}
-              className="w-[300px] h-[200px] mt-1.5"
+              width={width - 84}
+              className="h-[200px] mt-1.5"
               resizeMode="contain"
             />
           ))}
@@ -58,7 +65,7 @@ const ErroredQuestions: React.FC<{ chapterErrorBook: ErrorBookQuestion[] }> = ({
   );
 
   return (
-    <ScrollView className="p-5">
+    <ScrollView showsVerticalScrollIndicator={false} className="p-5">
       <Text className="font-mada-bold text-2xl mb-5 text-black">
         Errored Questions
       </Text>

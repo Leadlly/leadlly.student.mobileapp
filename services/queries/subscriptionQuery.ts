@@ -53,6 +53,31 @@ export const useGetSubscriptionPricing = (pricingType: string) => {
   });
 };
 
+export const useGetSubscriptionPricingByPlanId = (planId: string) => {
+  return useQuery({
+    queryKey: ["subscriptionPricing", planId],
+    queryFn: async () => {
+      try {
+        const res: AxiosResponse = await axiosClient.get(
+          `/api/subscription/pricing/plan/${planId}`
+        );
+
+        const responseData: { pricing: Plan; success: boolean } = res.data;
+        return responseData;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error(
+            "An unknown error while fetching subscription pricing by planId!"
+          );
+        }
+      }
+    },
+    enabled: !!planId,
+  });
+};
+
 export const useGetCoupon = (data: { plan: string; category: string }) => {
   return useQuery({
     queryKey: ["coupon"],

@@ -44,9 +44,7 @@ const SubscriptionPlansScreen: React.FC = () => {
     return userIndex === -1 || planIndex > userIndex;
   });
 
-
   const mergedPricingData = filteredPlans?.map((pricing) => {
-
     const matchingDetails = subscriptionDetails.find(
       (detail) => detail.category === pricing.category
     );
@@ -64,9 +62,12 @@ const SubscriptionPlansScreen: React.FC = () => {
     return null;
   });
 
-  const defaultPaginationIndex = filteredPlans?.findIndex(plan => plan.category === "pro") ?? 0;
+  const defaultPaginationIndex =
+    filteredPlans?.findIndex((plan) => plan.category === "pro") ?? 0;
 
-  const [paginationIndex, setPaginationIndex] = useState<number>(defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0);
+  const [paginationIndex, setPaginationIndex] = useState<number>(
+    defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0
+  );
 
   const [transactionCancelled, setIsTransactionCancelled] = useState(false);
   const [transactionSuccess, setIsTransactionSuccess] = useState(false);
@@ -103,7 +104,6 @@ const SubscriptionPlansScreen: React.FC = () => {
   useEffect(() => {
     const handleDeepLink = async (event: Linking.EventType) => {
       const url = Linking.parse(event.url);
-      console.log(url);
       const { queryParams } = url;
 
       if (queryParams && queryParams.transaction === "cancelled") {
@@ -158,8 +158,9 @@ const SubscriptionPlansScreen: React.FC = () => {
         {userCategory === "premium" ? (
           <View className="bg-yellow-100 p-4 rounded-md mx-5 mb-5">
             <Text className="text-base text-center font-mada-Bold">
-              Hi! You are a premium user. Further upgrades are not present.
-              If you want to extend your plan, please wait; it will be available soon. Thanks for choosing us!
+              Hi! You are a premium user. Further upgrades are not present. If
+              you want to extend your plan, please wait; it will be available
+              soon. Thanks for choosing us!
             </Text>
           </View>
         ) : fetchingPricing ? (
@@ -168,7 +169,7 @@ const SubscriptionPlansScreen: React.FC = () => {
           </View>
         ) : (
           <>
-            <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-between mb-8">
+            <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-center space-x-10 mb-8">
               {filteredPlans?.map((item, index) => (
                 <Pressable
                   key={item._id}

@@ -15,34 +15,28 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   activeTab,
   onTabPress,
 }) => (
-  <ScrollView
-    horizontal
-    showsHorizontalScrollIndicator={false}
-    className="flex-grow-0 px-4"
-  >
+  <View className="flex-row items-center justify-between px-5 bg-white">
     {tabs.map((tab) => (
       <TouchableOpacity
         key={tab}
         onPress={() => onTabPress(tab)}
-        className={`rounded-lg    border-2 px-6 py-1.5 mr-4 ${
+        className={`rounded-lg border px-5 py-1.5 ${
           activeTab === tab
             ? "border-primary bg-primary/10 text-primary"
-            : "border-[#A2A2A2] text-[#A2A2A2]"
+            : "border-tab-item-gray text-tab-item-gray"
         }`}
       >
         <Text
           className={`font-mada-semibold capitalize ${
-            activeTab === tab ? "text-primary" : "text-[#A2A2A2]"
+            activeTab === tab ? "text-primary" : "text-tab-item-gray"
           }`}
         >
           {tab}
         </Text>
       </TouchableOpacity>
     ))}
-  </ScrollView>
+  </View>
 );
-
-
 
 export default function ErrorList({ errorBook }: ErrorBookProps) {
   if (!errorBook || errorBook.length < 1) {
@@ -66,7 +60,7 @@ export default function ErrorList({ errorBook }: ErrorBookProps) {
   const [activeTab, setActiveTab] = useState(errorBook[0]?.subject);
 
   return (
-    <View className="flex-1 w-full">
+    <View className="flex-1 mb-16">
       <CustomTabs
         tabs={errorBook.map((tab) => tab.subject)}
         activeTab={activeTab}

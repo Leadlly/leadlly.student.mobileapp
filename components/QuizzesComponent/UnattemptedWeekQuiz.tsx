@@ -44,6 +44,12 @@ const UnattemptedWeekQuiz: React.FC<UnattemptedWeekQuizProps> = ({ quiz }) => {
             {Object.keys(quiz.questions).length > 10 ? "..." : "."}
           </Text>
 
+          <View className="items-end">
+            <Text className="text-gray-600 my-1 text-[10px] font-mada-regular">
+              {Object.values(quiz.questions).flat().length} Quiz Questions
+            </Text>
+          </View>
+
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-2">
               {userSubjects?.map((subject, index) => (
@@ -63,42 +69,22 @@ const UnattemptedWeekQuiz: React.FC<UnattemptedWeekQuizProps> = ({ quiz }) => {
                 </Text>
               ))}
             </View>
-            <View>
-              <Text className="text-gray-600 my-1 text-[10px] font-mada-regular">
-                {Object.values(quiz.questions).flat().length} Quiz Questions
-              </Text>
-            </View>
-          </View>
-          <View className="flex-row items-center justify-between mt-3">
-            {/* {daysLeft > 0 && ( */}
-            <Link
-              href={{
-                pathname: `/quiz/${quiz._id}/report`,
-              }}
-              asChild
-            >
-              <TouchableOpacity className="bg-primary h-8 items-center justify-center px-3 rounded-md">
-                <Text className="text-white font-mada-semibold text-xs">
-                  Report
-                </Text>
-              </TouchableOpacity>
-            </Link>
-            {/* )} */}
-
-            {/* {daysLeft > 0 && ( */}
-            <Link
-              href={{
-                pathname: `/quiz/${quiz._id}/attempt`,
-              }}
-              asChild
-            >
-              <TouchableOpacity className="bg-primary h-8 items-center justify-center px-3 rounded-md">
-                <Text className="text-white font-mada-semibold text-xs">
-                  Attempt Now
-                </Text>
-              </TouchableOpacity>
-            </Link>
-            {/* )} */}
+            {daysLeft > 0 && (
+              <View className="flex-row items-center justify-between">
+                <Link
+                  href={{
+                    pathname: `/quiz/${quiz._id}/attempt`,
+                  }}
+                  asChild
+                >
+                  <TouchableOpacity className="bg-primary h-8 items-center justify-center px-3 rounded-md">
+                    <Text className="text-white font-mada-semibold text-xs">
+                      Attempt Now
+                    </Text>
+                  </TouchableOpacity>
+                </Link>
+              </View>
+            )}
           </View>
         </View>
       </View>

@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppSelector } from "../../services/redux/hooks";
 import { useEffect, useState } from "react";
 import UpgradePlanPopup from "../../components/shared/UpgradePlanPopup";
+import { colors } from "../../constants/constants";
 
 const ErrorBook = () => {
   const [isCategory, setIsCategory] = useState(false);
@@ -22,18 +23,18 @@ const ErrorBook = () => {
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center h-[50vh] bg-white">
-        <ActivityIndicator size="large" color="#9654F4" />
+        <ActivityIndicator size="small" color={colors.primary} />
       </View>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1">
+    <>
+      <View className="flex-1 bg-white py-3">
         <ErrorList errorBook={errorBookData?.errorBook || []} />
       </View>
       {isCategory && <UpgradePlanPopup />}
-    </SafeAreaView>
+    </>
   );
 };
 

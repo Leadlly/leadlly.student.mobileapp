@@ -16,6 +16,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import {
   useCheckCustomCoupon,
   useGetCoupon,
+  useGetSubscriptionPricingByPlanId,
 } from "../../services/queries/subscriptionQuery";
 import CouponCard from "../../components/subscriptionComponents/CouponCard";
 import { useEffect, useState } from "react";
@@ -26,6 +27,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebouncedCallback } from "use-debounce";
 import clsx from "clsx";
+import { useAppSelector } from "../../services/redux/hooks";
 
 const CustomCouponSchema = z.object({
   code: z.string().min(1, { message: "Coupon is Required" }),
@@ -71,6 +73,11 @@ const ApplyCoupon = () => {
     }
   }, 500);
 
+  const user = useAppSelector((state) => state.user.user);
+
+  const { data: existingPlanPrice, isLoading: fetchingExistingPlanPrice } =
+    useGetSubscriptionPricingByPlanId(user?.subscription.planId || "");
+
   const {
     data: listedCouponData,
     isLoading,
@@ -92,143 +99,153 @@ const ApplyCoupon = () => {
 
   return (
     <SafeAreaView className="relative flex-1 bg-white">
-      <ScrollView
-        style={{ marginBottom: subTotalBlockHeight + 5 }}
-        showsVerticalScrollIndicator={false}
-        className="flex-1"
-      >
-        <TouchableOpacity onPress={() => router.back()} className="py-4 px-5">
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </TouchableOpacity>
+      {isLoading || fetchingExistingPlanPrice ? (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size={"small"} color={colors.primary} />
+        </View>
+      ) : (
+        <>
+          <ScrollView
+            style={{ marginBottom: subTotalBlockHeight + 5 }}
+            showsVerticalScrollIndicator={false}
+            className="flex-1"
+          >
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="py-4 px-5"
+            >
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </TouchableOpacity>
 
-        <LinearGradient
-          colors={["rgba(204, 162, 255, 0.51)", "rgba(150, 84, 244, 0.72)"]}
-          className="relative h-56 rounded-xl justify-between mx-5"
-        >
-          <View
-            style={{ transform: [{ translateY: -20 }] }}
-            className="absolute top-1/2 -left-6 bg-white rounded-full w-10 h-10"
-          />
-          <View
-            style={{ transform: [{ translateY: -20 }] }}
-            className="absolute top-1/2 -right-6 bg-white rounded-full w-10 h-10"
-          />
+            <LinearGradient
+              colors={["rgba(204, 162, 255, 0.51)", "rgba(150, 84, 244, 0.72)"]}
+              className="relative h-56 rounded-xl justify-between mx-5"
+            >
+              <View
+                style={{ transform: [{ translateY: -20 }] }}
+                className="absolute top-1/2 -left-6 bg-white rounded-full w-10 h-10"
+              />
+              <View
+                style={{ transform: [{ translateY: -20 }] }}
+                className="absolute top-1/2 -right-6 bg-white rounded-full w-10 h-10"
+              />
 
-          <View className="absolute top-1/2 left-0 -z-10 w-full border-b border-dashed border-tab-item-gray" />
+              <View className="absolute top-1/2 left-0 -z-10 w-full border-b border-dashed border-tab-item-gray" />
 
-          <View className="flex-row items-center justify-between px-8 pt-2">
-            <View className="flex-1 mt-5">
-              <Text className="text-xl font-mada-Bold leading-5">Get upto</Text>
-              <View className="relative">
-                <Text className="text-5xl font-mada-ExtraBold text-primary/10 tracking-widest whitespace-nowrap">
-                  50%
-                </Text>
-                <Text
-                  style={{ transform: [{ translateY: 0 }] }}
-                  className="absolute top-0  text-3xl font-mada-Bold -tracking-widest text-primary"
-                >
-                  50% OFF
-                </Text>
+              <View className="flex-row items-center justify-between px-8 pt-2">
+                <View className="flex-1 mt-5">
+                  <Text className="text-xl font-mada-Bold leading-5">
+                    Get upto
+                  </Text>
+                  <View className="relative">
+                    <Text className="text-5xl font-mada-ExtraBold text-primary/10 tracking-widest whitespace-nowrap">
+                      50%
+                    </Text>
+                    <Text
+                      style={{ transform: [{ translateY: 0 }] }}
+                      className="absolute top-0  text-3xl font-mada-Bold -tracking-widest text-primary"
+                    >
+                      50% OFF
+                    </Text>
+                  </View>
+                </View>
+
+                <Image
+                  source={require("../../assets/images/dayflow_gifts.png")}
+                  resizeMode="contain"
+                  className="w-24 h-24"
+                />
               </View>
+
+              <View className="px-8 pb-5">
+                <Controller
+                  name="code"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Input
+                      label="Use coupon code :"
+                      labelStyle="text-xs font-mada-semibold leading-tight text-white mb-2"
+                      placeholder="Enter the Coupon"
+                      placeholderTextColor={colors.inputBorder}
+                      inputStyle="text-base h-12 pr-3 text-white"
+                      containerStyle="px-3 border-white"
+                      icon2={
+                        checkingCustomCoupon ? (
+                          <ActivityIndicator size={15} color={"#fff"} />
+                        ) : null
+                      }
+                      onBlur={field.onBlur}
+                      onChangeText={(value) => {
+                        field.onChange(value);
+                        validateCustomCoupon(value);
+                      }}
+                      value={field.value}
+                    />
+                  )}
+                />
+
+                {form.formState.errors.code && (
+                  <Text className="text-[10px] text-leadlly-red font-mada-medium leading-none">
+                    {form.formState.errors.code.message}
+                  </Text>
+                )}
+
+                {isCustomCouponValid !== null && !checkingCustomCoupon && (
+                  <Text
+                    className={clsx(
+                      "text-[10px] font-mada-medium leading-none -mb-3",
+                      !isCustomCouponValid && "text-leadlly-red"
+                    )}
+                  >
+                    {!isCustomCouponValid && "Invalid coupon"}
+                  </Text>
+                )}
+              </View>
+            </LinearGradient>
+
+            <View className="items-center justify-center pt-8 pb-4 px-5">
+              <Text className="text-xl leading-6 font-mada-semibold">
+                New Offers
+              </Text>
             </View>
 
-            <Image
-              source={require("../../assets/images/dayflow_gifts.png")}
-              resizeMode="contain"
-              className="w-24 h-24"
-            />
-          </View>
-
-          <View className="px-8 pb-5">
-            <Controller
-              name="code"
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  label="Use coupon code :"
-                  labelStyle="text-xs font-mada-semibold leading-tight text-white mb-2"
-                  placeholder="Enter the Coupon"
-                  placeholderTextColor={colors.inputBorder}
-                  inputStyle="text-base h-12 pr-3 text-white"
-                  containerStyle="px-3 border-white"
-                  icon2={
-                    checkingCustomCoupon ? (
-                      <ActivityIndicator size={15} color={"#fff"} />
-                    ) : null
-                  }
-                  onBlur={field.onBlur}
-                  onChangeText={(value) => {
-                    field.onChange(value);
-                    validateCustomCoupon(value);
-                  }}
-                  value={field.value}
-                />
-              )}
-            />
-
-            {form.formState.errors.code && (
-              <Text className="text-[10px] text-leadlly-red font-mada-medium leading-none">
-                {form.formState.errors.code.message}
-              </Text>
+            {availableCoupons && availableCoupons.length > 0 ? (
+              <View className="flex-1 space-y-3">
+                {availableCoupons.map((coupon, index) => (
+                  <CouponCard
+                    key={coupon._id}
+                    index={index}
+                    coupon={coupon}
+                    selectedCoupon={selectedCoupon}
+                    setSelectedCoupon={setSelectedCoupon}
+                    isCustomCouponValid={isCustomCouponValid}
+                    resetCustomCouponForm={form.reset}
+                    setIsCustomCouponValid={setIsCustomCouponValid}
+                  />
+                ))}
+              </View>
+            ) : (
+              <View className="flex-1 items-center justify-center">
+                <Text className="text-base text-secondary-text font-mada-medium leading-tight">
+                  No Coupons!
+                </Text>
+              </View>
             )}
+          </ScrollView>
 
-            {isCustomCouponValid !== null && !checkingCustomCoupon && (
-              <Text
-                className={clsx(
-                  "text-[10px] font-mada-medium leading-none -mb-3",
-                  !isCustomCouponValid && "text-leadlly-red"
-                )}
-              >
-                {!isCustomCouponValid && "Invalid coupon"}
-              </Text>
-            )}
-          </View>
-        </LinearGradient>
-
-        <View className="items-center justify-center pt-8 pb-4 px-5">
-          <Text className="text-xl leading-6 font-mada-semibold">
-            New Offers
-          </Text>
-        </View>
-
-        {isLoading ? (
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size={"small"} color={colors.primary} />
-          </View>
-        ) : availableCoupons && availableCoupons.length > 0 ? (
-          <View className="flex-1 space-y-3">
-            {availableCoupons.map((coupon, index) => (
-              <CouponCard
-                key={coupon._id}
-                index={index}
-                coupon={coupon}
-                selectedCoupon={selectedCoupon}
-                setSelectedCoupon={setSelectedCoupon}
-                isCustomCouponValid={isCustomCouponValid}
-                resetCustomCouponForm={form.reset}
-                setIsCustomCouponValid={setIsCustomCouponValid}
-              />
-            ))}
-          </View>
-        ) : (
-          <View className="flex-1 items-center justify-center">
-            <Text className="text-base text-secondary-text font-mada-medium leading-tight">
-              No Coupons!
-            </Text>
-          </View>
-        )}
-      </ScrollView>
-
-      <SubTotalContainer
-        category={category}
-        price={price}
-        planId={planId}
-        selectedCoupon={selectedCoupon}
-        setSubTotalBlockHeight={setSubTotalBlockHeight}
-        resetCustomCouponForm={form.reset}
-        setIsCustomCouponValid={setIsCustomCouponValid}
-        setSelectedCoupon={setSelectedCoupon}
-      />
+          <SubTotalContainer
+            category={category}
+            price={price}
+            planId={planId}
+            selectedCoupon={selectedCoupon}
+            setSubTotalBlockHeight={setSubTotalBlockHeight}
+            resetCustomCouponForm={form.reset}
+            setIsCustomCouponValid={setIsCustomCouponValid}
+            setSelectedCoupon={setSelectedCoupon}
+            existingPlan={existingPlanPrice?.pricing || null}
+          />
+        </>
+      )}
     </SafeAreaView>
   );
 };

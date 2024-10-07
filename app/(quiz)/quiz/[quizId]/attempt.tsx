@@ -5,8 +5,7 @@ import Quiz from "../../../../components/AttemptQuizComponents/Quiz";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import { useGetWeeklyQuizQuestions } from "../../../../services/queries/WekklyQuizqueries";
-
-type Props = { params: { quizId: string } };
+import { colors } from "../../../../constants/constants";
 
 const AttemptQuiz: React.FC = () => {
   const { quizId } = useLocalSearchParams<{ quizId: string }>();
@@ -15,7 +14,7 @@ const AttemptQuiz: React.FC = () => {
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#9654F4" />
+        <ActivityIndicator size="small" color={colors.primary} />
       </View>
     );
   }
@@ -24,7 +23,6 @@ const AttemptQuiz: React.FC = () => {
     return null;
   }
 
-  
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1">

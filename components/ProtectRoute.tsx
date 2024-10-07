@@ -29,6 +29,20 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
       } else if (hasSubmittedInitialInfo && pathname === "/initialInfo") {
         router.replace("/dashboard");
       }
+    } else if (!loading && user && !isPublicPath) {
+      const category = user.category || "free";
+
+      const trialStartDate = new Date(user.freeTrial.dateOfActivation!);
+      const trialEndDate = new Date(
+        trialStartDate.getTime() + 14 * 24 * 60 * 60 * 1000
+      );
+      const now = new Date();
+
+      if (category === "free" && now >= trialEndDate) {
+        router.replace("/subscription-plans");
+      } else {
+        router.replace("/dashboard");
+      }
     } else if (!loading && user && isPublicPath) {
       router.replace("/dashboard");
     }
@@ -37,7 +51,7 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size={"large"} color={colors.primary} />
+        <ActivityIndicator size={"small"} color={colors.primary} />
       </View>
     );
   }

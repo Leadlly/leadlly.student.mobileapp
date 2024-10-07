@@ -1,19 +1,22 @@
-import React from 'react';
-import { View, Text, ScrollView, ActivityIndicator, Image } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import ChapterDetails from '../../../../components/ErrorBookComponents/ChapterDetails';
-import ErroredQuestions from '../../../../components/ErrorBookComponents/ErroredQuestions';
-import { useGetChapterErrorBook } from '../../../../services/queries/errorBookQuery';
+import React from "react";
+import { View, Text, ScrollView, ActivityIndicator, Image } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import ChapterDetails from "../../../../components/ErrorBookComponents/ChapterDetails";
+import ErroredQuestions from "../../../../components/ErrorBookComponents/ErroredQuestions";
+import { useGetChapterErrorBook } from "../../../../services/queries/errorBookQuery";
+import { colors } from "../../../../constants/constants";
 
 const ChapterErroredQuestions: React.FC = () => {
   const { chapterName } = useLocalSearchParams<{ chapterName: string }>();
 
-  const { data, isLoading, isError } = useGetChapterErrorBook(chapterName || '');
+  const { data, isLoading, isError } = useGetChapterErrorBook(
+    chapterName || ""
+  );
 
   if (isLoading) {
     return (
       <View className="min-h-screen flex items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -43,10 +46,10 @@ const ChapterErroredQuestions: React.FC = () => {
   return (
     <ScrollView className="flex-1 bg-white">
       <View className="p-4">
-        <View className="bg-[#9654F42E] rounded-lg p-5 mb-6">
+        <View className="bg-primary/10 rounded-lg p-5">
           <ChapterDetails
             totalQuestions={chapterErrorBook.length}
-            chapterName={chapterName || ''}
+            chapterName={chapterName || ""}
           />
         </View>
       </View>
