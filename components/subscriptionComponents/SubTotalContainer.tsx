@@ -5,14 +5,17 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ICoupon } from "../../types/types";
+import { ICoupon, Plan } from "../../types/types";
 import { colors } from "../../constants/constants";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
-import { useBuySubscription } from "../../services/queries/subscriptionQuery";
+import {
+  useBuySubscription,
+  useGetSubscriptionPricingByPlanId,
+} from "../../services/queries/subscriptionQuery";
 import Toast from "react-native-toast-message";
 import { useAppSelector } from "../../services/redux/hooks";
 import { UseFormReset } from "react-hook-form";
@@ -26,19 +29,27 @@ const SubTotalContainer = ({
   resetCustomCouponForm,
   setIsCustomCouponValid,
   setSelectedCoupon,
+  existingPlan,
 }: {
   selectedCoupon: ICoupon | null;
   setSubTotalBlockHeight: React.Dispatch<React.SetStateAction<number>>;
   category: string;
   price: string;
   planId: string;
+  existingPlan: Plan | null;
   resetCustomCouponForm: UseFormReset<{
     code: string;
   }>;
   setIsCustomCouponValid: React.Dispatch<React.SetStateAction<boolean | null>>;
   setSelectedCoupon: React.Dispatch<React.SetStateAction<ICoupon | null>>;
 }) => {
+  const [existingRemainingAmount, setExistingRemainingAmount] = useState<
+    number | null
+  >(null);
+
   const subTotalBlockRef = useRef<View>(null);
+
+  const user = useAppSelector((state) => state.user.user);
 
   const onSubTotalBlockLayout = () => {
     if (subTotalBlockRef.current) {
@@ -48,13 +59,13 @@ const SubTotalContainer = ({
     }
   };
 
-  const userToken = useAppSelector((state) => state.user.user?.token);
-
   const { mutateAsync: buySubscription, isPending: isBuyingSubscription } =
-    useBuySubscription({ planId, coupon: selectedCoupon?.code || '' });
+    useBuySubscription({ planId, coupon: selectedCoupon?.code || "" });
 
   const webBaseUrl =
     process.env.EXPO_PUBLIC_WEB_APP_URL || "https://education.leadlly.in";
+
+  const userToken = user?.token;
 
   const handleProceedButton = async () => {
     try {
@@ -73,6 +84,26 @@ const SubTotalContainer = ({
     }
   };
 
+  useEffect(() => {
+    if (existingPlan && user?.subscription.status === "active") {
+      // Calculate the remaining value of the current subscription
+      const currentDate = new Date();
+      const deactivationDate = new Date(user?.subscription.dateOfDeactivation!);
+      const timeRemaining =
+        (deactivationDate.getTime() - currentDate.getTime()) /
+        (1000 * 60 * 60 * 24); // Remaining days
+
+      const pricePerDayCurrent =
+        existingPlan.amount / (existingPlan["duration(months)"] * 30); // Assumes 30 days in a month
+      // Remaining value of the current subscription
+      const remainingValue = pricePerDayCurrent * timeRemaining;
+
+      setExistingRemainingAmount(remainingValue);
+    } else {
+      setExistingRemainingAmount(0);
+    }
+  }, [existingPlan, user, user?.subscription.dateOfDeactivation]);
+
   // Calculate the discount value based on coupon type
   const discountValue = selectedCoupon
     ? selectedCoupon.discountType === "percentage"
@@ -80,7 +111,9 @@ const SubTotalContainer = ({
       : selectedCoupon.discountValue // Assume it's a fixed amount
     : 0;
 
-  const subtotal = Number(price) - discountValue;
+  const subtotal = existingRemainingAmount
+    ? Number(price) - existingRemainingAmount - discountValue
+    : Number(price) - discountValue;
 
   return (
     <View
@@ -146,15 +179,33 @@ const SubTotalContainer = ({
         </Text>
       </View>
 
+      {existingPlan && (
+        <View
+          className={clsx(
+            "flex-row items-center justify-between px-5",
+            !selectedCoupon && "mb-3"
+          )}
+        >
+          <Text className="text-sm font-mada-medium leading-tight text-secondary-text">
+            Remaining Amount:
+          </Text>
+          <Text className="text-sm font-mada-medium leading-tight">
+            - ₹ {existingRemainingAmount?.toFixed(2)}/-
+          </Text>
+        </View>
+      )}
+
       {selectedCoupon && (
         <View className="flex-row items-center justify-between my-3 px-5">
           <Text className="text-sm font-mada-medium leading-tight text-secondary-text">
-            Discount {selectedCoupon.discountType === "percentage"
+            Discount{" "}
+            {selectedCoupon.discountType === "percentage"
               ? `${selectedCoupon.discountValue}% Off`
-              : `₹ ${selectedCoupon.discountValue} Off`} :
+              : `₹ ${selectedCoupon.discountValue} Off`}{" "}
+            :
           </Text>
           <Text className="text-sm font-mada-medium leading-tight text-primary">
-            - ₹ {discountValue}/-
+            - ₹ {discountValue.toFixed(2)}/-
           </Text>
         </View>
       )}
@@ -165,9 +216,7 @@ const SubTotalContainer = ({
         </Text>
 
         <Text className="text-base font-mada-Bold leading-tight">
-          {selectedCoupon
-            ? `₹ ${subtotal}/-`
-            : `₹ ${price}/-`}
+          ₹ {subtotal.toFixed(2)}/-
         </Text>
       </View>
 

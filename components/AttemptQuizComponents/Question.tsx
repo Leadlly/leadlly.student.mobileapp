@@ -16,15 +16,17 @@ const Question = ({ question }: { question: TQuizQuestionProps }) => {
           }}
         />
       </View>
-      {question.images && question.images.length > 0 && question.images[0]?.url && (
-        <Image
-          source={{
-            uri: question.images[0].url,
-          }}
-          className="w-full h-[300px]"
-          resizeMode="contain"
-        />
-      )}
+      {question.images &&
+        question.images.length > 0 &&
+        question.images[0]?.url && (
+          <Image
+            source={{
+              uri: question.images[0].url,
+            }}
+            className="w-full h-[300px]"
+            resizeMode="contain"
+          />
+        )}
     </View>
   );
 };

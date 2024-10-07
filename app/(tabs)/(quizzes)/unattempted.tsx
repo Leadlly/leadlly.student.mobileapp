@@ -9,7 +9,7 @@ import UnattemptedWeeklyQuizzes from "../../../components/QuizzesComponent/Unatt
 import CustomizedQuiz from "../../../components/QuizzesComponent/CustomizedQuiz";
 import UnattemptedChapterWiseQuizzes from "../../../components/QuizzesComponent/UnattemptedChapterWiseQuizzes";
 import { useGetWeeklyQuiz } from "../../../services/queries/WekklyQuizqueries";
-import { unattemptedQuizTabs } from "../../../constants/constants";
+import { colors, unattemptedQuizTabs } from "../../../constants/constants";
 
 const Unattempted = () => {
   const [chapterQuizzes] = useState<UnattemptedChapterQuizProps[]>([]);
@@ -19,7 +19,7 @@ const Unattempted = () => {
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#9654F4" />
+        <ActivityIndicator size="small" color={colors.primary} />
       </View>
     );
   }

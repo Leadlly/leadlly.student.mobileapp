@@ -4,12 +4,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { SubjectWiseReport } from "../../types/types";
 import {
   BottomSheetModal,
-  BottomSheetModalProvider,
   BottomSheetScrollView,
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
-import * as Progress from "react-native-progress";
 import Accordion from "./Accordion";
+import { colors } from "../../constants/constants";
 
 const TopicsCovered = ({
   subjectWiseReport,
@@ -21,9 +20,8 @@ const TopicsCovered = ({
 
   const snapPoints = useMemo(() => ["70%", "100%"], []);
 
-
   const topics = Object.entries(subjectWiseReport).map(([subject, data]) => {
-    const topics = Object.keys(data.topics).join(",");
+    const topics = Object.keys(data.topics).join(", ");
     return {
       id: subject,
       subject: subject,
@@ -48,8 +46,8 @@ const TopicsCovered = ({
   );
 
   return (
-    <View className="shadow-lg shadow-gray-400 my-6 p-6 rounded-[12px] flex-1 bg-white">
-      <Text className="text-xl font-mada-semibold mb-4 text-[#AEAEAE]">
+    <View className="shadow-lg shadow-gray-400 my-6 p-5 rounded-[12px] flex-1 bg-white">
+      <Text className="text-xl font-mada-semibold mb-4 text-secondary-text">
         Topics Covered
       </Text>
       <ScrollView
@@ -64,13 +62,19 @@ const TopicsCovered = ({
             onPress={() => handlePresentModalPress(item.subject)}
             className="border border-opacity-20 border-black/10 rounded-lg p-2 flex-row justify-between items-center mb-3"
           >
-            <View>
-              <Text className="font-mada-medium text-sm">{item.subject}</Text>
-              <Text className="font-mada-regular text-gray-600 text-xs">
+            <View className="flex-1">
+              <Text className="font-mada-medium text-sm capitalize">
+                {item.subject}
+              </Text>
+              <Text className="font-mada-regular text-tab-item-gray text-xs capitalize">
                 {item.details}
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="black" />
+            <Ionicons
+              name="chevron-forward"
+              size={18}
+              color={colors.iconGray}
+            />
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -81,9 +85,16 @@ const TopicsCovered = ({
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         backdropComponent={renderBackdrop}
+        style={{ paddingVertical: 30 }}
       >
-        <BottomSheetScrollView contentContainerStyle={{ padding: 16 }}>
-          <Text className="text-xl font-mada-semibold mb-4">
+        <BottomSheetScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            flex: 1,
+            paddingHorizontal: 10,
+          }}
+        >
+          <Text className="text-xl font-mada-semibold capitalize">
             {selectedSubject} Topics
           </Text>
           {selectedSubject &&
@@ -93,31 +104,58 @@ const TopicsCovered = ({
                   key={topic}
                   header={topic}
                   content={
-                    <View className="p-3 bg-gray-50 rounded-lg" style={{ maxHeight: 200 }}>
+                    <View
+                      className="p-3 bg-primary/5 rounded-lg"
+                      style={{ maxHeight: 200 }}
+                    >
                       <View className="flex-row justify-between items-center mb-3">
                         <View className="flex-row items-center">
-                          <Ionicons name="help-circle-outline" size={18} color="#4A5568" />
-                          <Text className="text-xs font-mada-semibold text-gray-700 ml-1">Total Questions:</Text>
+                          <Ionicons
+                            name="help-circle-outline"
+                            size={18}
+                            color={colors.iconGray}
+                          />
+                          <Text className="text-xs font-mada-semibold text-secondary-text ml-1">
+                            Total Questions:
+                          </Text>
                         </View>
-                        <Text className="text-sm font-mada-bold text-black">{topicData.totalQuestions}</Text>
+                        <Text className="text-sm font-mada-Bold text-black">
+                          {topicData.totalQuestions}
+                        </Text>
                       </View>
                       <View className="flex-row justify-between">
-                        <View className="flex-1 bg-green-50 rounded p-2 mr-1">
-                          <Text className="text-xs font-mada-medium text-green-700">Correct</Text>
-                          <Text className="text-sm font-mada-bold text-green-600">{topicData.correct}</Text>
+                        <View className="flex-1 bg-leadlly-green/10 rounded p-2 mr-1">
+                          <Text className="text-xs font-mada-medium text-leadlly-green">
+                            Correct
+                          </Text>
+                          <Text className="text-sm font-mada-bold text-leadlly-green">
+                            {topicData.correct}
+                          </Text>
                         </View>
-                        <View className="flex-1 bg-red-50 rounded p-2 mx-1">
-                          <Text className="text-xs font-mada-medium text-red-700">Incorrect</Text>
-                          <Text className="text-sm font-mada-bold text-red-600">{topicData.incorrect}</Text>
+                        <View className="flex-1 bg-leadlly-red/10 rounded p-2 mx-1">
+                          <Text className="text-xs font-mada-medium text-leadlly-red">
+                            Incorrect
+                          </Text>
+                          <Text className="text-sm font-mada-bold text-leadlly-red">
+                            {topicData.incorrect}
+                          </Text>
                         </View>
-                        <View className="flex-1 bg-yellow-50 rounded p-2 ml-1">
-                          <Text className="text-xs font-mada-medium text-yellow-700">Unattempted</Text>
-                          <Text className="text-sm font-mada-bold text-yellow-600">{topicData.unattempted}</Text>
+                        <View className="flex-1 bg-leadlly-yellow/10 rounded p-2 ml-1">
+                          <Text className="text-xs font-mada-medium text-leadlly-yellow">
+                            Unattempted
+                          </Text>
+                          <Text className="text-sm font-mada-bold text-leadlly-yellow">
+                            {topicData.unattempted}
+                          </Text>
                         </View>
                       </View>
                       <View className="mt-2 bg-blue-50 rounded p-2">
-                        <Text className="text-xs font-mada-medium text-blue-700">Total Marks</Text>
-                        <Text className="text-sm font-mada-bold text-blue-600">{topicData.totalMarks}</Text>
+                        <Text className="text-xs font-mada-medium text-blue-700">
+                          Total Marks
+                        </Text>
+                        <Text className="text-sm font-mada-bold text-blue-600">
+                          {topicData.totalMarks}
+                        </Text>
                       </View>
                     </View>
                   }

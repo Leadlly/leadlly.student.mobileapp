@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
-import { View, Text } from 'react-native';
-import { PieChart } from 'react-native-gifted-charts';
+import React, { FC } from "react";
+import { View, Text } from "react-native";
+import { PieChart } from "react-native-gifted-charts";
+import { colors } from "../../constants/constants";
 
 interface AttemptAnalysisChartProps {
   correctAnswers: number;
@@ -16,9 +17,21 @@ const AttemptAnalysisChart: FC<AttemptAnalysisChartProps> = ({
   efficiency,
 }) => {
   const data = [
-    { value: correctAnswers, color: '#0FD679', text: `${correctAnswers}` },
-    { value: incorrectAnswers, color: '#E62308', text: `${incorrectAnswers}` },
-    { value: notAttempted, color: '#9654F41A', text: `${notAttempted}` },
+    {
+      value: correctAnswers,
+      color: `${colors.leadllyGreen}`,
+      text: `${correctAnswers}`,
+    },
+    {
+      value: incorrectAnswers,
+      color: `${colors.leadllyRed}`,
+      text: `${incorrectAnswers}`,
+    },
+    {
+      value: notAttempted,
+      color: `${colors.primary200}`,
+      text: `${notAttempted}`,
+    },
   ];
 
   return (
@@ -37,7 +50,6 @@ const AttemptAnalysisChart: FC<AttemptAnalysisChartProps> = ({
           );
         }}
       />
-      
     </View>
   );
 };

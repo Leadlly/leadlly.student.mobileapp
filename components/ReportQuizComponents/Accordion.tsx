@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Animated, TouchableOpacity, View, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import * as Progress from 'react-native-progress';
+import React, { useState } from "react";
+import { Animated, TouchableOpacity, View, Text } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import * as Progress from "react-native-progress";
+import { colors } from "../../constants/constants";
 
 interface AccordionProps {
   header: string;
@@ -9,7 +10,11 @@ interface AccordionProps {
   efficiency: number;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ header, content, efficiency }) => {
+const Accordion: React.FC<AccordionProps> = ({
+  header,
+  content,
+  efficiency,
+}) => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [animation] = useState(new Animated.Value(0));
 
@@ -25,48 +30,48 @@ const Accordion: React.FC<AccordionProps> = ({ header, content, efficiency }) =>
 
   const contentHeight = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
+    outputRange: ["0%", "100%"],
   });
 
   const arrowRotation = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
+    outputRange: ["0deg", "180deg"],
   });
 
   const getProgressBarColor = (efficiency: number) => {
-    if (efficiency < 40) return "#FF0000";
-    if (efficiency < 70) return "#FFA500";
-    return "#00FF00";
+    if (efficiency < 40) return colors.leadllyRed;
+    if (efficiency < 70) return colors.leadllyYellow;
+    return colors.leadllyGreen;
   };
 
   return (
-    <View className="overflow-hidden max-h-[200px] py-3 w-full">
+    <View className="my-2 w-full">
       <TouchableOpacity
         onPress={toggleAccordion}
-        className="flex-row justify-between items-center space-x-3"
+        className="flex-row justify-between items-center"
       >
         <Animated.Text
           style={{ transform: [{ rotate: arrowRotation }] }}
           className="text-lg"
         >
-          <Ionicons name="chevron-down" size={20} color="black" />
+          <Ionicons name="chevron-down" size={15} color={colors.iconGray} />
         </Animated.Text>
-        <View className="flex-row justify-between items-center w-[90%]">
+        <View className="flex-row justify-between items-center space-x-2">
           <Text
-            className="text-sm font-mada-medium"
+            className="text-sm font-mada-medium w-[60%] capitalize"
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {header}
           </Text>
-          <View className="flex-row items-center flex justify-end">
+          <View className="flex-row items-center">
             <Progress.Bar
               progress={efficiency / 100}
               color={getProgressBarColor(efficiency)}
               width={100}
-              height={8}
+              height={5}
             />
-            <Text className="font-semibold text-[#9E9E9E] w-fit text-right ml-2 ">
+            <Text className="font-semibold text-secondary-text ml-2 ">
               {efficiency}%
             </Text>
           </View>
@@ -74,7 +79,7 @@ const Accordion: React.FC<AccordionProps> = ({ header, content, efficiency }) =>
       </TouchableOpacity>
       <Animated.View
         style={{ height: contentHeight }}
-        className="overflow-hidden"
+        className="overflow-hidden max-h-[200px]"
       >
         {content}
       </Animated.View>

@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "../../services/redux/hooks";
 import { weeklyQuizData } from "../../services/redux/slices/weeklyQuizSlice";
 import { getMonthDate } from "../../helpers/utils";
 import { useSaveWeeklyQuizQuestion } from "../../services/queries/WekklyQuizqueries";
+import { useGenerateQuizReport } from "../../services/queries/reportQueries";
 
 const Quiz = ({
   quizId,
@@ -48,8 +49,6 @@ const Quiz = ({
 
   const dispatch = useAppDispatch();
   const saveWeeklyQuizQuestion = useSaveWeeklyQuizQuestion();
-
-  const questionIds = questions.map((ques) => ques._id);
 
   const storedQuestionIds = weekly_quiz_data.map(
     (data: {
@@ -116,6 +115,25 @@ const Quiz = ({
     setCurrentQuestion((prev: number) => Math.max(prev - 1, 0));
   };
 
+  const { mutateAsync: generateQuizReport, isPending: generatingReport } =
+    useGenerateQuizReport(quizId);
+
+  const onQuizSubmit = async () => {
+    try {
+      const res = await generateQuizReport();
+      Toast.show({
+        type: "success",
+        text1: res.message,
+      });
+      router.replace(`/quiz/${quizId}/report`);
+    } catch (error: any) {
+      Toast.show({
+        type: "error",
+        text1: error.message,
+      });
+    }
+  };
+
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
@@ -126,7 +144,7 @@ const Quiz = ({
 
   return (
     <>
-      <View className="flex-1 p-5 pb-20">
+      <View className="flex-1 bg-white p-5 pb-20">
         <View className="flex-row justify-between items-center mb-5">
           <TouchableOpacity onPress={() => router.back()} className="flex-1">
             <AntDesign name="arrowleft" size={24} color="gray" />
@@ -141,7 +159,10 @@ const Quiz = ({
             </Text>
           </View>
           <View className="flex-1 items-end">
-            <SubmitDialog onSubmit={() => router.replace(`/quiz/${quizId}/report`)} />
+            <SubmitDialog
+              onSubmit={onQuizSubmit}
+              isGeneratingReport={generatingReport}
+            />
           </View>
         </View>
         <Progress
@@ -151,10 +172,10 @@ const Quiz = ({
           loading={isSaving}
         />
         <View>
-          <Text className="text-[#7C7C7C] font-mada-semibold text- mb-2">
+          <Text className="text-tab-item-gray font-mada-semibold text-sm mb-2">
             Question {currentQuestion + 1} of {questions.length}:
           </Text>
-          <ScrollView className="p-4 pb-10 mb-20">
+          <ScrollView className="pb-10 mb-20">
             <Question question={questions[currentQuestion]} />
             <Options
               options={questions[currentQuestion]?.options}

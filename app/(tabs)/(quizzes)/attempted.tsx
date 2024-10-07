@@ -21,7 +21,7 @@ const Attempted = () => {
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#9654F4" />
+        <ActivityIndicator size="small" color="#9654F4" />
       </View>
     );
   }
