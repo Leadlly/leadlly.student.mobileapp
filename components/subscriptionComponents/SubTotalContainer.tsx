@@ -187,7 +187,7 @@ const SubTotalContainer = ({
           )}
         >
           <Text className="text-sm font-mada-medium leading-tight text-secondary-text">
-            Remaining Amount:
+            Upgrade Adjustment:
           </Text>
           <Text className="text-sm font-mada-medium leading-tight">
             - ₹ {existingRemainingAmount?.toFixed(2)}/-
