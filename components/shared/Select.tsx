@@ -25,9 +25,9 @@ const Select = ({
   loading,
   overallClassName,
 }: {
-  items: { label: string | number; value: string | number }[];
-  defaultValue: string;
-  onValueChange: (value: string) => void;
+  items: { _id: string; label: string | number; value: string | number }[];
+  defaultValue: { name: string; _id: string } | null;
+  onValueChange: (value: { name: string | number; _id: string }) => void;
   inputStyle?: string;
   listContainerStyle?: string;
   placeholder?: string;
@@ -38,15 +38,22 @@ const Select = ({
   overallClassName?: string;
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
+  const [selectedValue, setSelectedValue] = useState<{
+    name: string | number;
+    _id: string;
+  } | null>(defaultValue);
 
   useEffect(() => {
     setSelectedValue(defaultValue);
   }, [defaultValue]);
 
-  const handleSelectValue = (value: string) => {
-    setSelectedValue(value);
-    onValueChange(value);
+  const handleSelectValue = (data: {
+    _id: string;
+    label: string | number;
+    value: string | number;
+  }) => {
+    setSelectedValue({ name: data.value, _id: data._id });
+    onValueChange({ name: data.value, _id: data._id });
     setShowDropdown(false);
   };
 
@@ -76,7 +83,9 @@ const Select = ({
               !selectedValue ? "text-tab-item-gray" : "text-black"
             )}
           >
-            {selectedValue ? capitalizeFirstLetter(selectedValue) : placeholder}
+            {selectedValue
+              ? capitalizeFirstLetter(String(selectedValue.name))
+              : placeholder}
           </Text>
         </View>
         <Feather name="chevron-down" size={20} color="black" />
@@ -111,10 +120,10 @@ const Select = ({
                   "flex-row items-center justify-between px-4 py-3 border-b border-input-border",
                   items[items.length - 1].value === item.value && "border-b-0"
                 )}
-                onPress={() => handleSelectValue(String(item.value))}
+                onPress={() => handleSelectValue(item)}
               >
                 <Text>{capitalizeFirstLetter(String(item.label))}</Text>
-                {selectedValue === item.value && (
+                {selectedValue?.name === item.value && (
                   <Feather name="check" size={20} color="black" />
                 )}
               </Pressable>

@@ -4,9 +4,10 @@ import axiosClient from "../axios/axios";
 
 type StudyDataProps = {
   tag: string;
-  topics: Array<{ name: string }>;
+  topics: Array<{ _id: string; name: string }>;
   chapter: {
-    name: string;
+    _id?: string;
+    name?: string;
     level?: string;
   };
   subject: string;

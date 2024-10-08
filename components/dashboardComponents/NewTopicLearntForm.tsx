@@ -55,7 +55,7 @@ const NewTopicLearntForm = ({
   } = useGetSubjectChapters(activeSubject!, userStandard!);
 
   useEffect(() => {
-    form.setValue("chapterName", "");
+    form.setValue("chapterName", null);
     refetchChapter();
   }, [activeSubject, refetchChapter, form.setValue]);
 
@@ -64,7 +64,11 @@ const NewTopicLearntForm = ({
     isFetching: topicsFetching,
     isLoading: topicsLoading,
     refetch: refetchTopics,
-  } = useGetChapterTopics(activeSubject!, selectedChapter, userStandard!);
+  } = useGetChapterTopics(
+    activeSubject!,
+    selectedChapter?.name || "",
+    userStandard!
+  );
 
   useEffect(() => {
     form.setValue("topicNames", []);
@@ -79,9 +83,13 @@ const NewTopicLearntForm = ({
   const onSubmit = async (data: z.infer<typeof StudyDataFormSchema>) => {
     const formattedData = {
       tag: "continuous_revision",
-      topics: data.topicNames.map((topic) => ({ name: topic })),
+      topics: data.topicNames.map((topic) => ({
+        _id: topic._id,
+        name: topic.name,
+      })),
       chapter: {
-        name: data.chapterName,
+        _id: data?.chapterName?._id,
+        name: data?.chapterName?.name,
       },
       subject: activeSubject!,
       standard: userStandard!,
@@ -100,7 +108,7 @@ const NewTopicLearntForm = ({
       });
 
       form.reset({
-        chapterName: "",
+        chapterName: null,
         topicNames: [],
       });
 
@@ -164,6 +172,7 @@ const NewTopicLearntForm = ({
                   placeholder="Select a chapter"
                   items={
                     chapterData?.chapters.map((chapter) => ({
+                      _id: chapter._id,
                       label: chapter.name,
                       value: chapter.name,
                     })) || []
@@ -190,6 +199,7 @@ const NewTopicLearntForm = ({
                   onValueChange={field.onChange}
                   items={
                     topicsData?.topics.map((topic) => ({
+                      _id: topic._id,
                       label: capitalizeFirstLetter(topic.name)!,
                       value: topic.name,
                     })) || []

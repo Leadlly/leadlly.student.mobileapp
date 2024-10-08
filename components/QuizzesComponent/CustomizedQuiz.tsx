@@ -50,10 +50,10 @@ const CustomizedQuiz: React.FC = () => {
     isLoading: chaptersLoading,
     isFetching: chaptersFetching,
     refetch: refetchChapter,
-  } = useGetSubjectChapters(subjectName!, userStandard!);
+  } = useGetSubjectChapters(subjectName?.name || "", userStandard!);
 
   useEffect(() => {
-    form.setValue("chapterName", "");
+    form.setValue("chapterName", null);
     refetchChapter();
   }, [subjectName, refetchChapter, form]);
 
@@ -62,7 +62,11 @@ const CustomizedQuiz: React.FC = () => {
     isFetching: topicsFetching,
     isLoading: topicsLoading,
     refetch: refetchTopics,
-  } = useGetChapterTopics(subjectName!, chapterName, userStandard!);
+  } = useGetChapterTopics(
+    subjectName?.name || "",
+    chapterName?.name || "",
+    userStandard!
+  );
 
   useEffect(() => {
     form.setValue("topicNames", []);
@@ -139,6 +143,7 @@ const CustomizedQuiz: React.FC = () => {
                   placeholder="Select subject"
                   items={
                     userSubjects?.map((subject) => ({
+                      _id: subject.name,
                       label: subject.name,
                       value: subject.name,
                     })) || []
@@ -179,6 +184,7 @@ const CustomizedQuiz: React.FC = () => {
               placeholder="Select a chapter"
               items={
                 chapterData?.chapters.map((chapter) => ({
+                  _id: chapter._id,
                   label: chapter.name,
                   value: chapter.name,
                 })) || []
@@ -203,6 +209,7 @@ const CustomizedQuiz: React.FC = () => {
               onValueChange={field.onChange}
               items={
                 topicsData?.topics.map((topic) => ({
+                  _id: topic._id,
                   label: capitalizeFirstLetter(topic.name)!,
                   value: topic.name,
                 })) || []
