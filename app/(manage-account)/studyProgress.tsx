@@ -55,7 +55,7 @@ const StudyProgress = () => {
   } = useGetSubjectChapters(activeSubject!, userStandard!);
 
   useEffect(() => {
-    form.setValue("chapterName", "");
+    form.setValue("chapterName", null);
     refetchChapter();
   }, [activeSubject, refetchChapter, form.setValue]);
 
@@ -64,7 +64,11 @@ const StudyProgress = () => {
     isFetching: topicsFetching,
     isLoading: topicsLoading,
     refetch: refetchTopics,
-  } = useGetChapterTopics(activeSubject!, selectedChapter, userStandard!);
+  } = useGetChapterTopics(
+    activeSubject!,
+    selectedChapter?.name || "",
+    userStandard!
+  );
 
   useEffect(() => {
     form.setValue("topicNames", []);
@@ -84,9 +88,13 @@ const StudyProgress = () => {
   ) => {
     const formattedData = {
       tag: "unrevised_topic",
-      topics: data.topicNames.map((topic) => ({ name: topic })),
+      topics: data.topicNames.map((topic) => ({
+        _id: topic._id,
+        name: topic.name,
+      })),
       chapter: {
-        name: data.chapterName,
+        _id: data?.chapterName?._id,
+        name: data?.chapterName?.name,
       },
       subject: activeSubject!,
       standard: userStandard!,
@@ -113,7 +121,7 @@ const StudyProgress = () => {
           : "Planner updated.",
       });
       form.reset({
-        chapterName: "",
+        chapterName: null,
         topicNames: [],
       });
     } catch (error: any) {
@@ -154,6 +162,7 @@ const StudyProgress = () => {
                 placeholder="Select a chapter"
                 items={
                   chapterData?.chapters.map((chapter) => ({
+                    _id: chapter._id,
                     label: chapter.name,
                     value: chapter.name,
                   })) || []
@@ -180,6 +189,7 @@ const StudyProgress = () => {
                 onValueChange={field.onChange}
                 items={
                   topicsData?.topics.map((topic) => ({
+                    _id: topic._id,
                     label: capitalizeFirstLetter(topic.name)!,
                     value: topic.name,
                   })) || []

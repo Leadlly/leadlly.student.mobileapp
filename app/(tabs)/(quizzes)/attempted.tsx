@@ -36,7 +36,7 @@ const Attempted = () => {
 
   return (
     <View className="flex-1 bg-white p-4 pb-20">
-      <View className="py-2 border rounded-xl flex-1 border-gray-300">
+      <View className="py-2 border rounded-xl flex-1 border-input-border">
         <View className="flex-row justify-around pb-2 border-b border-input-border">
           {attemptedTabs.map((tab) => (
             <TabNavItem

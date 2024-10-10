@@ -27,6 +27,10 @@ export const useGenerateQuizReport = (quizId: string) => {
       await queryClient.invalidateQueries({
         queryKey: ["quizReport", quizId],
       });
+      await Promise.all([
+        queryClient.refetchQueries({ queryKey: ["weeklyQuiz", "unattempted"] }),
+        queryClient.refetchQueries({ queryKey: ["weeklyQuiz", "attempted"] }),
+      ]);
     },
   });
 };

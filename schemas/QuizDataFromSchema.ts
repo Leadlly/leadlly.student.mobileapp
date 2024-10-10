@@ -1,11 +1,25 @@
 import { z } from "zod";
 
 export const QuizDataFormSchema = z.object({
-  subjectName: z.string({ required_error: "Please select a subject!" }),
-  chapterName: z.string({ required_error: "Please select a chapter!" }),
+  subjectName: z
+    .object({
+      _id: z.string({ required_error: "Please select a subject!" }),
+      name: z.string({ required_error: "Please select a subject!" }),
+    })
+    .nullable(),
+  chapterName: z
+    .object({
+      _id: z.string({ required_error: "Please select a chapter!" }),
+      name: z.string({ required_error: "Please select a chapter!" }),
+    })
+    .nullable(),
   topicNames: z
-    .string({ required_error: "Please select at least one topic" })
-    .array()
+    .array(
+      z.object({
+        _id: z.string(),
+        name: z.string(),
+      })
+    )
     .min(1, { message: "Please select at least one topic" })
     .default([]),
   numberOfQuestions: z

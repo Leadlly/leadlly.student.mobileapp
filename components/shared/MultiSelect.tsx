@@ -25,9 +25,9 @@ const MultiSelect = ({
   loading,
   maxCount = 4,
 }: {
-  items: { label: string; value: string }[];
-  defaultValue: string[];
-  onValueChange: (value: string[]) => void;
+  items: { _id: string; label: string; value: string }[];
+  defaultValue: Array<{ _id: string; name: string }>;
+  onValueChange: (value: Array<{ _id: string; name: string }>) => void;
   inputStyle?: string;
   placeholder?: string;
   loading?: boolean;
@@ -38,7 +38,8 @@ const MultiSelect = ({
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const [selectedValues, setSelectedValues] = useState<string[]>(defaultValue);
+  const [selectedValues, setSelectedValues] =
+    useState<Array<{ _id: string; name: string }>>(defaultValue);
 
   useEffect(() => {
     setSelectedValues(defaultValue);
@@ -49,20 +50,27 @@ const MultiSelect = ({
     onValueChange([]);
   };
 
-  const handleSelectValue = (value: string) => {
-    const newSelectedValues = selectedValues.includes(value)
-      ? selectedValues.filter((v) => v !== value)
-      : [...selectedValues, value];
+  const handleSelectValue = (value: { _id: string; name: string }) => {
+    setSelectedValues((prevValues) => {
+      const valueIndex = prevValues.findIndex((v) => v._id === value._id);
+      const newSelectedValues =
+        valueIndex >= 0
+          ? prevValues.filter((_, index) => index !== valueIndex)
+          : [...prevValues, value];
 
-    setSelectedValues(newSelectedValues);
-    onValueChange(newSelectedValues);
+      onValueChange(newSelectedValues);
+      return newSelectedValues;
+    });
   };
 
   const handleSelectAll = () => {
     if (selectedValues.length === items.length) {
       handleClear();
     } else {
-      const allValues = items.map((item) => item.value);
+      const allValues = items.map((item) => ({
+        _id: item._id,
+        name: item.value,
+      }));
       setSelectedValues(allValues);
       onValueChange(allValues);
       setShowDropdown(false);
@@ -102,10 +110,10 @@ const MultiSelect = ({
           <View className="flex-row flex-1 items-center justify-between">
             <View className="flex-row flex-1 gap-1 flex-wrap">
               {selectedValues.slice(0, maxCount).map((value) => {
-                const option = items?.find((o) => o.value === value);
+                const option = items?.find((o) => o.value === value.name);
                 return (
                   <View
-                    key={value}
+                    key={value._id}
                     className="bg-primary text-left rounded-full flex-row justify-between items-center px-2 py-1"
                   >
                     <Text
@@ -210,16 +218,18 @@ const MultiSelect = ({
                 <Pressable
                   key={item.value}
                   className="flex-row items-center px-4 py-3 border-b border-input-border"
-                  onPress={() => handleSelectValue(item.value)}
+                  onPress={() =>
+                    handleSelectValue({ _id: item._id, name: item.value })
+                  }
                 >
                   <View
                     className={clsx(
                       "w-4 h-4 rounded border items-center justify-center",
-                      selectedValues.includes(item.value) &&
+                      selectedValues.some((val) => val._id === item._id) &&
                         "bg-primary border-primary"
                     )}
                   >
-                    {selectedValues.includes(item.value) && (
+                    {selectedValues.some((val) => val._id === item._id) && (
                       <Feather name="check" size={14} color="white" />
                     )}
                   </View>
