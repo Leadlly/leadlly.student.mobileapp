@@ -4,6 +4,7 @@ import { TLevelPointProps } from "../../types/types";
 import clsx from "clsx";
 import * as Progress from "react-native-progress";
 import { widthPercentage } from "../../helpers/utils";
+import { calculateProgress } from "../../constants/constants";
 
 const LevelBox = ({
   cardBgColor,
@@ -18,7 +19,8 @@ const LevelBox = ({
       className={clsx(
         "flex-1 border border-input-border rounded-xl p-2",
         cardBgColor
-      )}>
+      )}
+    >
       <View className="w-3.5 h-3.5 rounded-full">
         {pointsText === "Level Up" ? (
           <Image
@@ -43,7 +45,8 @@ const LevelBox = ({
 
       <View className="w-full items-center justify-center mt-4">
         <Text
-          className={clsx("leading-[0.5] text-xl font-semibold", pointsColor)}>
+          className={clsx("leading-[0.5] text-xl font-semibold", pointsColor)}
+        >
           {points}
         </Text>
         <Text className="text-sm font-medium text-[#6B6B6B]">{pointsText}</Text>
@@ -51,7 +54,7 @@ const LevelBox = ({
 
       <View className="w-full items-center justify-center mt-4 mb-2">
         <Progress.Bar
-          progress={Math.round(progressValue! / 100)}
+          progress={calculateProgress(progressValue!)}
           unfilledColor="#fff"
           width={widthPercentage(22)}
           borderWidth={0}

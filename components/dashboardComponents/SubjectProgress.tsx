@@ -23,8 +23,8 @@ const SubjectProgress = () => {
   )[0];
 
   return (
-    <View className="my-1.5 border border-input-border rounded-xl p-4">
-      <View className="flex-row items-center justify-between">
+    <View className="my-1.5 border border-input-border rounded-xl py-3">
+      <View className="flex-row items-center justify-between px-3">
         <Text className="text-[15px] font-mada-Bold leading-tight">
           Subject Progress
         </Text>
@@ -35,11 +35,11 @@ const SubjectProgress = () => {
           setActiveItem={setActiveSubject}
           width={200}
           height={24}
-          itemClassName="w-16 h-6"
+          itemClassName="px-2 h-6"
         />
       </View>
 
-      <View className="mt-5 mb-3 flex-row justify-between items-center">
+      <View className="mt-5 mb-3 flex-row justify-between items-center px-5">
         <SemiRadialChart
           data={subject?.overall_progress!}
           color={colors.primary}

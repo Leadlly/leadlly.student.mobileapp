@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAppDispatch } from "../services/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../services/redux/hooks";
 import { loadUser } from "../services/redux/slices/userSlice";
 import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -9,8 +9,10 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import LogoutButton from "./manageAccountComponents/LogoutButton";
 import { loadQuizzes } from "../services/redux/slices/weeklyQuizSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import UpgradeButton from "./shared/UpgradeButton";
 
 const AppWrapper = () => {
+  const user = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -46,6 +48,8 @@ const AppWrapper = () => {
                   </TouchableOpacity>
                 </View>
               ),
+              headerRight: () =>
+                user && user.category !== "free" && <UpgradeButton />,
             }}
           />
           <Stack.Screen

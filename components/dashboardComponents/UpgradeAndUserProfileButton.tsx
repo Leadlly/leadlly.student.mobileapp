@@ -5,14 +5,19 @@ import { capitalizeFirstLetter } from "../../helpers/utils";
 import FreeTrialTimer from "./FreeTrialTimer";
 import clsx from "clsx";
 import UpgradeButton from "../shared/UpgradeButton";
+import LevelAndPoints from "./LevelAndPoints";
 
 const UpgradeAndUserProfileButton = () => {
   const user = useAppSelector((state) => state.user.user);
   return (
     <View className="mr-4 flex-row items-center space-x-4">
-      <UpgradeButton />
+      {user && user.category === "free" ? (
+        <UpgradeButton />
+      ) : (
+        <LevelAndPoints />
+      )}
 
-      <Link href="/personalInfo" asChild>
+      <Link href="/profile" asChild>
         <TouchableOpacity
           className={clsx(
             "w-10 h-10 rounded-full items-center justify-center",

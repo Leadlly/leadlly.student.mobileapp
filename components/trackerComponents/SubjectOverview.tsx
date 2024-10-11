@@ -2,16 +2,9 @@ import { View, Text } from "react-native";
 import * as Progress from "react-native-progress";
 import { ISubject } from "../../types/types";
 import { widthPercentage } from "../../helpers/utils";
-import { colors } from "../../constants/constants";
+import { calculateProgress, colors } from "../../constants/constants";
 
 const SubjectOverview = ({ subject }: { subject: ISubject | undefined }) => {
-  const calculateProgress = (overallProgress: number) => {
-    if (typeof overallProgress !== "number" || isNaN(overallProgress)) {
-      return 0; // Default to 0 if the value is invalid
-    }
-    return Math.min(Math.max(overallProgress / 100, 0), 1);
-  };
-
   return (
     <View className="bg-primary/10 rounded-lg p-4 mb-4">
       <Text className="text-lg leading-tight font-mada-Bold mb-4">

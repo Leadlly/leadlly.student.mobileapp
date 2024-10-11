@@ -113,7 +113,6 @@ const ActivePlannerPage = () => {
           renderItem={(item) => (
             <PlannerSubjectList
               item={item.item}
-              plan={plan!}
               getBackRevisionTopicsForSubject={getBackRevisionTopicsForSubject}
               getContinuousRevisionTopicsForSubject={
                 getContinuousRevisionTopicsForSubject

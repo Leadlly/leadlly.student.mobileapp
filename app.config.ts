@@ -32,6 +32,51 @@ export default {
       "expo-router",
       "expo-font",
       ["@react-native-google-signin/google-signin"],
+      [
+        "@react-native-community/datetimepicker",
+        {
+          android: {
+            datePicker: {
+              colorAccent: {
+                light: "#9654F4",
+                dark: "#9654F4",
+              },
+              textColor: {
+                light: "#9654F4",
+                dark: "#9654F4",
+              },
+              textColorPrimary: {
+                light: "#9654F4",
+                dark: "#9654F4",
+              },
+              textColorPrimaryInverse: {
+                light: "#FFFFFF",
+                dark: "#FFFFFF",
+              },
+              textColorSecondary: {
+                light: "#7F7F7F",
+                dark: "#7F7F7F",
+              },
+              textColorSecondaryInverse: {
+                light: "#7F7F7F",
+                dark: "#7F7F7F",
+              },
+              colorControlActivated: {
+                light: "#9654F4",
+                dark: "#9654F4",
+              },
+              colorControlHighlight: {
+                light: "#9654F4",
+                dark: "#9654F4",
+              },
+              windowBackground: {
+                light: "#FFFFFF",
+                dark: "#FFFFFF",
+              },
+            },
+          },
+        },
+      ],
     ],
     extra: {
       router: {

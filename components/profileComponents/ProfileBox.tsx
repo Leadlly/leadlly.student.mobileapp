@@ -8,13 +8,18 @@ import { Link } from "expo-router";
 const ProfileBox = () => {
   const user = useAppSelector((state) => state.user.user);
   return (
-    <View className="border border-input-border rounded-2xl bg-primary/10 p-4 items-center justify-center mb-3">
+    <View className="rounded-2xl bg-primary/5 p-4 items-center justify-center mb-3">
       <View
         className={clsx(
-          "w-20 h-20 rounded-full items-center justify-center mb-2",
-          user?.avatar && user.avatar.url ? "" : "bg-primary/20"
+          "relative w-20 h-20 rounded-full items-center justify-center mb-2",
+          user?.avatar && user.avatar.url ? "" : "bg-primary/10"
         )}
       >
+        <View className="absolute -bottom-0.5 -right-0.5 border-2 border-white bg-primary rounded-full px-3 py-[1px]">
+          <Text className="text-[8px] text-white font-mada-medium capitalize">
+            {user && user.category}
+          </Text>
+        </View>
         {user?.avatar && user.avatar.url ? (
           <Image
             src={user.avatar.url}
@@ -41,13 +46,13 @@ const ProfileBox = () => {
         {user?.firstname} {user?.lastname ? user.lastname : null}
       </Text>
 
-      <Text className="text-lg font-mada-regular leading-6 w-[250px] text-justify">
+      <Text className="text-base text-center font-mada-regular leading-5 max-w-[300px]">
         Embrace the course as a catalyst for personal growth and empowerment,
         propelling you towards success with unwavering determination.
       </Text>
 
       <Link href="/personalInfo" asChild>
-        <TouchableOpacity className="w-32 h-10 bg-white rounded-lg border border-input-border items-center justify-center -mt-2">
+        <TouchableOpacity className="w-32 h-10 bg-white rounded-lg border border-input-border items-center justify-center mt-2">
           <Text className="text-sm font-mada-semibold leading-tight text-primary">
             Manage Account
           </Text>

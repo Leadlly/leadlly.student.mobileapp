@@ -36,7 +36,7 @@ const ProgressAnalytics = () => {
           setActiveItem={setActiveTab}
           width={150}
           height={24}
-          itemClassName="w-14 h-6"
+          itemClassName="px-2 h-6"
         />
       </View>
 
