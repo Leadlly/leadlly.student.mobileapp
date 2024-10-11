@@ -1,5 +1,13 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { TTrackerProps } from "../../types/types";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  ListRenderItem,
+  ListRenderItemInfo,
+} from "react-native";
+import { Topic, TTrackerProps } from "../../types/types";
 import { capitalizeFirstLetter, getFormattedDate } from "../../helpers/utils";
 import { useState } from "react";
 import ChapterRevisionDateTable from "./ChapterRevisionDateTable";

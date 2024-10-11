@@ -70,7 +70,7 @@ const TabNav = ({
         containerClassName
       )}
     >
-      {tabWidth > 0 && (
+      {/* {tabWidth > 0 && (
         <Animated.View
           style={[
             animatedStyle,
@@ -84,17 +84,16 @@ const TabNav = ({
             },
           ]}
         />
-      )}
+      )} */}
       {items?.map((item, index) => (
         <Pressable
           key={item.name}
-          className={clsx("items-center justify-center", itemClassName)}
-          onPress={() => {
-            tabPositionX.value = withSpring(tabWidth * index, {
-              duration: 1500,
-            });
-            setActiveItem(item.name);
-          }}
+          className={clsx(
+            "items-center justify-center rounded",
+            item.name === activeItem && "bg-primary",
+            itemClassName
+          )}
+          onPress={() => setActiveItem(item.name)}
         >
           <Text
             className={clsx(

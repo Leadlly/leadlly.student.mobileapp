@@ -22,7 +22,7 @@ const UserLevelPoints = () => {
             ? userDetails.level.number
             : 0
         }
-        progressIndicatorBg="bg-[#0075FF]"
+        progressIndicatorBg="#0075FF"
       />
       <LevelBox
         cardBgColor="bg-[#FF8A00]/[0.03] mr-2"
@@ -38,7 +38,7 @@ const UserLevelPoints = () => {
             ? userDetails.points.number
             : 0
         }
-        progressIndicatorBg="bg-[#FF9900]"
+        progressIndicatorBg="#FF9900"
       />
       <LevelBox
         cardBgColor="bg-[#EF31FF]/[0.03]"
@@ -54,7 +54,7 @@ const UserLevelPoints = () => {
             ? userDetails.streak.number
             : 0
         }
-        progressIndicatorBg="bg-[#FF00E5]"
+        progressIndicatorBg="#FF00E5"
       />
     </View>
   );

@@ -49,7 +49,7 @@ const MoodEmojiSelector = () => {
 
       dispatch(
         setUser({
-          ...user,
+          ...user!,
           details: {
             ...user?.details,
             mood: [...(user?.details?.mood || []), { day: today, emoji: mood }],
@@ -101,7 +101,8 @@ const MoodEmojiSelector = () => {
                 "w-[25px] h-[25px] rounded-full transition-all duration-200",
                 currentMood === emoji.mood ? "scale-125 opacity-100" : "",
                 (isPending || isDisabled) && "opacity-90"
-              )}>
+              )}
+            >
               <Image
                 source={emoji.moodImg}
                 resizeMode="contain"
@@ -113,9 +114,7 @@ const MoodEmojiSelector = () => {
           <View className="w-[6px] h-[6px] rounded-full bg-primary" />
           <View className="absolute top-1/2 left-0 -mt-[1px] -z-10 bg-primary w-full h-[2px]" />
         </View>
-        {isPending && (
-          <ActivityIndicator size={"small"} color={colors.primary} />
-        )}
+        {isPending && <ActivityIndicator size={15} color={colors.primary} />}
       </View>
     </View>
   );

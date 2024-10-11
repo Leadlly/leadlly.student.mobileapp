@@ -1,6 +1,7 @@
 import { Plan } from "../types/types";
 
 export const colors = Object.freeze({
+  white: "#FFFFFF",
   primary: "#9654F4",
   primary200: "rgba(150, 84, 244, 0.5)",
   inputBorder: "#D9D8D8",
@@ -62,6 +63,13 @@ export const plannerSubjectProgressString = [
   "Provides insights for personalized academic assistance.",
   "Enables personalized learning and continuous improvement.",
 ];
+
+export const calculateProgress = (overallProgress: number) => {
+  if (typeof overallProgress !== "number" || isNaN(overallProgress)) {
+    return 0; // Default to 0 if the value is invalid
+  }
+  return Math.min(Math.max(overallProgress / 100, 0), 1);
+};
 
 export const moodEmojis = [
   {

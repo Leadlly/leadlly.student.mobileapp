@@ -8,7 +8,7 @@ const PersonalInfo = () => {
   return (
     <View className="flex-1 bg-white p-4">
       <View className="items-center">
-        <View className="bg-primary/10 rounded-xl p-4 w-64 items-center justify-center space-y-2">
+        <View className="bg-primary/10 rounded-xl p-4 max-w-[256px] w-full items-center justify-center space-y-2">
           <View className="rounded-full w-10 h-10 bg-primary/20 items-center justify-center">
             {user?.avatar?.url ? (
               <Image

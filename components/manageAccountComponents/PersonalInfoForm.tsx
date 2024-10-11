@@ -25,6 +25,7 @@ import { useStudentPersonalInfo } from "../../services/queries/userQuery";
 import Toast from "react-native-toast-message";
 import { useAppDispatch } from "../../services/redux/hooks";
 import { setUser } from "../../services/redux/slices/userSlice";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -69,20 +70,26 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
     },
   });
 
+  const handleConfirmDateOfBirth = (date: Date) => {
+    form.setValue(
+      "dateOfBirth",
+      date.toLocaleString("en-US", {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+      })
+    );
+    setShowCalendar(false);
+  };
+
   const { mutateAsync: studentPersonalInfo, isPending: savingStudentInfo } =
     useStudentPersonalInfo();
 
   const onSubmit = async (data: z.infer<typeof AccountPersonalInfoSchema>) => {
     const formattedPersonalData = {
       class: data.class ? Number(data.class) : null,
-      dateOfBirth: data.dateOfBirth
-        ? new Date(data.dateOfBirth).toLocaleString("en-US", {
-            timeZone: "Asia/Kolkata",
-            year: "numeric",
-            month: "short",
-            day: "2-digit",
-          })
-        : "",
+      dateOfBirth: data.dateOfBirth ? data.dateOfBirth : "",
       phone: data.phone ? Number(data.phone) : null,
       parentsPhone: data.parentsPhone ? Number(data.parentsPhone) : null,
       pinCode: data.pinCode ? Number(data.pinCode) : null,
@@ -233,7 +240,7 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
                       >
                         <Text
                           className={clsx(
-                            "flex-1 font-mada-regular text-left text-base",
+                            "flex-1 font-mada-regular text-left text-base capitalize",
                             !field.value && "text-tab-item-gray"
                           )}
                         >
@@ -247,6 +254,16 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
                           />
                         </View>
                       </Pressable>
+
+                      <DateTimePickerModal
+                        isVisible={showCalendar}
+                        mode="date"
+                        onChange={field.onChange}
+                        onConfirm={handleConfirmDateOfBirth}
+                        onCancel={() => setShowCalendar(false)}
+                        maximumDate={new Date(Date.now())}
+                        minimumDate={new Date(1990, 0, 1)}
+                      />
                     </>
                   );
                 }}

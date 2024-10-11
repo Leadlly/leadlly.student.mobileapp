@@ -1,17 +1,15 @@
-import { View, Text, FlatList, Dimensions, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React from "react";
-import { ISubject, TDayProps, TRevisionProps } from "../../types/types";
+import { ISubject, TRevisionProps } from "../../types/types";
 import ChapterTopicItem from "./ChapterTopicItem";
 import LottieView from "lottie-react-native";
 
 const PlannerSubjectList = ({
   item,
-  plan,
   getBackRevisionTopicsForSubject,
   getContinuousRevisionTopicsForSubject,
 }: {
   item: ISubject;
-  plan: TDayProps;
   getContinuousRevisionTopicsForSubject: (subject: string) => TRevisionProps[];
   getBackRevisionTopicsForSubject: (subject: string) => TRevisionProps[];
 }) => {
@@ -23,7 +21,7 @@ const PlannerSubjectList = ({
   return (
     <View
       key={item.name}
-      className="h-64 border border-input-border rounded-xl p-4 mb-4"
+      className="max-h-72 border border-input-border rounded-xl p-4 mb-4"
     >
       <Text className="text-[17px] font-mada-medium capitalize text-black leading-tight mb-3">
         {item.name === "maths" ? "mathematics" : item.name}
@@ -46,13 +44,14 @@ const PlannerSubjectList = ({
           </>
         ) : (
           <View className="flex-1 items-center justify-center">
-            <View className="items-center justify-center mt-3">
+            <View className="items-center justify-center">
               <LottieView
                 source={require("../../assets/no_topics_animations.json")}
                 autoPlay
                 style={{
                   width: 100,
                   height: 100,
+                  marginTop: -20,
                 }}
               />
             </View>

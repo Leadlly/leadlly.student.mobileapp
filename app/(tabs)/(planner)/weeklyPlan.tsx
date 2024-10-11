@@ -56,7 +56,7 @@ const Planner = () => {
           <Text className="text-base leading-tight font-mada-semibold text-secondary-text">
             {plannerData && plannerData.startDate && plannerData.endDate ? (
               <>
-                {getMonthDate(new Date(plannerData?.startDate!))} -
+                {getMonthDate(new Date(plannerData?.startDate!))} -{" "}
                 {getMonthDate(new Date(plannerData?.endDate!))}
               </>
             ) : null}

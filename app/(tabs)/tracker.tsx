@@ -4,6 +4,7 @@ import {
   Pressable,
   ActivityIndicator,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { useAppSelector } from "../../services/redux/hooks";
 import { router, useLocalSearchParams } from "expo-router";
@@ -68,7 +69,7 @@ const Tracker = () => {
 
       {isFetching || isLoading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size={"large"} color={colors.primary} />
+          <ActivityIndicator size={25} color={colors.primary} />
         </View>
       ) : isError ? (
         <View className="flex-1 items-center justify-center">
@@ -77,29 +78,34 @@ const Tracker = () => {
           </Text>
         </View>
       ) : (
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <SubjectOverview
-            subject={
-              userSubjects?.filter(
-                (subject) => subject.name === activeSubject
-              )[0]
-            }
-          />
-
-          {trackerData &&
-          trackerData.tracker &&
-          trackerData.tracker.length > 0 ? (
-            trackerData.tracker.map((item) => (
-              <ChapterTracker key={item._id} item={item} />
-            ))
-          ) : (
+        <FlatList
+          data={
+            trackerData && trackerData.tracker && trackerData.tracker.length > 0
+              ? trackerData.tracker
+              : []
+          }
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <ChapterTracker key={item._id} item={item} />
+          )}
+          ListHeaderComponent={() => (
+            <SubjectOverview
+              subject={
+                userSubjects?.filter(
+                  (subject) => subject.name === activeSubject
+                )[0]
+              }
+            />
+          )}
+          ListEmptyComponent={() => (
             <View className="w-full my-10">
               <Text className="text-center font-mada-semibold text-lg leading-tight text-tab-item-gray">
                 No chapter to track!
               </Text>
             </View>
           )}
-        </ScrollView>
+          showsVerticalScrollIndicator={false}
+        />
       )}
     </View>
   );
