@@ -191,5 +191,5 @@ export const subscriptionFeatures = [
 export const unattemptedQuizTabs = [
   { id: "weeklyQuiz", label: "Weekly Quiz", mobileOnly: false },
   { id: "chapterQuiz", label: "Chapter Quiz", mobileOnly: false },
-  { id: "customizedQuiz", label: "Custom Quiz", mobileOnly: true },
+  // { id: "customizedQuiz", label: "Custom Quiz", mobileOnly: true },
 ];

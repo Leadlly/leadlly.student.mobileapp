@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { TTrackerProps } from "../../types/types";
 import DonutChart from "../charts/DonutChart";
 import { colors } from "../../constants/constants";
@@ -32,7 +32,10 @@ const TrackerGraph = ({ item }: { item: TTrackerProps }) => {
   const smallFont = useFont(require("../../assets/fonts/Mada-Medium.ttf"), 9);
 
   return (
-    <View className="p-5 bg-primary/10 rounded-lg my-3 flex-row items-center justify-between">
+    <View
+      style={[styles.boxShadow, { backgroundColor: "#E9DAFF" }]}
+      className="p-5 rounded-lg my-3 flex-row items-center justify-between"
+    >
       {!font || !smallFont ? (
         <View />
       ) : (
@@ -91,5 +94,18 @@ const TrackerGraph = ({ item }: { item: TTrackerProps }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  boxShadow: {
+    shadowColor: colors.primary,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+});
 
 export default TrackerGraph;

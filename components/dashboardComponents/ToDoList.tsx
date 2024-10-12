@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  ActivityIndicator,
-  Dimensions,
-} from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import {
   getFormattedDate,
@@ -15,7 +9,6 @@ import QuestionsModal from "./QuestionsModal";
 import { useGetUserPlanner } from "../../services/queries/plannerQuery";
 import { TDayProps } from "../../types/types";
 import ToDoListItem from "./ToDoListItem";
-import { colors } from "../../constants/constants";
 import LottieView from "lottie-react-native";
 import DashboardSkeletonLoader from "./DashboardSkeletonLoader";
 
@@ -45,16 +38,18 @@ const ToDoList = () => {
   }, [data, isSuccess]);
 
   return (
-    <View className="h-72 rounded-xl p-4 bg-primary/5 my-1.5">
+    <View className="rounded-xl py-4 bg-primary/5 my-1.5">
       {isLoading || isFetching ? (
-        <DashboardSkeletonLoader />
+        <View className="h-52 px-4">
+          <DashboardSkeletonLoader />
+        </View>
       ) : (
         <>
           {todaysTopics &&
           (todaysTopics.backRevisionTopics.length > 0 ||
             todaysTopics?.continuousRevisionTopics.length > 0) ? (
             <>
-              <View className="mb-1.5">
+              <View className="mb-1.5 px-4">
                 <Text className="text-xl leading-tight font-mada-Bold text-primary">
                   Todo List
                 </Text>
@@ -63,9 +58,9 @@ const ToDoList = () => {
                 </Text>
               </View>
               <ScrollView
-                nestedScrollEnabled={true}
-                showsVerticalScrollIndicator={false}
-                className="flex-1 space-y-4"
+                nestedScrollEnabled
+                persistentScrollbar
+                className="flex-1 space-y-4 px-4 max-h-48"
               >
                 {todaysTopics.backRevisionTopics.map((item) => (
                   <ToDoListItem
