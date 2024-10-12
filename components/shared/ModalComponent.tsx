@@ -11,6 +11,7 @@ import { BlurView } from "expo-blur";
 import React from "react";
 import clsx from "clsx";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import Toast from "react-native-toast-message";
 
 const ModalComponent = ({
   modalVisible,
@@ -55,6 +56,7 @@ const ModalComponent = ({
           )}
         </View>
       </BlurView>
+      <Toast />
     </Modal>
   );
 };

@@ -111,8 +111,6 @@ const NewTopicLearntForm = ({
         chapterName: null,
         topicNames: [],
       });
-
-      setModalVisible(false);
     } catch (error: any) {
       Toast.show({
         type: "error",
