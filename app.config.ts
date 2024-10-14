@@ -3,7 +3,7 @@ export default {
     owner: "leadlly_edusolutions_private_limited",
     name: "Leadlly",
     slug: "leadlly",
-    version: "1.0.1",
+    version: "1.0.2",
     scheme: "leadlly-student-app",
     orientation: "portrait",
     icon: "./assets/icon.png",
@@ -23,7 +23,7 @@ export default {
       },
       package: "com.leadlly.app",
       googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
-      versionCode: 3,
+      versionCode: 4,
     },
     web: {
       favicon: "./assets/favicon.png",
