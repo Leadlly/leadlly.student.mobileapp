@@ -16,7 +16,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import {
   useCheckCustomCoupon,
   useGetCoupon,
-  useGetSubscriptionPricingByPlanId,
 } from "../../services/queries/subscriptionQuery";
 import CouponCard from "../../components/subscriptionComponents/CouponCard";
 import { useEffect, useState } from "react";
@@ -27,7 +26,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebouncedCallback } from "use-debounce";
 import clsx from "clsx";
-import { useAppSelector } from "../../services/redux/hooks";
+import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
 
 const CustomCouponSchema = z.object({
   code: z.string().min(1, { message: "Coupon is Required" }),
@@ -73,10 +72,10 @@ const ApplyCoupon = () => {
     }
   }, 500);
 
-  const user = useAppSelector((state) => state.user.user);
+  const { existingRemainingAmount, fetchingExistingPlanPrice } =
+    useGetExistingPlanRemainingAmount();
 
-  const { data: existingPlanPrice, isLoading: fetchingExistingPlanPrice } =
-    useGetSubscriptionPricingByPlanId(user?.subscription.planId || "");
+  const isExistingRemainingAmount = !!existingRemainingAmount;
 
   const {
     data: listedCouponData,
@@ -203,13 +202,17 @@ const ApplyCoupon = () => {
               </View>
             </LinearGradient>
 
-            <View className="items-center justify-center pt-8 pb-4 px-5">
-              <Text className="text-xl leading-6 font-mada-semibold">
-                New Offers
-              </Text>
-            </View>
+            {!isExistingRemainingAmount && (
+              <View className="items-center justify-center pt-8 pb-4 px-5">
+                <Text className="text-xl leading-6 font-mada-semibold">
+                  New Offers
+                </Text>
+              </View>
+            )}
 
-            {availableCoupons && availableCoupons.length > 0 ? (
+            {!isExistingRemainingAmount &&
+            availableCoupons &&
+            availableCoupons.length > 0 ? (
               <View className="flex-1 space-y-3">
                 {availableCoupons.map((coupon, index) => (
                   <CouponCard
@@ -225,9 +228,15 @@ const ApplyCoupon = () => {
                 ))}
               </View>
             ) : (
-              <View className="flex-1 items-center justify-center">
-                <Text className="text-base text-secondary-text font-mada-medium leading-tight">
-                  No Coupons!
+              <View className="flex-1 items-center justify-center mt-10">
+                <Text className="text-lg text-center font-mada-semibold leading-tight max-w-[250px]">
+                  No coupons applicable at the moment
+                </Text>
+                <Text className="text-base text-secondary-text font-mada-medium text-center">
+                  Have a coupon code?
+                </Text>
+                <Text className="text-base text-secondary-text font-mada-medium text-center max-w-[250px]">
+                  Try typing it in the coupon code box above
                 </Text>
               </View>
             )}
@@ -242,7 +251,7 @@ const ApplyCoupon = () => {
             resetCustomCouponForm={form.reset}
             setIsCustomCouponValid={setIsCustomCouponValid}
             setSelectedCoupon={setSelectedCoupon}
-            existingPlan={existingPlanPrice?.pricing || null}
+            existingRemainingAmount={existingRemainingAmount}
           />
         </>
       )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, Image } from "react-native";
 import { WeeklyQuizProps } from "../../types/types";
 import AttemptedWeekQuiz from "./AttemptedWeekQuiz";
 
@@ -16,9 +16,18 @@ const AttemptedWeeklyQuizzes: React.FC<AttemptedWeeklyQuizzesProps> = ({
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => <AttemptedWeekQuiz quiz={item} />}
       ListEmptyComponent={() => (
-        <View className="flex-1 justify-center items-center my-10">
-          <Text className="text-sm text-secondary-text font-mada-medium">
-            No attempted quizzes yet!
+        <View className="justify-center items-center mt-16">
+          <Image
+            source={require("../../assets/images/typing_laptop.png")}
+            resizeMode="contain"
+            className="w-40 h-40"
+          />
+          <Text className="text-2xl font-mada-semibold mt-9 text-center">
+            No Attempted Quizzes, yet!
+          </Text>
+          <Text className="text-base font-mada-regular text-secondary-text text-center max-w-[320px] mt-2">
+            No Quizzes in your inbox, yet! Start your journey to create and
+            attempt quizzes
           </Text>
         </View>
       )}

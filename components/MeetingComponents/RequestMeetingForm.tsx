@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +18,9 @@ import { z } from "zod";
 import { colors } from "../../constants/constants";
 import { useAppSelector } from "../../services/redux/hooks";
 import UpgradePlanPopup from "../shared/UpgradePlanPopup";
+import LottieView from "lottie-react-native";
+import VoucherIcon from "../icons/VoucherIcon";
+import UpgradationComponent from "../shared/UpgradationComponent";
 
 interface RequestMeetingFormProps {
   onSuccess: () => void;
@@ -59,10 +63,30 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
   };
 
   useEffect(() => {
-    if (userCategory !== "premium") {
+    if (userCategory === "basic" || userCategory === "pro") {
       setIsCategory(true);
     }
   }, [userCategory]);
+
+  if (isCategory === true) {
+    return (
+      <UpgradationComponent
+        animationSource={require("../../assets/upgrade_1.json")}
+        upgradeType="premium"
+        tagline="Empower you growth with this premium feature"
+        featureList={[
+          {
+            imageSource: require("../../assets/images/voucher.png"),
+            feature: "Personalized one on one session",
+          },
+          {
+            imageSource: require("../../assets/images/expensive-price.png"),
+            feature: "On demand sessions",
+          },
+        ]}
+      />
+    );
+  }
 
   return (
     <>
@@ -198,7 +222,7 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
         />
       </ScrollView>
 
-      {isCategory && <UpgradePlanPopup />}
+      {/* {isCategory && <UpgradePlanPopup />} */}
     </>
   );
 };

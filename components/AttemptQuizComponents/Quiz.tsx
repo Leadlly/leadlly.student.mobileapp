@@ -83,10 +83,6 @@ const Quiz = ({
           ...formattedData,
         })
       );
-      Toast.show({
-        type: "success",
-        text1: res.message,
-      });
     } catch (error: any) {
       Toast.show({
         type: "error",

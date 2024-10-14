@@ -27,7 +27,7 @@ const SubscriptionPlansScreen: React.FC = () => {
   const { data: pricingData, isLoading: fetchingPricing } =
     useGetSubscriptionPricing("main");
 
-  const { loading, user } = useAppSelector((state) => state.user);
+  const { user } = useAppSelector((state) => state.user);
 
   // Plan hierarchy
   const planHierarchy = ["basic", "pro", "premium"];
@@ -132,7 +132,7 @@ const SubscriptionPlansScreen: React.FC = () => {
     <SafeAreaView className="bg-white flex-1">
       <ScrollView className="flex-1">
         <View
-          className="relative m-5 bg-primary rounded-xl h-28 justify-center pl-6"
+          className="relative mx-5 mt-5 mb-2 bg-primary rounded-xl h-28 justify-center pl-6"
           style={{ overflow: "hidden" }}
         >
           <ImageBackground
@@ -145,13 +145,9 @@ const SubscriptionPlansScreen: React.FC = () => {
           </Text>
         </View>
 
-        <View className="items-center space-y-3 mt-4 mb-6">
+        <View className="items-center space-y-3 my-4">
           <Text className="text-xl font-mada-Bold leading-tight">
             Choose Your Plan
-          </Text>
-          <Text className="text-sm text-center leading-5 font-mada-regular max-w-sm">
-            Choose the plan that suits you to Unlock exclusive benefits tailored
-            to your needs!
           </Text>
         </View>
 

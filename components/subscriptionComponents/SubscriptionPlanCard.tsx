@@ -109,7 +109,7 @@ const SubscriptionPlanCard = ({
           </View>
         </View>
 
-        <View className="space-y-4">
+        <View className="space-y-5">
           {subscriptionFeatures.map((feature, index) => (
             <View key={index} className="flex-row items-center gap-x-4">
               <View

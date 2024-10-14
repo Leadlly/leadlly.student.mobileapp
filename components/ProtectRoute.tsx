@@ -19,18 +19,12 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
     pathname.startsWith("/forgot-password");
 
   useEffect(() => {
-    if (!loading && !user && !isPublicPath) {
-      router.replace("/welcome");
-    } else if (!loading && user && !isPublicPath) {
-      const hasSubmittedInitialInfo = !!user.academic.standard;
+    if (loading) return;
 
-      if (!hasSubmittedInitialInfo && pathname !== "/initialInfo") {
-        router.replace("/initialInfo");
-      } else if (hasSubmittedInitialInfo && pathname === "/initialInfo") {
-        router.replace("/dashboard");
-      }
-    } else if (!loading && user && !isPublicPath) {
-      const category = user.category || "free";
+    if (!user && !isPublicPath) {
+      router.replace("/welcome");
+    } else if (user && !isPublicPath) {
+      const hasSubmittedInitialInfo = !!user.academic.standard;
 
       const trialStartDate = new Date(user.freeTrial.dateOfActivation!);
       const trialEndDate = new Date(
@@ -38,12 +32,20 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
       );
       const now = new Date();
 
-      if (category === "free" && now >= trialEndDate) {
-        router.replace("/subscription-plans");
-      } else {
+      if (!hasSubmittedInitialInfo && pathname !== "/initialInfo") {
+        router.replace("/initialInfo");
+      } else if (hasSubmittedInitialInfo && pathname === "/initialInfo") {
         router.replace("/dashboard");
+      } else if (
+        user.category === "free" &&
+        now >= trialEndDate &&
+        pathname !== "/subscription-plans"
+      ) {
+        if (pathname !== "/apply-coupon") {
+          router.replace("/subscription-plans");
+        }
       }
-    } else if (!loading && user && isPublicPath) {
+    } else if (user && isPublicPath) {
       router.replace("/dashboard");
     }
   }, [loading, pathname, user, router]);
