@@ -66,9 +66,7 @@ const CouponCard = ({
                 </Text>
                 <Text className="text-2xl font-mada-Bold leading-tight">
                   <Text className="text-leadlly-yellow">
-                    {coupon.discountType === "percentage" ? "" : "₹"}
-                    {coupon.discountValue}
-                    {coupon.discountType === "percentage" ? "%" : ""}
+                  {coupon.discountType === "percentage" ? `${coupon.discountValue}%` : `₹${coupon.discountValue}`}
                   </Text>{" "}
                   OFF
                 </Text>

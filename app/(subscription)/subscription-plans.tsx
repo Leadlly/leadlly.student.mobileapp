@@ -62,12 +62,17 @@ const SubscriptionPlansScreen: React.FC = () => {
     return null;
   });
 
-  const defaultPaginationIndex =
-    filteredPlans?.findIndex((plan) => plan.category === "pro") ?? 0;
 
-  const [paginationIndex, setPaginationIndex] = useState<number>(
-    defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0
-  );
+  const [paginationIndex, setPaginationIndex] = useState<number>(0);
+
+ useEffect(() => {
+   if (filteredPlans && filteredPlans.length > 0) {
+     const defaultPaginationIndex =
+       filteredPlans.findIndex((plan) => plan.category === "pro");
+ 
+     setPaginationIndex(defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0);
+   }
+ }, [filteredPlans]);
 
   const [transactionCancelled, setIsTransactionCancelled] = useState(false);
   const [transactionSuccess, setIsTransactionSuccess] = useState(false);
