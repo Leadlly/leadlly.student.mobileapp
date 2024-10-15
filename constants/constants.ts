@@ -15,6 +15,8 @@ export const colors = Object.freeze({
   leadllyChartYellow: "#FFDA57",
 });
 
+export const freeTrialDays = 7 * 24 * 60 * 60 * 1000;
+
 export const tabBarItems = [
   {
     name: "dashboard",
@@ -142,8 +144,8 @@ export const subscriptionDetails = [
     image: require("../assets/images/paper_plane.png"),
     details: [
       "Personalized self-study strategies",
-      "Subject chapter & topic tracking Daily",
-      "Weekly & monthly report",
+      "Subject chapter & topic tracking",
+      "Daily, weekly & monthly report",
       "Weekly mentor sessions",
     ],
   },
@@ -154,8 +156,8 @@ export const subscriptionDetails = [
     image: require("../assets/images/rocket.png"),
     details: [
       "Personalized self-study strategies",
-      "Subject chapter & topic tracking Daily",
-      "Weekly & monthly report",
+      "Subject chapter & topic tracking",
+      "Daily, weekly & monthly report",
       "Weekly mentor sessions",
       "Error book",
       "Active monitoring by mentor",
@@ -168,8 +170,8 @@ export const subscriptionDetails = [
     image: require("../assets/images/small_satellite.png"),
     details: [
       "Personalized self-study strategies",
-      "Subject chapter & topic tracking Daily",
-      "Weekly & monthly report",
+      "Subject chapter & topic tracking",
+      "Daily, weekly & monthly report",
       "Weekly mentor sessions",
       "Error book",
       "Active monitoring by mentor",
@@ -180,8 +182,8 @@ export const subscriptionDetails = [
 
 export const subscriptionFeatures = [
   "Personalized self-study strategies",
-  "Subject chapter & topic tracking Daily",
-  "Weekly & monthly report",
+  "Subject chapter & topic tracking",
+  "Daily, weekly & monthly report",
   "Weekly mentor sessions",
   "Error book",
   "Active monitoring by mentor",

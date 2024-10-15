@@ -65,7 +65,8 @@ const UpgradationComponent = ({
             Upgrade to {capitalizeFirstLetter(upgradeType)}
           </Text>
           <Text className="text-lg text-center font-mada-regular text-secondary-text max-w-sm mx-auto px-3">
-            {tagline}
+            {tagline}{" "}
+            {upgradeType === "pro" ? Math.round(extraPriceToPay!) : ""}
           </Text>
 
           <View className="max-w-xs mx-auto px-3 space-y-5 mt-8">

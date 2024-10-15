@@ -8,14 +8,13 @@ import {
 import React, { useRef } from "react";
 import clsx from "clsx";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ICoupon } from "../../types/types";
+import { SubtotalContainerProps } from "../../types/types";
 import { colors } from "../../constants/constants";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { useBuySubscription } from "../../services/queries/subscriptionQuery";
 import Toast from "react-native-toast-message";
 import { useAppSelector } from "../../services/redux/hooks";
-import { UseFormReset } from "react-hook-form";
 
 const SubTotalContainer = ({
   selectedCoupon,
@@ -27,19 +26,8 @@ const SubTotalContainer = ({
   setIsCustomCouponValid,
   setSelectedCoupon,
   existingRemainingAmount,
-}: {
-  selectedCoupon: ICoupon | null;
-  setSubTotalBlockHeight: React.Dispatch<React.SetStateAction<number>>;
-  category: string;
-  price: string;
-  planId: string;
-  existingRemainingAmount: number | null;
-  resetCustomCouponForm: UseFormReset<{
-    code: string;
-  }>;
-  setIsCustomCouponValid: React.Dispatch<React.SetStateAction<boolean | null>>;
-  setSelectedCoupon: React.Dispatch<React.SetStateAction<ICoupon | null>>;
-}) => {
+  isExistingRemainingAmount,
+}: SubtotalContainerProps) => {
   const subTotalBlockRef = useRef<View>(null);
 
   const user = useAppSelector((state) => state.user.user);
@@ -84,8 +72,8 @@ const SubTotalContainer = ({
       : selectedCoupon.discountValue // Assume it's a fixed amount
     : 0;
 
-  const subtotal = !!existingRemainingAmount
-    ? Number(price) - existingRemainingAmount - discountValue
+  const subtotal = isExistingRemainingAmount
+    ? Number(price) - existingRemainingAmount! - discountValue
     : Number(price) - discountValue;
 
   return (
@@ -152,7 +140,7 @@ const SubTotalContainer = ({
         </Text>
       </View>
 
-      {!!existingRemainingAmount && existingRemainingAmount > 0 && (
+      {isExistingRemainingAmount && (
         <View
           className={clsx(
             "flex-row items-center justify-between px-5",
@@ -163,7 +151,7 @@ const SubTotalContainer = ({
             Upgrade Adjustment:
           </Text>
           <Text className="text-sm font-mada-medium leading-tight">
-            - ₹ {Math.round(existingRemainingAmount)}/-
+            - ₹ {Math.round(existingRemainingAmount!)}/-
           </Text>
         </View>
       )}
@@ -178,7 +166,7 @@ const SubTotalContainer = ({
             :
           </Text>
           <Text className="text-sm font-mada-medium leading-tight text-primary">
-            - ₹ {discountValue.toFixed(2)}/-
+            - ₹ {Math.round(discountValue)}/-
           </Text>
         </View>
       )}

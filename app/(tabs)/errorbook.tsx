@@ -34,7 +34,7 @@ const ErrorBook = () => {
       <UpgradationComponent
         animationSource={require("../../assets/upgrade_2.json")}
         upgradeType="pro"
-        tagline="It's time to know your mistakes. Unlock this feature at just Rs 500"
+        tagline="It's time to know your mistakes. Unlock this feature at just Rs"
         featureList={[
           {
             imageSource: require("../../assets/images/questions.png"),

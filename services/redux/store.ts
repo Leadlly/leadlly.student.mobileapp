@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
 import PlannerReducer from "./slices/plannerSlice";
 import WeeklyQuizReducer from "./slices/weeklyQuizSlice";
+import DailyQuizReducer from "./slices/dailyQuizSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     todaysPlan: PlannerReducer,
     weeklyQuizzes: WeeklyQuizReducer,
+    dailyQuizzes: DailyQuizReducer,
   },
 });
 

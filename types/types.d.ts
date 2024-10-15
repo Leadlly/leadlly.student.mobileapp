@@ -1,3 +1,5 @@
+import React from "react";
+import { UseFormReset } from "react-hook-form";
 import { ImageSourcePropType, TextInputProps } from "react-native";
 
 export interface ISubject {
@@ -389,8 +391,6 @@ export type UnattemptedChapterQuizProps = {
   questions: number;
 };
 
-
-
 export type Question = {
   _id: string;
   question: string;
@@ -416,7 +416,6 @@ export interface MergedPlanData extends Plan {
   features: string[];
   image: ImageSourcePropType;
 }
-
 
 export type ChapterProps = {
   chapter: string;
@@ -489,6 +488,22 @@ export interface ICoupon {
   plan: string;
   usageLimit: number;
 }
+
+export interface SubtotalContainerProps {
+  selectedCoupon: ICoupon | null;
+  setSubTotalBlockHeight: React.Dispatch<React.SetStateAction<number>>;
+  category: string;
+  price: string;
+  planId: string;
+  existingRemainingAmount: number | null;
+  isExistingRemainingAmount: boolean;
+  resetCustomCouponForm: UseFormReset<{
+    code: string;
+  }>;
+  setIsCustomCouponValid: React.Dispatch<React.SetStateAction<boolean | null>>;
+  setSelectedCoupon: React.Dispatch<React.SetStateAction<ICoupon | null>>;
+}
+
 export type QuizReportSummary = {
   user: string;
   quizId: string;

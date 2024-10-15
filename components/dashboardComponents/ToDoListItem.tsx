@@ -4,6 +4,7 @@ import { TRevisionProps } from "../../types/types";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import clsx from "clsx";
 import { colors } from "../../constants/constants";
+import { useAppSelector } from "../../services/redux/hooks";
 
 const ToDoListItem = ({
   item,
@@ -22,24 +23,21 @@ const ToDoListItem = ({
     setTopic({ name: topic, _id: topicId });
     setModalVisible(true);
   };
+
   return (
     <View className="py-2 justify-center">
       <View
         className={clsx(
           "flex-row justify-between items-start",
-          (completedTopics || incompleteTopics) &&
-            (completedTopics?.length || incompleteTopics?.length) &&
-            (completedTopics?.includes(item.topic.name) ||
-              incompleteTopics?.includes(item.topic.name)) &&
+          completedTopics &&
+            completedTopics?.length &&
+            completedTopics?.includes(item.topic.name) &&
             "opacity-60"
         )}
       >
         <TouchableOpacity
           className="flex-1 flex-row items-start space-x-3"
-          disabled={
-            completedTopics?.includes(item.topic.name) ||
-            incompleteTopics?.includes(item.topic.name)
-          }
+          disabled={completedTopics?.includes(item.topic.name)}
           onPress={() => handleTopicPress(item.topic.name, item._id)}
         >
           <View

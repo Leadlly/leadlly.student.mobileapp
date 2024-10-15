@@ -252,6 +252,7 @@ const ApplyCoupon = () => {
             setIsCustomCouponValid={setIsCustomCouponValid}
             setSelectedCoupon={setSelectedCoupon}
             existingRemainingAmount={existingRemainingAmount}
+            isExistingRemainingAmount={isExistingRemainingAmount}
           />
         </>
       )}

@@ -1,5 +1,6 @@
 import { Redirect } from "expo-router";
 import { useAppSelector } from "../services/redux/hooks";
+import { freeTrialDays } from "../constants/constants";
 
 const WelcomeScreen = () => {
   const { loading, user } = useAppSelector((state) => state.user);
@@ -12,9 +13,7 @@ const WelcomeScreen = () => {
 
   if (!loading && user && userCategory === "free") {
     const trialStartDate = new Date(user.freeTrial.dateOfActivation!);
-    const trialEndDate = new Date(
-      trialStartDate.getTime() + 14 * 24 * 60 * 60 * 1000
-    );
+    const trialEndDate = new Date(trialStartDate.getTime() + freeTrialDays);
     const now = new Date();
 
     if (now >= trialEndDate) {

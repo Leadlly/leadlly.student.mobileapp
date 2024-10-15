@@ -15,9 +15,11 @@ const LevelAndPoints = () => {
         />
         <Text className="text-xs font-mada-medium text-[#0075FF]">
           {user &&
-            user.details &&
-            user.details.level &&
-            user.details.level?.number}
+          user.details &&
+          user.details.level &&
+          user.details.level?.number
+            ? user.details.level?.number
+            : 0}
         </Text>
       </View>
       <View className="flex-row items-center space-x-0.5">
@@ -28,9 +30,11 @@ const LevelAndPoints = () => {
         />
         <Text className="text-xs font-mada-medium text-[#FF9900]">
           {user &&
-            user.details &&
-            user.details.points &&
-            user.details.points?.number}
+          user.details &&
+          user.details.points &&
+          user.details.points?.number
+            ? user.details.points?.number
+            : 0}
         </Text>
       </View>
       <View className="flex-row items-center space-x-0.5">
@@ -41,9 +45,11 @@ const LevelAndPoints = () => {
         />
         <Text className="text-xs font-mada-medium text-[#FF00E5]">
           {user &&
-            user.details &&
-            user.details.streak &&
-            user.details.streak?.number}
+          user.details &&
+          user.details.streak &&
+          user.details.streak?.number
+            ? user.details.streak?.number
+            : 0}
         </Text>
       </View>
     </View>
