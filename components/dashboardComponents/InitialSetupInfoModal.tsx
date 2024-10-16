@@ -1,8 +1,9 @@
 import { View, Text, Modal, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useRef } from "react";
 import { BlurView } from "expo-blur";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import LottieView from "lottie-react-native";
+import Toast from "react-native-toast-message";
 
 const InitialSetupInfoModal = ({
   params,
@@ -69,6 +70,7 @@ const InitialSetupInfoModal = ({
           />
         </View>
       </BlurView>
+      <Toast />
     </Modal>
   );
 };

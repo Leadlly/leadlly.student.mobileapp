@@ -6,6 +6,7 @@ import { useAppSelector } from "../../services/redux/hooks";
 import { useEffect, useState } from "react";
 import UpgradePlanPopup from "../../components/shared/UpgradePlanPopup";
 import { colors } from "../../constants/constants";
+import UpgradationComponent from "../../components/shared/UpgradationComponent";
 
 const ErrorBook = () => {
   const [isCategory, setIsCategory] = useState(false);
@@ -25,6 +26,30 @@ const ErrorBook = () => {
       <View className="flex-1 justify-center items-center h-[50vh] bg-white">
         <ActivityIndicator size="small" color={colors.primary} />
       </View>
+    );
+  }
+
+  if (isCategory === true) {
+    return (
+      <UpgradationComponent
+        animationSource={require("../../assets/upgrade_2.json")}
+        upgradeType="pro"
+        tagline="It's time to know your mistakes. Unlock this feature at just Rs"
+        featureList={[
+          {
+            imageSource: require("../../assets/images/questions.png"),
+            feature: "Subject and chapter wise division",
+          },
+          {
+            imageSource: require("../../assets/images/quiz.png"),
+            feature: "Attempt as quiz",
+          },
+          {
+            imageSource: require("../../assets/images/error_2.png"),
+            feature: "Analyze your mistakes",
+          },
+        ]}
+      />
     );
   }
 

@@ -5,20 +5,16 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import clsx from "clsx";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ICoupon, Plan } from "../../types/types";
+import { SubtotalContainerProps } from "../../types/types";
 import { colors } from "../../constants/constants";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
-import {
-  useBuySubscription,
-  useGetSubscriptionPricingByPlanId,
-} from "../../services/queries/subscriptionQuery";
+import { useBuySubscription } from "../../services/queries/subscriptionQuery";
 import Toast from "react-native-toast-message";
 import { useAppSelector } from "../../services/redux/hooks";
-import { UseFormReset } from "react-hook-form";
 
 const SubTotalContainer = ({
   selectedCoupon,
@@ -29,24 +25,9 @@ const SubTotalContainer = ({
   resetCustomCouponForm,
   setIsCustomCouponValid,
   setSelectedCoupon,
-  existingPlan,
-}: {
-  selectedCoupon: ICoupon | null;
-  setSubTotalBlockHeight: React.Dispatch<React.SetStateAction<number>>;
-  category: string;
-  price: string;
-  planId: string;
-  existingPlan: Plan | null;
-  resetCustomCouponForm: UseFormReset<{
-    code: string;
-  }>;
-  setIsCustomCouponValid: React.Dispatch<React.SetStateAction<boolean | null>>;
-  setSelectedCoupon: React.Dispatch<React.SetStateAction<ICoupon | null>>;
-}) => {
-  const [existingRemainingAmount, setExistingRemainingAmount] = useState<
-    number | null
-  >(null);
-
+  existingRemainingAmount,
+  isExistingRemainingAmount,
+}: SubtotalContainerProps) => {
   const subTotalBlockRef = useRef<View>(null);
 
   const user = useAppSelector((state) => state.user.user);
@@ -84,26 +65,6 @@ const SubTotalContainer = ({
     }
   };
 
-  useEffect(() => {
-    if (existingPlan && user?.subscription.status === "active") {
-      // Calculate the remaining value of the current subscription
-      const currentDate = new Date();
-      const deactivationDate = new Date(user?.subscription.dateOfDeactivation!);
-      const timeRemaining =
-        (deactivationDate.getTime() - currentDate.getTime()) /
-        (1000 * 60 * 60 * 24); // Remaining days
-
-      const pricePerDayCurrent =
-        existingPlan.amount / (existingPlan["duration(months)"] * 30); // Assumes 30 days in a month
-      // Remaining value of the current subscription
-      const remainingValue = pricePerDayCurrent * timeRemaining;
-
-      setExistingRemainingAmount(remainingValue);
-    } else {
-      setExistingRemainingAmount(0);
-    }
-  }, [existingPlan, user, user?.subscription.dateOfDeactivation]);
-
   // Calculate the discount value based on coupon type
   const discountValue = selectedCoupon
     ? selectedCoupon.discountType === "percentage"
@@ -111,8 +72,8 @@ const SubTotalContainer = ({
       : selectedCoupon.discountValue // Assume it's a fixed amount
     : 0;
 
-  const subtotal = existingRemainingAmount
-    ? Number(price) - existingRemainingAmount - discountValue
+  const subtotal = isExistingRemainingAmount
+    ? Number(price) - existingRemainingAmount! - discountValue
     : Number(price) - discountValue;
 
   return (
@@ -179,7 +140,7 @@ const SubTotalContainer = ({
         </Text>
       </View>
 
-      {existingPlan && (
+      {isExistingRemainingAmount && (
         <View
           className={clsx(
             "flex-row items-center justify-between px-5",
@@ -190,7 +151,7 @@ const SubTotalContainer = ({
             Upgrade Adjustment:
           </Text>
           <Text className="text-sm font-mada-medium leading-tight">
-            - ₹ {existingRemainingAmount?.toFixed(2)}/-
+            - ₹ {Math.round(existingRemainingAmount!)}/-
           </Text>
         </View>
       )}
@@ -205,7 +166,7 @@ const SubTotalContainer = ({
             :
           </Text>
           <Text className="text-sm font-mada-medium leading-tight text-primary">
-            - ₹ {discountValue.toFixed(2)}/-
+            - ₹ {Math.round(discountValue)}/-
           </Text>
         </View>
       )}
@@ -216,7 +177,7 @@ const SubTotalContainer = ({
         </Text>
 
         <Text className="text-base font-mada-Bold leading-tight">
-          ₹ {subtotal.toFixed(2)}/-
+          ₹ {Math.round(subtotal)}/-
         </Text>
       </View>
 

@@ -22,37 +22,35 @@ const ToDoListItem = ({
     setTopic({ name: topic, _id: topicId });
     setModalVisible(true);
   };
+
   return (
     <View className="py-2 justify-center">
       <View
         className={clsx(
           "flex-row justify-between items-start",
-          (completedTopics || incompleteTopics) &&
-            (completedTopics?.length || incompleteTopics?.length) &&
-            (completedTopics?.includes(item.topic.name) ||
-              incompleteTopics?.includes(item.topic.name)) &&
+          completedTopics &&
+            completedTopics?.length &&
+            completedTopics?.includes(item.topic.name) &&
             "opacity-60"
         )}
       >
         <TouchableOpacity
           className="flex-1 flex-row items-start space-x-3"
-          disabled={
-            completedTopics?.includes(item.topic.name) ||
-            incompleteTopics?.includes(item.topic.name)
-          }
-          onPress={() => handleTopicPress(item.topic.name, item._id)}
+          disabled={completedTopics?.includes(item.topic.name)}
+          onPress={() => handleTopicPress(item.topic.name, item.topic.id)}
         >
           <View
             className={clsx(
               "w-[18px] h-[18px] rounded border border-checkbox-gray items-center justify-center",
               completedTopics &&
                 completedTopics.length > 0 &&
-                completedTopics.includes(item.topic.name) &&
-                "bg-leadlly-green/20 border-0",
-              incompleteTopics &&
-                incompleteTopics.length > 0 &&
-                incompleteTopics.includes(item.topic.name) &&
-                "bg-leadlly-red/20 border-0"
+                completedTopics.includes(item.topic.name)
+                ? "bg-leadlly-green/20 border-0"
+                : incompleteTopics &&
+                    incompleteTopics.length > 0 &&
+                    incompleteTopics.includes(item.topic.name)
+                  ? "bg-leadlly-red/20 border-0"
+                  : ""
             )}
           >
             {completedTopics &&

@@ -1,13 +1,15 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../services/redux/hooks";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 import { formatTime } from "../../helpers/utils";
+import { freeTrialDays } from "../../constants/constants";
 
 const FreeTrialTimer = () => {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const freeTrialActivation = useAppSelector(
     (state) => state.user.user?.freeTrial
@@ -16,13 +18,10 @@ const FreeTrialTimer = () => {
   useEffect(() => {
     const checkTrialStatus = () => {
       const trialStartDate = new Date(freeTrialActivation?.dateOfActivation!);
-      const trialEndDate = new Date(
-        trialStartDate.getTime() + 14 * 24 * 60 * 60 * 1000
-
-      );
+      const trialEndDate = new Date(trialStartDate.getTime() + freeTrialDays);
       const now = new Date();
 
-      if (now >= trialEndDate) {
+      if (now >= trialEndDate && pathname !== "/subscription-plans") {
         console.log(trialEndDate, now >= trialEndDate);
         router.replace("/subscription-plans");
       } else {

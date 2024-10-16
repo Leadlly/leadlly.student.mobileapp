@@ -10,6 +10,7 @@ import LogoutButton from "./manageAccountComponents/LogoutButton";
 import { loadQuizzes } from "../services/redux/slices/weeklyQuizSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import UpgradeButton from "./shared/UpgradeButton";
+import { loadDailyQuizzes } from "../services/redux/slices/dailyQuizSlice";
 
 const AppWrapper = () => {
   const user = useAppSelector((state) => state.user.user);
@@ -18,6 +19,7 @@ const AppWrapper = () => {
 
   useEffect(() => {
     dispatch(loadUser());
+    dispatch(loadDailyQuizzes());
     dispatch(loadQuizzes());
   }, [dispatch]);
 

@@ -19,20 +19,26 @@ const ModalComponent = ({
   children,
   className,
   isCloseIcon = true,
+  isSavingDailyQuiz = false,
+  handleBackSubmit,
 }: {
   children: React.ReactNode;
   modalVisible: boolean;
   setModalVisible: (modalVisible: boolean) => void;
   className?: string;
   isCloseIcon?: boolean;
+  isSavingDailyQuiz?: boolean;
+  handleBackSubmit?: () => Promise<void>;
 }) => {
   return (
     <Modal
       animationType="fade"
       transparent={true}
       visible={modalVisible}
-      onRequestClose={() => {
-        console.log("Modal closed!");
+      onRequestClose={async () => {
+        if (isSavingDailyQuiz && handleBackSubmit) {
+          await handleBackSubmit();
+        }
         setModalVisible(!modalVisible);
       }}
     >

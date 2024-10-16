@@ -83,10 +83,6 @@ const Quiz = ({
           ...formattedData,
         })
       );
-      Toast.show({
-        type: "success",
-        text1: res.message,
-      });
     } catch (error: any) {
       Toast.show({
         type: "error",
@@ -175,15 +171,26 @@ const Quiz = ({
           <Text className="text-tab-item-gray font-mada-semibold text-sm mb-2">
             Question {currentQuestion + 1} of {questions.length}:
           </Text>
-          <ScrollView className="pb-10 mb-20">
-            <Question question={questions[currentQuestion]} />
-            <Options
-              options={questions[currentQuestion]?.options}
-              selectedOption={selectedOption}
-              handleOptionChange={handleOptionChange}
-              attemptedOption={attemptedQuestionAnswers}
-            />
-          </ScrollView>
+          {questions[currentQuestion] ? (
+            <ScrollView className="pb-10 mb-20">
+              <Question question={questions[currentQuestion]} />
+              <Options
+                options={questions[currentQuestion]?.options}
+                selectedOption={selectedOption}
+                handleOptionChange={handleOptionChange}
+                attemptedOption={attemptedQuestionAnswers}
+              />
+            </ScrollView>
+          ) : (
+            <View className="min-h-[200px] items-center justify-center">
+              <Text className="text-base font-mada-medium text-secondary-text text-center">
+                No Question Available!!
+              </Text>
+              <Text className="text-base font-mada-medium text-secondary-text text-center">
+                Please try the next question.
+              </Text>
+            </View>
+          )}
         </View>
       </View>
       <View className="bg-primary/20 flex-row justify-between items-center p-4">
