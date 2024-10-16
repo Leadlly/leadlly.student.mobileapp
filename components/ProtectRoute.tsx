@@ -34,7 +34,9 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
         router.replace("/initialInfo");
       } else if (hasSubmittedInitialInfo && pathname === "/initialInfo") {
         router.replace("/dashboard");
-      } else if (
+      } 
+      else if (
+        hasSubmittedInitialInfo &&
         user.subscription.status !== "active" &&
         user.freeTrial.active &&
         now >= trialEndDate &&
