@@ -89,7 +89,7 @@ export const {
 
 export default dailyQuizSlice.reducer;
 
-export const loadQuizzes = () => async (dispatch: AppDispatch) => {
+export const loadDailyQuizzes = () => async (dispatch: AppDispatch) => {
   const attemptedQuestions = await loadAttemptedQuestionsFromStorage();
   if (attemptedQuestions.length > 0) {
     dispatch(initializeQuizzes(attemptedQuestions));

@@ -4,7 +4,6 @@ import { TRevisionProps } from "../../types/types";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import clsx from "clsx";
 import { colors } from "../../constants/constants";
-import { useAppSelector } from "../../services/redux/hooks";
 
 const ToDoListItem = ({
   item,
@@ -38,19 +37,20 @@ const ToDoListItem = ({
         <TouchableOpacity
           className="flex-1 flex-row items-start space-x-3"
           disabled={completedTopics?.includes(item.topic.name)}
-          onPress={() => handleTopicPress(item.topic.name, item._id)}
+          onPress={() => handleTopicPress(item.topic.name, item.topic.id)}
         >
           <View
             className={clsx(
               "w-[18px] h-[18px] rounded border border-checkbox-gray items-center justify-center",
               completedTopics &&
                 completedTopics.length > 0 &&
-                completedTopics.includes(item.topic.name) &&
-                "bg-leadlly-green/20 border-0",
-              incompleteTopics &&
-                incompleteTopics.length > 0 &&
-                incompleteTopics.includes(item.topic.name) &&
-                "bg-leadlly-red/20 border-0"
+                completedTopics.includes(item.topic.name)
+                ? "bg-leadlly-green/20 border-0"
+                : incompleteTopics &&
+                    incompleteTopics.length > 0 &&
+                    incompleteTopics.includes(item.topic.name)
+                  ? "bg-leadlly-red/20 border-0"
+                  : ""
             )}
           >
             {completedTopics &&

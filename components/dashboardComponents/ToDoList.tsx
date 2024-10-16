@@ -1,5 +1,5 @@
 import { View, Text, ScrollView } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getFormattedDate,
   getTodaysDay,
@@ -18,8 +18,6 @@ const ToDoList = () => {
   const [topic, setTopic] = useState<{ name: string; _id: string } | null>(
     null
   );
-
-  const animation = useRef<LottieView>(null);
 
   const { data, isLoading, isFetching, isSuccess } = useGetUserPlanner();
 
@@ -97,7 +95,6 @@ const ToDoList = () => {
               <View className="items-center justify-center">
                 <LottieView
                   source={require("../../assets/todo_pending_animation.json")}
-                  ref={animation}
                   autoPlay
                   style={{
                     width: 100,

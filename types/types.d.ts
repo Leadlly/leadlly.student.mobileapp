@@ -118,6 +118,7 @@ export type UserDataProps = {
 };
 
 export type Topic = {
+  id: string;
   name: string;
   plannerFrequency?: number;
   level?: string;
@@ -129,6 +130,7 @@ export type Topic = {
 };
 
 export type Chapter = {
+  id: string;
   name: string;
   plannerFrequency?: number;
   level?: string;
