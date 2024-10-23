@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
-import { MergedPlanData } from "../../types/types";
+import { MergedPlanData, UserDataProps } from "../../types/types";
 import Animated, {
   Extrapolation,
   interpolate,
@@ -12,6 +12,8 @@ import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { colors, subscriptionFeatures } from "../../constants/constants";
 import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
 
 const SubscriptionPlanCard = ({
   index,
@@ -19,13 +21,24 @@ const SubscriptionPlanCard = ({
   scrollX,
   paginationIndex,
   cardWidth,
+  user,
 }: {
   index: number;
   data: MergedPlanData | null;
   scrollX: SharedValue<number>;
   paginationIndex: number;
   cardWidth: number;
+  user: UserDataProps | null;
 }) => {
+  const webBaseUrl =
+    process.env.EXPO_PUBLIC_WEB_APP_URL || "https://education.leadlly.in";
+
+  const userToken = user?.token;
+
+  const redirectUrl = Linking.createURL("dashboard");
+
+  const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${data?.category}&planId=${data?.planId}&price=${String(data?.amount)}`;
+
   const rnAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -138,7 +151,7 @@ const SubscriptionPlanCard = ({
         </View>
 
         <View className="items-center justify-center mt-6 mb-2">
-          <Link
+          {/* <Link
             href={{
               pathname: "/apply-coupon",
               params: {
@@ -148,18 +161,23 @@ const SubscriptionPlanCard = ({
               },
             }}
             asChild
+          > */}
+          <TouchableOpacity
+            onPress={async () =>
+              await WebBrowser.openBrowserAsync(subscriptionUrl)
+            }
+            className="bg-primary rounded-lg h-9 w-36 items-center justify-center flex-row gap-x-1.5"
           >
-            <TouchableOpacity className="bg-primary rounded-lg h-9 w-36 items-center justify-center flex-row gap-x-1.5">
-              <MaterialCommunityIcons
-                name="ticket-percent"
-                size={17}
-                color="white"
-              />
-              <Text className="text-sm text-white font-mada-semibold leading-tight">
-                Apply Coupon
-              </Text>
-            </TouchableOpacity>
-          </Link>
+            <MaterialCommunityIcons
+              name="ticket-percent"
+              size={17}
+              color="white"
+            />
+            <Text className="text-sm text-white font-mada-semibold leading-tight">
+              Apply Coupon
+            </Text>
+          </TouchableOpacity>
+          {/* </Link> */}
         </View>
       </View>
     </Animated.View>
