@@ -62,17 +62,19 @@ const SubscriptionPlansScreen: React.FC = () => {
     return null;
   });
 
-
   const [paginationIndex, setPaginationIndex] = useState<number>(0);
 
- useEffect(() => {
-   if (filteredPlans && filteredPlans.length > 0) {
-     const defaultPaginationIndex =
-       filteredPlans.findIndex((plan) => plan.category === "pro");
- 
-     setPaginationIndex(defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0);
-   }
- }, [filteredPlans]);
+  useEffect(() => {
+    if (filteredPlans && filteredPlans.length > 0) {
+      const defaultPaginationIndex = filteredPlans.findIndex(
+        (plan) => plan.category === "pro"
+      );
+
+      setPaginationIndex(
+        defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0
+      );
+    }
+  }, [filteredPlans]);
 
   const [transactionCancelled, setIsTransactionCancelled] = useState(false);
   const [transactionSuccess, setIsTransactionSuccess] = useState(false);
@@ -211,6 +213,7 @@ const SubscriptionPlansScreen: React.FC = () => {
                     scrollX={scrollX}
                     paginationIndex={paginationIndex}
                     cardWidth={cardWidth}
+                    user={user}
                   />
                 ))}
               </Animated.ScrollView>
