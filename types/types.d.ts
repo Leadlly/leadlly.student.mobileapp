@@ -226,6 +226,18 @@ export type ChapterTopicsProps = {
   updatedAt: string;
 };
 
+export type SubTopic = {
+  _id: string;
+  chapterId: string;
+  chapterName: string;
+  name: string;
+  standard: number;
+  subjectName: string;
+  subtopics: any[];
+  topicId: string;
+  topicName: string;
+};
+
 export type TStudentReportProps = {
   startDate: string;
   endDate: string;
