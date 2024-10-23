@@ -35,7 +35,7 @@ const SubscriptionPlanCard = ({
 
   const userToken = user?.token;
 
-  const redirectUrl = Linking.createURL("subscription-plans");
+  const redirectUrl = Linking.createURL("dashboard");
 
   const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${data?.category}&planId=${data?.planId}&price=${String(data?.amount)}`;
 
