@@ -5,12 +5,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ISubject } from "../../types/types";
 import clsx from "clsx";
 import {
   useGetChapterTopics,
   useGetSubjectChapters,
+  useGetSubTopics,
 } from "../../services/queries/questionQuery";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import MultiSelect from "../shared/MultiSelect";
@@ -41,6 +42,8 @@ const NewTopicLearntForm = ({
   userStandard: number;
   userSubjects: ISubject[];
 }) => {
+  const [topicName, setTopicName] = useState("");
+
   const form = useForm<z.infer<typeof StudyDataFormSchema>>({
     resolver: zodResolver(StudyDataFormSchema),
   });
@@ -64,16 +67,24 @@ const NewTopicLearntForm = ({
     isFetching: topicsFetching,
     isLoading: topicsLoading,
     refetch: refetchTopics,
-  } = useGetChapterTopics(
-    activeSubject!,
-    selectedChapter?.name || "",
-    userStandard!
-  );
+  } = useGetChapterTopics(activeSubject!, selectedChapter?.name, userStandard!);
 
   useEffect(() => {
     form.setValue("topicNames", []);
     refetchTopics();
   }, [activeSubject, selectedChapter, refetchTopics, form.setValue]);
+
+  const {
+    data: subTopicsData,
+    isFetching: subTopicsFetching,
+    isLoading: subTopicsLoading,
+    refetch: refetchSubTopics,
+  } = useGetSubTopics(
+    activeSubject,
+    selectedChapter?.name,
+    topicName,
+    userStandard
+  );
 
   const { mutateAsync: saveStudyData, isPending } = useSaveStudyData();
 
@@ -202,9 +213,21 @@ const NewTopicLearntForm = ({
                       value: topic.name,
                     })) || []
                   }
+                  subItems={{
+                    itemName: topicName,
+                    subItems:
+                      subTopicsData?.subtopics.map((subTopic) => ({
+                        _id: subTopic._id,
+                        name: subTopic.name,
+                      })) || [],
+                  }}
+                  refetchSubTopics={refetchSubTopics}
                   loading={topicsLoading}
                   fetching={topicsFetching}
+                  subTopicFetching={subTopicsFetching}
+                  subTopicLoading={subTopicsLoading}
                   maxCount={3}
+                  setTopicName={setTopicName}
                 />
               )}
             />
