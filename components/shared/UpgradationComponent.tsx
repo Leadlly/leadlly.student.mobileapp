@@ -13,6 +13,9 @@ import { capitalizeFirstLetter } from "../../helpers/utils";
 import { colors } from "../../constants/constants";
 import { Link } from "expo-router";
 import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
+import { useAppSelector } from "../../services/redux/hooks";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
 
 const UpgradationComponent = ({
   animationSource,
@@ -28,6 +31,7 @@ const UpgradationComponent = ({
     feature: string;
   }>;
 }) => {
+  const user = useAppSelector((state) => state.user.user);
   const { data: pricingData, isLoading: fetchingPricing } =
     useGetSubscriptionPricing("main");
 
@@ -42,6 +46,15 @@ const UpgradationComponent = ({
     existingRemainingAmount && planToUpgrade
       ? planToUpgrade?.amount - existingRemainingAmount
       : planToUpgrade?.amount;
+
+  const webBaseUrl =
+    process.env.EXPO_PUBLIC_WEB_APP_URL || "https://education.leadlly.in";
+
+  const userToken = user?.token;
+
+  const redirectUrl = Linking.createURL("dashboard");
+
+  const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${upgradeType}&planId=${planToUpgrade?.planId}&price=${String(planToUpgrade?.amount)}`;
 
   return (
     <ScrollView className="flex-1 bg-white mb-16 pt-5">
@@ -89,7 +102,7 @@ const UpgradationComponent = ({
               For only {Math.round(extraPriceToPay!)}/- more a year
             </Text>
 
-            <Link
+            {/* <Link
               href={{
                 pathname: "/apply-coupon",
                 params: {
@@ -99,18 +112,23 @@ const UpgradationComponent = ({
                 },
               }}
               asChild
+            > */}
+            <TouchableOpacity
+              onPress={async () =>
+                await WebBrowser.openBrowserAsync(subscriptionUrl)
+              }
+              className="max-w-xs w-full bg-primary rounded-lg items-center flex-row justify-center space-x-4 px-2 h-11"
             >
-              <TouchableOpacity className="max-w-xs w-full bg-primary rounded-lg items-center flex-row justify-center space-x-4 px-2 h-11">
-                <Image
-                  source={require("../../assets/images/satellite-signal.png")}
-                  resizeMode="contain"
-                  className="w-7 h-7"
-                />
-                <Text className="text-base font-mada-Bold text-white">
-                  Upgrade premium ₹{Math.round(extraPriceToPay!)}/-
-                </Text>
-              </TouchableOpacity>
-            </Link>
+              <Image
+                source={require("../../assets/images/satellite-signal.png")}
+                resizeMode="contain"
+                className="w-7 h-7"
+              />
+              <Text className="text-base font-mada-Bold text-white">
+                Upgrade premium ₹{Math.round(extraPriceToPay!)}/-
+              </Text>
+            </TouchableOpacity>
+            {/* </Link> */}
           </View>
         </>
       )}
