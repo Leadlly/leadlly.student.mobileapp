@@ -22,10 +22,14 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import SubscriptionPlanCard from "../../components/subscriptionComponents/SubscriptionPlanCard";
+import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
 
 const SubscriptionPlansScreen: React.FC = () => {
   const { data: pricingData, isLoading: fetchingPricing } =
     useGetSubscriptionPricing("main");
+
+  const { existingRemainingAmount, fetchingExistingPlanPrice } =
+    useGetExistingPlanRemainingAmount();
 
   const { user } = useAppSelector((state) => state.user);
 
@@ -166,7 +170,7 @@ const SubscriptionPlansScreen: React.FC = () => {
               soon. Thanks for choosing us!
             </Text>
           </View>
-        ) : fetchingPricing ? (
+        ) : fetchingPricing || fetchingExistingPlanPrice ? (
           <View className="flex-1 items-center justify-center">
             <ActivityIndicator size={"small"} color={colors.primary} />
           </View>
@@ -214,6 +218,7 @@ const SubscriptionPlansScreen: React.FC = () => {
                     paginationIndex={paginationIndex}
                     cardWidth={cardWidth}
                     user={user}
+                    existingRemainingAmount={existingRemainingAmount}
                   />
                 ))}
               </Animated.ScrollView>

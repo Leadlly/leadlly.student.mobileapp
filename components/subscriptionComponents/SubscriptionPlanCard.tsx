@@ -22,6 +22,7 @@ const SubscriptionPlanCard = ({
   paginationIndex,
   cardWidth,
   user,
+  existingRemainingAmount,
 }: {
   index: number;
   data: MergedPlanData | null;
@@ -29,6 +30,7 @@ const SubscriptionPlanCard = ({
   paginationIndex: number;
   cardWidth: number;
   user: UserDataProps | null;
+  existingRemainingAmount: number | null;
 }) => {
   const webBaseUrl =
     process.env.EXPO_PUBLIC_WEB_APP_URL || "https://education.leadlly.in";
@@ -37,7 +39,7 @@ const SubscriptionPlanCard = ({
 
   const redirectUrl = Linking.createURL("dashboard");
 
-  const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${data?.category}&planId=${data?.planId}&price=${String(data?.amount)}`;
+  const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${data?.category}&planId=${data?.planId}&price=${String(data?.amount)}&existingRemainingAmount=${Math.round(existingRemainingAmount || 0)}`;
 
   const rnAnimatedStyle = useAnimatedStyle(() => {
     return {
