@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Link } from "expo-router";
 import { useAppSelector } from "../../services/redux/hooks";
 import { capitalizeFirstLetter } from "../../helpers/utils";
-import FreeTrialTimer from "./FreeTrialTimer";
 import clsx from "clsx";
 import UpgradeButton from "../shared/UpgradeButton";
 import LevelAndPoints from "./LevelAndPoints";
@@ -11,7 +10,7 @@ const UpgradeAndUserProfileButton = () => {
   const user = useAppSelector((state) => state.user.user);
   return (
     <View className="mr-4 flex-row items-center space-x-4">
-      {user && user.category === "free" ? (
+      {user && user.category === "free" && user.freeTrial.active ? (
         <UpgradeButton />
       ) : (
         <LevelAndPoints />
