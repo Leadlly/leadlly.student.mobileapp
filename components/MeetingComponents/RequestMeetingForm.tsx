@@ -63,7 +63,7 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
   };
 
   useEffect(() => {
-    if (userCategory === "basic" || userCategory === "pro") {
+    if (userCategory !== "premium") {
       setIsCategory(true);
     }
   }, [userCategory]);

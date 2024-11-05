@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,6 +13,8 @@ import { useGetMeetings } from "../../../services/queries/meetingQuery";
 import { colors } from "../../../constants/constants";
 import { Image } from "expo-image";
 import { TMeetingsProps } from "../../../types/types";
+import { useAppSelector } from "../../../services/redux/hooks";
+import UpgradationComponent from "../../../components/shared/UpgradationComponent";
 
 const UpcomingMeetings = () => {
   const { data, isLoading, isFetching } = useGetMeetings("");
@@ -151,9 +152,39 @@ const DoneMeetings = () => {
 };
 
 const MeetingsComponent: React.FC = () => {
+  const [isCategory, setIsCategory] = useState(false);
+
   const [selectedTab, setSelectedTab] = useState<"upcoming" | "done">(
     "upcoming"
   );
+
+  const userCategory = useAppSelector((state) => state.user.user?.category);
+
+  useEffect(() => {
+    if (userCategory === "free") {
+      setIsCategory(true);
+    }
+  }, [userCategory]);
+
+  if (isCategory === true) {
+    return (
+      <UpgradationComponent
+        animationSource={require("../../../assets/upgrade_1.json")}
+        upgradeType="pro"
+        tagline="Empower you growth with this pro feature at just Rs"
+        featureList={[
+          {
+            imageSource: require("../../../assets/images/voucher.png"),
+            feature: "Personalized one on one session",
+          },
+          {
+            imageSource: require("../../../assets/images/expensive-price.png"),
+            feature: "On demand sessions",
+          },
+        ]}
+      />
+    );
+  }
 
   return (
     <View className="flex-1">
