@@ -1,4 +1,11 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Linking,
+} from "react-native";
 import React from "react";
 import { MergedPlanData, UserDataProps } from "../../types/types";
 import Animated, {
@@ -13,7 +20,7 @@ import { colors, subscriptionFeatures } from "../../constants/constants";
 import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import * as WebBrowser from "expo-web-browser";
-import * as Linking from "expo-linking";
+import * as LinkingExpo from "expo-linking";
 
 const SubscriptionPlanCard = ({
   index,
@@ -37,7 +44,7 @@ const SubscriptionPlanCard = ({
 
   const userToken = user?.token;
 
-  const redirectUrl = Linking.createURL("dashboard");
+  const redirectUrl = LinkingExpo.createURL("dashboard");
 
   const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${data?.category}&planId=${data?.planId}&price=${String(data?.amount)}&existingRemainingAmount=${Math.round(existingRemainingAmount || 0)}`;
 
@@ -165,9 +172,7 @@ const SubscriptionPlanCard = ({
             asChild
           > */}
           <TouchableOpacity
-            onPress={async () =>
-              await WebBrowser.openBrowserAsync(subscriptionUrl)
-            }
+            onPress={() => Linking.openURL(subscriptionUrl)}
             className="bg-primary rounded-lg h-9 w-36 items-center justify-center flex-row gap-x-1.5"
           >
             <MaterialCommunityIcons
