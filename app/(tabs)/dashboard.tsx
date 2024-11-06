@@ -1,4 +1,10 @@
-import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  View,
+  AppState,
+} from "react-native";
 import ToDoList from "../../components/dashboardComponents/ToDoList";
 import NewTopicLearnt from "../../components/dashboardComponents/NewTopicLearnt";
 import SubjectProgress from "../../components/dashboardComponents/SubjectProgress";
@@ -9,7 +15,7 @@ import InitialSetupInfoModal from "../../components/dashboardComponents/InitialS
 import InitialTodoBox from "../../components/dashboardComponents/InitialTodoBox";
 import { useAppSelector } from "../../services/redux/hooks";
 import { BlurView } from "expo-blur";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { registerForPushNotificationsAsync } from "../../helpers/registerForPushNotificationsAsync";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSavePushToken } from "../../services/queries/notificationQuery";
@@ -17,6 +23,28 @@ import { colors } from "../../constants/constants";
 import ReloadApp from "../../components/shared/ReloadApp";
 
 const Dashboard = () => {
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        console.log("App has come to the foreground!");
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log("AppState", appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   const params = useLocalSearchParams<{
     initialSetup?: string;
     isRedirectedAfterSubscription?: string;
