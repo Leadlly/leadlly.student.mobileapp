@@ -23,8 +23,17 @@ import Animated, {
 } from "react-native-reanimated";
 import SubscriptionPlanCard from "../../components/subscriptionComponents/SubscriptionPlanCard";
 import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
+import useAppStateChange from "../../hooks/useAppStateChange";
+import { useLocalSearchParams } from "expo-router";
+import ReloadApp from "../../components/shared/ReloadApp";
 
 const SubscriptionPlansScreen: React.FC = () => {
+  const currentAppState = useAppStateChange();
+
+  const params = useLocalSearchParams<{
+    isRedirectedAfterSubscription?: string;
+  }>();
+
   const { data: pricingData, isLoading: fetchingPricing } =
     useGetSubscriptionPricing("main");
 
@@ -138,6 +147,15 @@ const SubscriptionPlansScreen: React.FC = () => {
       submit.remove();
     };
   }, []);
+
+  if (params.isRedirectedAfterSubscription === "true") {
+    return (
+      <ReloadApp
+        isRedirected={params.isRedirectedAfterSubscription}
+        user={user}
+      />
+    );
+  }
 
   return (
     <SafeAreaView className="bg-white flex-1">

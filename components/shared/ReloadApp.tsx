@@ -19,14 +19,21 @@ const ReloadApp = ({
 
   const dispatch = useAppDispatch();
 
-  const { data: userInfoData, isSuccess } = useGetUser();
+  const { data: userInfoData, refetch } = useGetUser();
 
   useEffect(() => {
-    if (isRedirected === "true" && isSuccess) {
-      dispatch(setUser({ ...user, ...userInfoData.user }));
-      router.setParams({ isRedirectedAfterSubscription: "false" });
-    }
-  }, [isRedirected, userInfoData, isSuccess]);
+    const updateUser = async () => {
+      if (isRedirected === "true") {
+        await refetch();
+
+        dispatch(setUser({ ...user, ...userInfoData?.user }));
+
+        router.replace("/dashboard");
+      }
+    };
+
+    updateUser();
+  }, [isRedirected, userInfoData, refetch]);
 
   return (
     <Modal
