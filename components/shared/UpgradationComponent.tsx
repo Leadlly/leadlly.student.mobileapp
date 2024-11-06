@@ -54,7 +54,7 @@ const UpgradationComponent = ({
 
   const redirectUrl = Linking.createURL("dashboard");
 
-  const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${upgradeType}&planId=${planToUpgrade?.planId}&price=${String(planToUpgrade?.amount)}`;
+  const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${upgradeType}&planId=${planToUpgrade?.planId}&price=${String(planToUpgrade?.amount)}&existingRemainingAmount=${Math.round(existingRemainingAmount || 0)}`;
 
   return (
     <ScrollView className="flex-1 bg-white mb-16 pt-5">

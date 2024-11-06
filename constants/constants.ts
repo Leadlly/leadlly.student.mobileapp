@@ -31,12 +31,12 @@ export const tabBarItems = [
     title: "Tracker",
   },
   {
-    name: "(chat)",
-    title: "Chat",
-  },
-  {
     name: "(quizzes)",
     title: "Quizzes",
+  },
+  {
+    name: "(chat)",
+    title: "Chat",
   },
   {
     name: "errorbook",
