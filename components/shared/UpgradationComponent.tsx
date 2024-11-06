@@ -11,7 +11,6 @@ import LottieView, { AnimationObject } from "lottie-react-native";
 import { useGetSubscriptionPricing } from "../../services/queries/subscriptionQuery";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import { colors } from "../../constants/constants";
-import { Link } from "expo-router";
 import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
 import { useAppSelector } from "../../services/redux/hooks";
 import * as WebBrowser from "expo-web-browser";
@@ -54,7 +53,7 @@ const UpgradationComponent = ({
 
   const redirectUrl = Linking.createURL("dashboard");
 
-  const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${upgradeType}&planId=${planToUpgrade?.planId}&price=${String(planToUpgrade?.amount)}`;
+  const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&redirect=${encodeURIComponent(redirectUrl)}&category=${upgradeType}&planId=${planToUpgrade?.planId}&price=${String(planToUpgrade?.amount)}&existingRemainingAmount=${Math.round(existingRemainingAmount || 0)}`;
 
   return (
     <ScrollView className="flex-1 bg-white mb-16 pt-5">
@@ -114,9 +113,7 @@ const UpgradationComponent = ({
               asChild
             > */}
             <TouchableOpacity
-              onPress={async () =>
-                await WebBrowser.openBrowserAsync(subscriptionUrl)
-              }
+              onPress={() => Linking.openURL(subscriptionUrl)}
               className="max-w-xs w-full bg-primary rounded-lg items-center flex-row justify-center space-x-4 px-2 h-11"
             >
               <Image

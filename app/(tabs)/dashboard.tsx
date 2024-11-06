@@ -15,8 +15,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSavePushToken } from "../../services/queries/notificationQuery";
 import { colors } from "../../constants/constants";
 import ReloadApp from "../../components/shared/ReloadApp";
+import useAppStateChange from "../../hooks/useAppStateChange";
 
 const Dashboard = () => {
+  const currentAppState = useAppStateChange();
+
   const params = useLocalSearchParams<{
     initialSetup?: string;
     isRedirectedAfterSubscription?: string;
