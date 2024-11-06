@@ -16,7 +16,7 @@ const ErrorBook = () => {
   const { data: errorBookData, isLoading } = useGetErrorBook();
 
   useEffect(() => {
-    if (userCategory === "basic") {
+    if (userCategory === "free") {
       setIsCategory(true);
     }
   }, [userCategory]);

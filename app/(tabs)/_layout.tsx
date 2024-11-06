@@ -4,8 +4,11 @@ import TabBar from "../../components/TabBar";
 import UpgradeAndUserProfileButton from "../../components/dashboardComponents/UpgradeAndUserProfileButton";
 import { Text, TouchableOpacity } from "react-native";
 import { Octicons } from "@expo/vector-icons";
+import { useAppSelector } from "../../services/redux/hooks";
 
 const TabsLayout = () => {
+  const userCategory = useAppSelector((state) => state.user.user?.category);
+
   return (
     <Tabs tabBar={(props) => <TabBar {...props} />}>
       {tabBarItems.map((item) => (
@@ -26,14 +29,18 @@ const TabsLayout = () => {
                   return <UpgradeAndUserProfileButton />;
                 case "errorbook":
                   return (
-                    <Link href="(error-Notes)/error-notes" asChild>
-                      <TouchableOpacity className="bg-primary px-3 py-1 mr-5 rounded-lg flex-row  items-center flex ">
-                        <Octicons name="pencil" size={13} color="white" />
-                        <Text className="text-white font-mada-semibold ml-1.5">
-                          Notes
-                        </Text>
-                      </TouchableOpacity>
-                    </Link>
+                    <>
+                      {userCategory !== "free" ? (
+                        <Link href="(error-Notes)/error-notes" asChild>
+                          <TouchableOpacity className="bg-primary px-3 py-1 mr-5 rounded-lg flex-row  items-center flex ">
+                            <Octicons name="pencil" size={13} color="white" />
+                            <Text className="text-white font-mada-semibold ml-1.5">
+                              Notes
+                            </Text>
+                          </TouchableOpacity>
+                        </Link>
+                      ) : null}
+                    </>
                   );
                 default:
                   return null;

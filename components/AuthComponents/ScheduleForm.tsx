@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import {
   ActivityIndicator,
   Pressable,
@@ -7,8 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { isValid, z } from "zod";
+import { z } from "zod";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Feather } from "@expo/vector-icons";
 import { FormType, StudentPersonalInfoProps } from "../../types/types";
@@ -19,7 +18,6 @@ import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import { setUser } from "../../services/redux/slices/userSlice";
 import clsx from "clsx";
-import { useActivateFreeTrial } from "../../services/queries/subscriptionQuery";
 
 const ScheduleForm = ({
   next,
@@ -37,9 +35,6 @@ const ScheduleForm = ({
   >;
   isSavingInitialInfo: boolean;
 }) => {
-  const { mutateAsync: activateFreeTrial, isPending: isActivatingFreeTrial } =
-    useActivateFreeTrial();
-
   const { handleSubmit } = form;
   const user = useAppSelector((state) => state.user.user);
 
@@ -56,14 +51,11 @@ const ScheduleForm = ({
         gender: data.gender,
       });
 
-      const freeTrialResponse = await activateFreeTrial();
-
-      dispatch(setUser({ ...user, ...freeTrialResponse.user }));
+      dispatch(setUser({ ...user, ...saveInitialInfoResponse.user }));
 
       Toast.show({
         type: "success",
         text1: saveInitialInfoResponse.message,
-        text2: freeTrialResponse.message,
       });
 
       router.replace("/dashboard?initialSetup=true");
@@ -141,9 +133,9 @@ const ScheduleForm = ({
       <Pressable
         className="mt-8 py-2 px-6 bg-[#9654F4] rounded-lg flex flex-row space-x-2 justify-center items-center"
         onPress={handleSubmit(onSubmit)}
-        disabled={isSavingInitialInfo || isActivatingFreeTrial}
+        disabled={isSavingInitialInfo}
       >
-        {isSavingInitialInfo || isActivatingFreeTrial ? (
+        {isSavingInitialInfo ? (
           <ActivityIndicator size={"small"} color={"white"} />
         ) : (
           <>
