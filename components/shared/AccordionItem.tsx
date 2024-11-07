@@ -69,7 +69,7 @@ const AccordionItem = ({
           >
             <Ionicons name="chevron-down" size={15} color={colors.iconGray} />
           </Animated.View>
-          <Text className="flex-1 text-base font-mada-regular leading-tight">
+          <Text className="flex-1 text-base font-mada-regular leading-5">
             {capitalizeFirstLetter(item.label)}
           </Text>
         </Pressable>

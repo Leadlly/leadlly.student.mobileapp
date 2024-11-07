@@ -12,6 +12,14 @@ export const StudyDataFormSchema = z.object({
       z.object({
         _id: z.string(),
         name: z.string(),
+        subItems: z
+          .array(
+            z.object({
+              _id: z.string(),
+              name: z.string(),
+            })
+          )
+          .optional(),
       })
     )
     .min(1, { message: "Please select at least one topic" })

@@ -73,6 +73,12 @@ const StudyProgress = () => {
   useEffect(() => {
     form.setValue("topicNames", []);
     refetchTopics();
+    const topicNames =
+      topicsData?.topics.map((topic) => ({
+        _id: topic._id,
+        name: topic.name,
+      })) || [];
+    form.setValue("topicNames", topicNames);
   }, [activeSubject, selectedChapter, refetchTopics, form.setValue]);
 
   const { mutateAsync: saveStudyData, isPending: savingStudyData } =
@@ -176,7 +182,7 @@ const StudyProgress = () => {
           />
         </View>
 
-        <View>
+        {/* <View>
           <Controller
             name="topicNames"
             control={form.control}
@@ -200,7 +206,7 @@ const StudyProgress = () => {
               />
             )}
           />
-        </View>
+        </View> */}
 
         <View className="items-center justify-center">
           <TouchableOpacity

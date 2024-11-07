@@ -2,7 +2,6 @@ import { colors } from "../../constants/constants";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Animated,
   Pressable,
   ScrollView,
   Text,
@@ -13,10 +12,8 @@ import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import ModalComponent from "./ModalComponent";
-import { Ionicons } from "@expo/vector-icons";
 import AccordionItem from "./AccordionItem";
-import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
-import { SubTopic } from "../../types/types";
+import Input from "./Input";
 
 const MultiSelect = ({
   items,
@@ -33,12 +30,21 @@ const MultiSelect = ({
   subTopicLoading,
   maxCount = 4,
   setTopicName,
-  refetchSubTopics,
 }: {
   items: { _id: string; label: string; value: string }[];
   subItems: { itemName: string; subItems: { _id: string; name: string }[] };
-  defaultValue: Array<{ _id: string; name: string }>;
-  onValueChange: (value: Array<{ _id: string; name: string }>) => void;
+  defaultValue: Array<{
+    _id: string;
+    name: string;
+    subItems?: Array<{ _id: string; name: string }>;
+  }>;
+  onValueChange: (
+    value: Array<{
+      _id: string;
+      name: string;
+      subItems?: Array<{ _id: string; name: string }>;
+    }>
+  ) => void;
   inputStyle?: string;
   placeholder?: string;
   loading?: boolean;
@@ -49,26 +55,27 @@ const MultiSelect = ({
   labelStyle?: string;
   maxCount?: number;
   setTopicName: React.Dispatch<React.SetStateAction<string>>;
-  refetchSubTopics: (options?: RefetchOptions) => Promise<
-    QueryObserverResult<
-      {
-        subtopics: SubTopic[];
-        success: boolean;
-      },
-      Error
-    >
-  >;
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const [expanded, setExpanded] = useState<number | null>(null);
+
+  const filterItemsBasedOnSearch = items.filter((item) =>
+    item.value.toString().toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   const toggleAccordion = (value: string, index: number) => {
     setTopicName(value);
     setExpanded((prevIndex) => (prevIndex === index ? null : index));
   };
 
-  const [selectedValues, setSelectedValues] =
-    useState<Array<{ _id: string; name: string }>>(defaultValue);
+  const [selectedValues, setSelectedValues] = useState<
+    Array<{
+      _id: string;
+      name: string;
+      subItems?: Array<{ _id: string; name: string }>;
+    }>
+  >(defaultValue);
 
   useEffect(() => {
     setSelectedValues(defaultValue);
@@ -79,7 +86,11 @@ const MultiSelect = ({
     onValueChange([]);
   };
 
-  const handleSelectValue = (value: { _id: string; name: string }) => {
+  const handleSelectValue = (value: {
+    _id: string;
+    name: string;
+    subItems: Array<{ _id: string; name: string }>;
+  }) => {
     setSelectedValues((prevValues) => {
       const valueIndex = prevValues.findIndex((v) => v._id === value._id);
       const newSelectedValues =
@@ -99,6 +110,7 @@ const MultiSelect = ({
       const allValues = items.map((item) => ({
         _id: item._id,
         name: item.value,
+        subItems: item.value === subItems.itemName ? subItems.subItems : [],
       }));
       setSelectedValues(allValues);
       onValueChange(allValues);
@@ -110,6 +122,44 @@ const MultiSelect = ({
     const newSelectedValues = selectedValues.slice(0, maxCount);
     setSelectedValues(newSelectedValues);
     onValueChange(newSelectedValues);
+  };
+
+  const handleSelectSubTopic = (
+    item: {
+      _id: string;
+      label: string;
+      value: string;
+    },
+    subItem: { _id: string; name: string }
+  ) => {
+    setSelectedValues((prevValues) => {
+      const value = prevValues.find((v) => v._id === item._id);
+      let newSelectedValue;
+      if (value) {
+        const subItemIndex = value?.subItems?.findIndex(
+          (v) => v._id === subItem._id
+        );
+        if (subItemIndex && subItemIndex >= 0) {
+          const filteredSubItem = value.subItems?.filter(
+            (_, index) => index !== subItemIndex
+          );
+          value.subItems = filteredSubItem;
+        } else {
+          value.subItems?.push(subItem);
+        }
+        newSelectedValue = [...prevValues];
+      } else {
+        const selectedSubItem = {
+          _id: item._id,
+          name: item.value,
+          subItems: [subItem],
+        };
+        newSelectedValue = [...prevValues, selectedSubItem];
+      }
+
+      onValueChange(newSelectedValue);
+      return newSelectedValue;
+    });
   };
 
   return (
@@ -156,7 +206,10 @@ const MultiSelect = ({
                       className="ml-2"
                       onPress={(e) => {
                         e.stopPropagation();
-                        handleSelectValue(value);
+                        handleSelectValue({
+                          ...value,
+                          subItems: subItems.subItems,
+                        });
                       }}
                     >
                       <AntDesign name="close" size={12} color="white" />
@@ -213,107 +266,156 @@ const MultiSelect = ({
             Select {label}
           </Text>
         </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          nestedScrollEnabled={true}
-          className="h-80 bg-white rounded-lg rounded-b-none border border-input-border py-1"
-        >
-          {loading || fetching ? (
-            <View>
-              <ActivityIndicator size={"small"} color={colors.primary} />
-            </View>
-          ) : items && items.length > 0 ? (
-            <>
-              <Pressable
-                onPress={() => handleSelectAll()}
-                className="flex-row items-center justify-between px-4 py-3 border-b border-input-border"
-              >
-                <Text className="text-base font-mada-medium leading-tight">
-                  Select All
-                </Text>
-                <View
-                  className={clsx(
-                    "w-4 h-4 rounded border items-center justify-center",
-                    selectedValues.length === items.length &&
-                      "bg-primary border-primary"
-                  )}
-                >
-                  {selectedValues.length === items.length && (
-                    <Feather name="check" size={14} color="white" />
-                  )}
-                </View>
-              </Pressable>
-              {items.map((item, index) => (
-                <AccordionItem
-                  key={item._id}
-                  item={item}
-                  isExpanded={expanded === index}
-                  selectedValues={selectedValues}
-                  onToggle={() => toggleAccordion(item.value, index)}
-                  onSelectValue={() =>
-                    handleSelectValue({ _id: item._id, name: item.value })
-                  }
-                  content={
-                    <ScrollView
-                      nestedScrollEnabled={true}
-                      className="bg-primary/10 border-b border-input-border"
+        <View className="bg-white rounded-lg rounded-b-none border border-input-border py-1">
+          <View className="p-2 border-b border-input-border">
+            <Input
+              inputStyle="h-8 text-sm pr-3"
+              placeholder="Search a chapter"
+              icon={<Feather name="search" size={15} color={colors.iconGray} />}
+              icon2={
+                searchValue.length > 0 ? (
+                  <AntDesign
+                    name="closecircleo"
+                    size={15}
+                    color={colors.iconGray}
+                  />
+                ) : null
+              }
+              handlePress={() => setSearchValue("")}
+              value={searchValue}
+              onChangeText={setSearchValue}
+            />
+          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}
+            className="h-72"
+          >
+            {loading || fetching ? (
+              <View>
+                <ActivityIndicator size={"small"} color={colors.primary} />
+              </View>
+            ) : filterItemsBasedOnSearch &&
+              filterItemsBasedOnSearch.length > 0 ? (
+              <>
+                {searchValue.length <= 0 && (
+                  <Pressable
+                    onPress={() => handleSelectAll()}
+                    className="flex-row items-center justify-between px-4 py-3 border-b border-input-border"
+                  >
+                    <Text className="text-base font-mada-medium leading-tight">
+                      Select All
+                    </Text>
+                    <View
+                      className={clsx(
+                        "w-4 h-4 rounded border items-center justify-center",
+                        selectedValues.length === items.length &&
+                          "bg-primary border-primary"
+                      )}
                     >
-                      {subTopicFetching || subTopicLoading ? (
-                        <View className="flex-1 items-center justify-center my-6">
-                          <ActivityIndicator size={10} color={colors.primary} />
-                        </View>
-                      ) : (
-                        <>
-                          {subItems.subItems && subItems.subItems.length > 0 ? (
-                            subItems.subItems.map((subItem, i) => (
-                              <Pressable
-                                key={subItem._id}
-                                className={clsx(
-                                  "px-6 py-3 border-b border-input-border flex-row items-center justify-between",
-                                  subItems.subItems.length - 1 === i &&
-                                    "border-b-0"
-                                )}
-                              >
-                                <Text className="text-sm font-mada-medium flex-1">
-                                  {capitalizeFirstLetter(subItem.name)}
-                                </Text>
-                                <View
+                      {selectedValues.length === items.length && (
+                        <Feather name="check" size={14} color="white" />
+                      )}
+                    </View>
+                  </Pressable>
+                )}
+                {filterItemsBasedOnSearch.map((item, index) => (
+                  <AccordionItem
+                    key={item._id}
+                    item={item}
+                    isExpanded={expanded === index}
+                    selectedValues={selectedValues}
+                    onToggle={() => toggleAccordion(item.value, index)}
+                    onSelectValue={() =>
+                      handleSelectValue({
+                        _id: item._id,
+                        name: item.value,
+                        subItems:
+                          subItems.itemName === item.value
+                            ? subItems.subItems
+                            : [],
+                      })
+                    }
+                    content={
+                      <ScrollView
+                        nestedScrollEnabled={true}
+                        className="bg-primary/10 border-b border-input-border"
+                      >
+                        {subTopicFetching || subTopicLoading ? (
+                          <View className="flex-1 items-center justify-center my-6">
+                            <ActivityIndicator
+                              size={10}
+                              color={colors.primary}
+                            />
+                          </View>
+                        ) : (
+                          <>
+                            {subItems.subItems &&
+                            subItems.subItems.length > 0 ? (
+                              subItems.subItems.map((subItem, i) => (
+                                <Pressable
+                                  key={subItem._id}
+                                  onPress={() =>
+                                    handleSelectSubTopic(item, subItem)
+                                  }
                                   className={clsx(
-                                    "w-3.5 h-3.5 rounded border items-center justify-center"
+                                    "px-6 py-3 border-b border-input-border flex-row items-center justify-between",
+                                    subItems.subItems.length - 1 === i &&
+                                      "border-b-0"
                                   )}
                                 >
-                                  {/* {selectedValues.length === items.length && (
-                                    <Feather
-                                      name="check"
-                                      size={12}
-                                      color="white"
-                                    />
-                                  )} */}
-                                </View>
-                              </Pressable>
-                            ))
-                          ) : (
-                            <View className="flex-1 items-center justify-center px-3 my-6">
-                              <Text className="text-xs text-secondary-text font-mada-medium text-center">
-                                No subtopic available!
-                              </Text>
-                            </View>
-                          )}
-                        </>
-                      )}
-                    </ScrollView>
-                  }
-                />
-              ))}
-            </>
-          ) : (
-            <View className="h-20 items-center justify-center">
-              <Text className="text-sm leading-tight font-mada-medium text-tab-item-gray">
-                No items to show!
-              </Text>
-            </View>
-          )}
-        </ScrollView>
+                                  <Text className="text-sm font-mada-medium flex-1">
+                                    {capitalizeFirstLetter(subItem.name)}
+                                  </Text>
+                                  <View
+                                    className={clsx(
+                                      "w-3.5 h-3.5 rounded border items-center justify-center",
+                                      selectedValues
+                                        ?.find(
+                                          (val) => val?.name === item.value
+                                        )
+                                        ?.subItems?.some(
+                                          (v) => v._id === subItem._id
+                                        ) && "bg-primary border-primary"
+                                    )}
+                                  >
+                                    {selectedValues
+                                      .find((val) => val.name === item.value)
+                                      ?.subItems?.some(
+                                        (v) => v._id === subItem._id
+                                      ) && (
+                                      <Feather
+                                        name="check"
+                                        size={12}
+                                        color="white"
+                                      />
+                                    )}
+                                  </View>
+                                </Pressable>
+                              ))
+                            ) : (
+                              <View className="flex-1 items-center justify-center px-3 my-6">
+                                <Text className="text-xs text-secondary-text font-mada-medium text-center">
+                                  No subtopic available!
+                                </Text>
+                              </View>
+                            )}
+                          </>
+                        )}
+                      </ScrollView>
+                    }
+                  />
+                ))}
+              </>
+            ) : (
+              <View className="h-20 items-center justify-center">
+                <Text className="text-sm leading-tight font-mada-medium text-tab-item-gray">
+                  No items to show!
+                </Text>
+              </View>
+            )}
+          </ScrollView>
+        </View>
 
         <View className="fixed bottom-0 inset-x-0 h-10 border border-t-0 border-input-border rounded-b-lg flex-row items-center justify-between bg-white">
           {selectedValues.length > 0 && (

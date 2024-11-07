@@ -78,7 +78,6 @@ const NewTopicLearntForm = ({
     data: subTopicsData,
     isFetching: subTopicsFetching,
     isLoading: subTopicsLoading,
-    refetch: refetchSubTopics,
   } = useGetSubTopics(
     activeSubject,
     selectedChapter?.name,
@@ -97,6 +96,7 @@ const NewTopicLearntForm = ({
       topics: data.topicNames.map((topic) => ({
         _id: topic._id,
         name: topic.name,
+        subtopics: topic.subItems,
       })),
       chapter: {
         _id: data?.chapterName?._id,
@@ -221,7 +221,6 @@ const NewTopicLearntForm = ({
                         name: subTopic.name,
                       })) || [],
                   }}
-                  refetchSubTopics={refetchSubTopics}
                   loading={topicsLoading}
                   fetching={topicsFetching}
                   subTopicFetching={subTopicsFetching}

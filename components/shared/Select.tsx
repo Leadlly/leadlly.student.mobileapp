@@ -11,6 +11,8 @@ import Feather from "@expo/vector-icons/Feather";
 import clsx from "clsx";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import ModalComponent from "./ModalComponent";
+import Input from "./Input";
+import { AntDesign } from "@expo/vector-icons";
 
 const Select = ({
   items,
@@ -38,6 +40,7 @@ const Select = ({
   overallClassName?: string;
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const [selectedValue, setSelectedValue] = useState<{
     name: string | number;
     _id: string;
@@ -46,6 +49,10 @@ const Select = ({
   useEffect(() => {
     setSelectedValue(defaultValue);
   }, [defaultValue]);
+
+  const filterItemsBasedOnSearch = items.filter((item) =>
+    item.value.toString().toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   const handleSelectValue = (data: {
     _id: string;
@@ -100,42 +107,66 @@ const Select = ({
             Select a {label}
           </Text>
         </View>
-        <ScrollView
-          className={clsx(
-            "h-80 bg-white rounded-lg border border-input-border py-1",
-            listContainerStyle
-          )}
-          showsVerticalScrollIndicator={false}
-          nestedScrollEnabled={true}
-        >
-          {loading || fetching ? (
-            <View>
-              <ActivityIndicator size={"small"} color={colors.primary} />
-            </View>
-          ) : items && items.length > 0 ? (
-            items.map((item) => (
-              <Pressable
-                key={item.value}
-                className={clsx(
-                  "flex-row items-center justify-between px-4 py-3 border-b border-input-border",
-                  items[items.length - 1].value === item.value && "border-b-0"
-                )}
-                onPress={() => handleSelectValue(item)}
-              >
-                <Text>{capitalizeFirstLetter(String(item.label))}</Text>
-                {selectedValue?.name === item.value && (
-                  <Feather name="check" size={20} color="black" />
-                )}
-              </Pressable>
-            ))
-          ) : (
-            <View className="h-10 items-center justify-center">
-              <Text className="text-sm leading-tight font-mada-medium text-tab-item-gray">
-                No items to show!
-              </Text>
-            </View>
-          )}
-        </ScrollView>
+        <View className="bg-white rounded-lg border border-input-border">
+          <View className="p-2 border-b border-input-border">
+            <Input
+              inputStyle="h-8 text-sm pr-3"
+              placeholder="Search a chapter"
+              icon={<Feather name="search" size={15} color={colors.iconGray} />}
+              icon2={
+                searchValue.length > 0 ? (
+                  <AntDesign
+                    name="closecircleo"
+                    size={15}
+                    color={colors.iconGray}
+                  />
+                ) : null
+              }
+              handlePress={() => setSearchValue("")}
+              value={searchValue}
+              onChangeText={setSearchValue}
+            />
+          </View>
+
+          <ScrollView
+            className={clsx("h-72", listContainerStyle)}
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}
+          >
+            {loading || fetching ? (
+              <View>
+                <ActivityIndicator size={"small"} color={colors.primary} />
+              </View>
+            ) : filterItemsBasedOnSearch &&
+              filterItemsBasedOnSearch.length > 0 ? (
+              filterItemsBasedOnSearch.map((item) => (
+                <Pressable
+                  key={item.value}
+                  className={clsx(
+                    "flex-row items-center justify-between px-4 py-3 border-b border-input-border",
+                    filterItemsBasedOnSearch[
+                      filterItemsBasedOnSearch.length - 1
+                    ].value === item.value && "border-b-0"
+                  )}
+                  onPress={() => handleSelectValue(item)}
+                >
+                  <Text className="flex-1 text-base font-mada-regular leading-5">
+                    {capitalizeFirstLetter(String(item.label))}
+                  </Text>
+                  {selectedValue?.name === item.value && (
+                    <Feather name="check" size={20} color="black" />
+                  )}
+                </Pressable>
+              ))
+            ) : (
+              <View className="h-10 items-center justify-center">
+                <Text className="text-sm leading-tight font-mada-medium text-tab-item-gray">
+                  No items to show!
+                </Text>
+              </View>
+            )}
+          </ScrollView>
+        </View>
       </ModalComponent>
     </View>
   );
