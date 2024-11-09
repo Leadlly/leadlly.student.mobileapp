@@ -18,6 +18,9 @@ const PlannerSubjectList = ({
   const mergedData = [
     ...getContinuousRevisionTopicsForSubject(item.name),
     ...getBackRevisionTopicsForSubject(item.name),
+  ];
+
+  const mergedSubtopics = [
     ...getContinuousRevisionSubTopicsForSubject(item.name),
   ];
 
@@ -39,10 +42,14 @@ const PlannerSubjectList = ({
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
       >
-        {mergedData && mergedData.length > 0 ? (
+        {(mergedData && mergedData.length > 0) ||
+        (mergedSubtopics && mergedSubtopics.length > 0) ? (
           <>
             {mergedData.map((item) => (
               <ChapterTopicItem key={item._id} item={item} />
+            ))}
+            {mergedSubtopics.map((item) => (
+              <ChapterTopicItem key={item._id} item={item} isSubtopics={true} />
             ))}
           </>
         ) : (

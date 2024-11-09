@@ -86,7 +86,7 @@ const WeeklyPlanButton = ({
                   " / "}
                 {item.continuousRevisionSubTopics
                   .map((subtopics: TRevisionProps) =>
-                    capitalizeFirstLetter(subtopics.topic.name)
+                    capitalizeFirstLetter(subtopics.subtopic.name)
                   )
                   .join(" / ")}
               </>

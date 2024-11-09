@@ -129,6 +129,18 @@ export type Topic = {
   }[];
 };
 
+export type SubTopic = {
+  id: string;
+  name: string;
+  plannerFrequency?: number;
+  level?: string;
+  overall_efficiency?: number;
+  studiedAt: {
+    date?: Date;
+    efficiency?: number;
+  }[];
+};
+
 export type Chapter = {
   id: string;
   name: string;
@@ -152,6 +164,7 @@ export type TRevisionProps = {
   tag: string;
   topic: Topic;
   chapter: Chapter;
+  subtopic: SubTopic;
   subject: ISubject;
   standard: number;
   createdAt?: Date;
