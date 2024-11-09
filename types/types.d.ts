@@ -165,6 +165,7 @@ export type TDayProps = {
   date: string;
   day: string;
   continuousRevisionTopics: TRevisionProps[];
+  continuousRevisionSubTopics: TRevisionProps[];
   backRevisionTopics: TRevisionProps[];
   questions: { [key: string]: any };
   completedTopics: any[];
@@ -236,6 +237,16 @@ export type SubTopic = {
   subtopics: any[];
   topicId: string;
   topicName: string;
+};
+
+export type TopicsWithSubtopicsProps = {
+  _id: string;
+  chapterId: string;
+  name: string;
+  subtopics: Array<{
+    _id: string;
+    name: string;
+  }>;
 };
 
 export type TStudentReportProps = {

@@ -17,7 +17,6 @@ import Input from "./Input";
 
 const MultiSelect = ({
   items,
-  subItems,
   defaultValue = [],
   onValueChange,
   inputStyle,
@@ -26,13 +25,15 @@ const MultiSelect = ({
   placeholder = "Select options",
   fetching,
   loading,
-  subTopicFetching,
-  subTopicLoading,
   maxCount = 4,
-  setTopicName,
+  selectedValues,
+  setSelectedValues,
 }: {
-  items: { _id: string; label: string; value: string }[];
-  subItems: { itemName: string; subItems: { _id: string; name: string }[] };
+  items: {
+    _id: string;
+    name: string;
+    subItems: Array<{ _id: string; name: string }>;
+  }[];
   defaultValue: Array<{
     _id: string;
     name: string;
@@ -45,41 +46,90 @@ const MultiSelect = ({
       subItems?: Array<{ _id: string; name: string }>;
     }>
   ) => void;
+  selectedValues: {
+    _id: string;
+    name: string;
+    subItems?: Array<{
+      _id: string;
+      name: string;
+    }>;
+  }[];
+  setSelectedValues: React.Dispatch<
+    React.SetStateAction<
+      {
+        _id: string;
+        name: string;
+        subItems?: Array<{
+          _id: string;
+          name: string;
+        }>;
+      }[]
+    >
+  >;
   inputStyle?: string;
   placeholder?: string;
   loading?: boolean;
   fetching?: boolean;
-  subTopicLoading: boolean;
-  subTopicFetching: boolean;
   label?: string;
   labelStyle?: string;
   maxCount?: number;
-  setTopicName: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [expanded, setExpanded] = useState<number | null>(null);
 
   const filterItemsBasedOnSearch = items.filter((item) =>
-    item.value.toString().toLowerCase().includes(searchValue.toLowerCase())
+    item.name.toString().toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  const toggleAccordion = (value: string, index: number) => {
-    setTopicName(value);
+  const toggleAccordion = (index: number) => {
     setExpanded((prevIndex) => (prevIndex === index ? null : index));
   };
 
-  const [selectedValues, setSelectedValues] = useState<
-    Array<{
+  // useEffect(() => {
+  //   setSelectedValues(defaultValue);
+  // }, [defaultValue]);
+
+  function checkAndRemoveSubItems(
+    item: {
       _id: string;
       name: string;
-      subItems?: Array<{ _id: string; name: string }>;
-    }>
-  >(defaultValue);
+      subItems: { _id: string; name: string }[];
+    },
+    newSelectedValue: {
+      _id: string;
+      name: string;
+      subItems?: Array<{
+        _id: string;
+        name: string;
+      }>;
+    }[]
+  ): {
+    _id: string;
+    name: string;
+    subItems?: Array<{
+      _id: string;
+      name: string;
+    }>;
+  }[] {
+    return newSelectedValue.map((newValue) => {
+      if (newValue.subItems) {
+        const matchedItems = newValue.subItems.filter((subItem) => {
+          return item.subItems.some(
+            (itemSubItem) => itemSubItem._id === subItem._id
+          );
+        });
 
-  useEffect(() => {
-    setSelectedValues(defaultValue);
-  }, [defaultValue]);
+        if (
+          matchedItems.length === item.subItems.length &&
+          matchedItems.length === newValue.subItems.length
+        ) {
+          return { ...newValue, subItems: [] };
+        }
+      }
+      return newValue;
+    });
+  }
 
   const handleClear = () => {
     setSelectedValues([]);
@@ -98,7 +148,9 @@ const MultiSelect = ({
           ? prevValues.filter((_, index) => index !== valueIndex)
           : [...prevValues, value];
 
-      onValueChange(newSelectedValues);
+      const updatedValues = checkAndRemoveSubItems(value, newSelectedValues);
+
+      onValueChange(updatedValues);
       return newSelectedValues;
     });
   };
@@ -109,11 +161,17 @@ const MultiSelect = ({
     } else {
       const allValues = items.map((item) => ({
         _id: item._id,
-        name: item.value,
-        subItems: item.value === subItems.itemName ? subItems.subItems : [],
+        name: item.name,
+        subItems: item.subItems,
       }));
       setSelectedValues(allValues);
-      onValueChange(allValues);
+
+      const updatedValues = items.map((item) => ({
+        _id: item._id,
+        name: item.name,
+        subItems: [],
+      }));
+      onValueChange(updatedValues);
       setShowDropdown(false);
     }
   };
@@ -127,37 +185,69 @@ const MultiSelect = ({
   const handleSelectSubTopic = (
     item: {
       _id: string;
-      label: string;
-      value: string;
+      name: string;
+      subItems: { _id: string; name: string }[];
     },
     subItem: { _id: string; name: string }
   ) => {
     setSelectedValues((prevValues) => {
-      const value = prevValues.find((v) => v._id === item._id);
-      let newSelectedValue;
-      if (value) {
-        const subItemIndex = value?.subItems?.findIndex(
+      const valueIndex = prevValues.findIndex((v) => v._id === item._id);
+      let newSelectedValue: Array<{
+        _id: string;
+        name: string;
+        subItems?: Array<{ _id: string; name: string }>;
+      }> = [];
+
+      if (valueIndex !== -1) {
+        // Update existing value
+        const value = { ...prevValues[valueIndex] };
+        const subItemIndex = value.subItems?.findIndex(
           (v) => v._id === subItem._id
         );
-        if (subItemIndex && subItemIndex >= 0) {
-          const filteredSubItem = value.subItems?.filter(
+
+        if (subItemIndex !== -1 && value.subItems) {
+          // Deselect subItem
+          value.subItems = value.subItems.filter(
             (_, index) => index !== subItemIndex
           );
-          value.subItems = filteredSubItem;
-        } else {
-          value.subItems?.push(subItem);
+
+          // If there are no more subItems, deselect the entire item
+          if (value.subItems.length === 0) {
+            newSelectedValue = [
+              ...prevValues.slice(0, valueIndex),
+              ...prevValues.slice(valueIndex + 1),
+            ];
+          } else {
+            newSelectedValue = [
+              ...prevValues.slice(0, valueIndex),
+              value,
+              ...prevValues.slice(valueIndex + 1),
+            ];
+          }
+        } else if (value.subItems) {
+          // Select subItem
+          value.subItems = [...(value.subItems || []), subItem];
+          newSelectedValue = [
+            ...prevValues.slice(0, valueIndex),
+            value,
+            ...prevValues.slice(valueIndex + 1),
+          ];
         }
-        newSelectedValue = [...prevValues];
       } else {
-        const selectedSubItem = {
-          _id: item._id,
-          name: item.value,
-          subItems: [subItem],
-        };
-        newSelectedValue = [...prevValues, selectedSubItem];
+        // Add new value
+        newSelectedValue = [
+          ...prevValues,
+          {
+            _id: item._id,
+            name: item.name,
+            subItems: [subItem],
+          },
+        ];
       }
 
-      onValueChange(newSelectedValue);
+      const updatedValues = checkAndRemoveSubItems(item, newSelectedValue);
+
+      onValueChange(updatedValues);
       return newSelectedValue;
     });
   };
@@ -189,7 +279,7 @@ const MultiSelect = ({
           <View className="flex-row flex-1 items-center justify-between">
             <View className="flex-row flex-1 gap-1 flex-wrap">
               {selectedValues.slice(0, maxCount).map((value) => {
-                const option = items?.find((o) => o.value === value.name);
+                const option = items?.find((o) => o.name === value.name);
                 return (
                   <View
                     key={value._id}
@@ -200,15 +290,16 @@ const MultiSelect = ({
                       ellipsizeMode="tail"
                       className="max-w-[250px] text-white text-xs font-mada-medium leading-tight"
                     >
-                      {option?.label}
+                      {capitalizeFirstLetter(option?.name)}
                     </Text>
                     <Pressable
                       className="ml-2"
                       onPress={(e) => {
                         e.stopPropagation();
                         handleSelectValue({
-                          ...value,
-                          subItems: subItems.subItems,
+                          _id: value._id,
+                          name: value.name,
+                          subItems: value.subItems!,
                         });
                       }}
                     >
@@ -325,15 +416,12 @@ const MultiSelect = ({
                     item={item}
                     isExpanded={expanded === index}
                     selectedValues={selectedValues}
-                    onToggle={() => toggleAccordion(item.value, index)}
+                    onToggle={() => toggleAccordion(index)}
                     onSelectValue={() =>
                       handleSelectValue({
                         _id: item._id,
-                        name: item.value,
-                        subItems:
-                          subItems.itemName === item.value
-                            ? subItems.subItems
-                            : [],
+                        name: item.name,
+                        subItems: item.subItems,
                       })
                     }
                     content={
@@ -341,66 +429,51 @@ const MultiSelect = ({
                         nestedScrollEnabled={true}
                         className="bg-primary/10 border-b border-input-border"
                       >
-                        {subTopicFetching || subTopicLoading ? (
-                          <View className="flex-1 items-center justify-center my-6">
-                            <ActivityIndicator
-                              size={10}
-                              color={colors.primary}
-                            />
-                          </View>
-                        ) : (
-                          <>
-                            {subItems.subItems &&
-                            subItems.subItems.length > 0 ? (
-                              subItems.subItems.map((subItem, i) => (
-                                <Pressable
-                                  key={subItem._id}
-                                  onPress={() =>
-                                    handleSelectSubTopic(item, subItem)
-                                  }
-                                  className={clsx(
-                                    "px-6 py-3 border-b border-input-border flex-row items-center justify-between",
-                                    subItems.subItems.length - 1 === i &&
-                                      "border-b-0"
-                                  )}
-                                >
-                                  <Text className="text-sm font-mada-medium flex-1">
-                                    {capitalizeFirstLetter(subItem.name)}
-                                  </Text>
-                                  <View
-                                    className={clsx(
-                                      "w-3.5 h-3.5 rounded border items-center justify-center",
-                                      selectedValues
-                                        ?.find(
-                                          (val) => val?.name === item.value
-                                        )
-                                        ?.subItems?.some(
-                                          (v) => v._id === subItem._id
-                                        ) && "bg-primary border-primary"
-                                    )}
-                                  >
-                                    {selectedValues
-                                      .find((val) => val.name === item.value)
-                                      ?.subItems?.some(
-                                        (v) => v._id === subItem._id
-                                      ) && (
-                                      <Feather
-                                        name="check"
-                                        size={12}
-                                        color="white"
-                                      />
-                                    )}
-                                  </View>
-                                </Pressable>
-                              ))
-                            ) : (
-                              <View className="flex-1 items-center justify-center px-3 my-6">
-                                <Text className="text-xs text-secondary-text font-mada-medium text-center">
-                                  No subtopic available!
-                                </Text>
+                        {item.subItems && item.subItems.length > 0 ? (
+                          item.subItems.map((subItem, i) => (
+                            <Pressable
+                              key={subItem._id}
+                              onPress={() =>
+                                handleSelectSubTopic(item, subItem)
+                              }
+                              className={clsx(
+                                "px-6 py-3 border-b border-input-border flex-row items-center justify-between",
+                                item.subItems.length - 1 === i && "border-b-0"
+                              )}
+                            >
+                              <Text className="text-sm font-mada-medium flex-1">
+                                {capitalizeFirstLetter(subItem.name)}
+                              </Text>
+                              <View
+                                className={clsx(
+                                  "w-3.5 h-3.5 rounded border items-center justify-center",
+                                  selectedValues
+                                    ?.find((val) => val?.name === item.name)
+                                    ?.subItems?.some(
+                                      (v) => v._id === subItem._id
+                                    ) && "bg-primary border-primary"
+                                )}
+                              >
+                                {selectedValues
+                                  .find((val) => val.name === item.name)
+                                  ?.subItems?.some(
+                                    (v) => v._id === subItem._id
+                                  ) && (
+                                  <Feather
+                                    name="check"
+                                    size={12}
+                                    color="white"
+                                  />
+                                )}
                               </View>
-                            )}
-                          </>
+                            </Pressable>
+                          ))
+                        ) : (
+                          <View className="flex-1 items-center justify-center px-3 my-6">
+                            <Text className="text-xs text-secondary-text font-mada-medium text-center">
+                              No subtopic available!
+                            </Text>
+                          </View>
                         )}
                       </ScrollView>
                     }

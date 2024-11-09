@@ -52,6 +52,21 @@ const ActivePlannerPage = () => {
       : [];
   }
 
+  function getContinuousRevisionSubTopicsForSubject(
+    subject: string
+  ): TRevisionProps[] {
+    const subtopics =
+      plan?.continuousRevisionSubTopics.filter(
+        (topic) => topic.subject.name === subject
+      ) ?? [];
+
+    return subtopics?.length ||
+      ((plan?.backRevisionTopics.length ?? 0) ||
+        (plan?.continuousRevisionTopics.length ?? 0)) > 0
+      ? subtopics
+      : [];
+  }
+
   useEffect(() => {
     if (data && data.data && data.data.days.length > 0 && isSuccess) {
       dispatch(
@@ -116,6 +131,9 @@ const ActivePlannerPage = () => {
               getBackRevisionTopicsForSubject={getBackRevisionTopicsForSubject}
               getContinuousRevisionTopicsForSubject={
                 getContinuousRevisionTopicsForSubject
+              }
+              getContinuousRevisionSubTopicsForSubject={
+                getContinuousRevisionSubTopicsForSubject
               }
             />
           )}

@@ -8,14 +8,17 @@ const PlannerSubjectList = ({
   item,
   getBackRevisionTopicsForSubject,
   getContinuousRevisionTopicsForSubject,
+  getContinuousRevisionSubTopicsForSubject,
 }: {
   item: ISubject;
   getContinuousRevisionTopicsForSubject: (subject: string) => TRevisionProps[];
   getBackRevisionTopicsForSubject: (subject: string) => TRevisionProps[];
+  getContinuousRevisionSubTopicsForSubject(subject: string): TRevisionProps[];
 }) => {
   const mergedData = [
     ...getContinuousRevisionTopicsForSubject(item.name),
     ...getBackRevisionTopicsForSubject(item.name),
+    ...getContinuousRevisionSubTopicsForSubject(item.name),
   ];
 
   return (

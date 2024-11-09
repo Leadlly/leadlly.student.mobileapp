@@ -5,6 +5,7 @@ import {
   ChapterTopicsProps,
   SubjectChaptersProps,
   SubTopic,
+  TopicsWithSubtopicsProps,
 } from "../../types/types";
 
 export const useGetSubjectChapters = (
@@ -38,18 +39,18 @@ export const useGetSubjectChapters = (
 
 export const useGetChapterTopics = (
   subject: string | string[],
-  chapterName: string | undefined,
+  chapterId: string | undefined,
   standard: number
 ) => {
   return useQuery({
-    queryKey: ["topics", chapterName],
+    queryKey: ["topics", chapterId],
     queryFn: async () => {
-      if (!chapterName) {
+      if (!chapterId) {
         throw new Error("Please select a chapter first!");
       }
       try {
         const res = await axiosClient.get(
-          `/api/questionbank/topic?subjectName=${subject}&chapterName=${chapterName}&standard=${standard}`
+          `/api/questionbank/topic?subjectName=${subject}&chapterId=${chapterId}&standard=${standard}`
         );
 
         const responseData: {
@@ -66,7 +67,7 @@ export const useGetChapterTopics = (
         }
       }
     },
-    enabled: !!chapterName && chapterName !== "",
+    enabled: !!chapterId && chapterId !== "",
   });
 };
 
@@ -101,5 +102,39 @@ export const useGetSubTopics = (
     },
     enabled:
       !!chapterName && chapterName !== "" && !!topicName && topicName !== "",
+  });
+};
+
+export const useGetTopicsWithSubTopics = (
+  subject: string | string[],
+  chapterId: string | undefined,
+  standard: number
+) => {
+  return useQuery({
+    queryKey: ["topicsWithSubtopics", chapterId],
+    queryFn: async () => {
+      if (!chapterId) {
+        throw new Error("Please select a chapter first!");
+      }
+      try {
+        const res = await axiosClient.get(
+          `/api/questionbank/topicwithsubtopic?subjectName=${subject}&chapterId=${chapterId}&standard=${standard}`
+        );
+
+        const responseData: {
+          topics: TopicsWithSubtopicsProps[];
+          success: boolean;
+        } = res.data;
+
+        return responseData;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error("An unknown error while fetching chapter topics!!");
+        }
+      }
+    },
+    enabled: !!chapterId && chapterId !== "",
   });
 };

@@ -36,6 +36,7 @@ const UnrevisedTopicsList = () => {
             existingChapter.topics.push(curr.topic);
           } else {
             acc.push({
+              id: curr.chapter.id,
               name: curr.chapter.name,
               topics: [curr.topic],
               studiedAt: curr.chapter.studiedAt,
@@ -72,8 +73,8 @@ const UnrevisedTopicsList = () => {
   };
 
   return (
-    <View className="flex-1 my-3">
-      <View className="flex-row items-center justify-between bg-input-border rounded-md h-11 px-4">
+    <View className="flex-1 my-2">
+      <View className="flex-row items-center justify-between bg-input-border rounded-t-md h-11 px-4">
         <View className="flex-row items-center gap-x-1 w-40">
           <AntDesign name="filetext1" size={10} color="black" />
           <Text className="text-sm font-mada-medium leading-none text-tab-item-gray">
@@ -94,8 +95,9 @@ const UnrevisedTopicsList = () => {
 
       <ScrollView
         nestedScrollEnabled={true}
-        showsVerticalScrollIndicator={false}
-        className="flex-1 bg-white"
+        showsVerticalScrollIndicator={true}
+        persistentScrollbar={true}
+        className="flex-1 bg-white border border-input-border border-t-0 rounded-b-md"
       >
         {isLoading ? (
           <View className="flex-1 items-center justify-center">
@@ -104,7 +106,7 @@ const UnrevisedTopicsList = () => {
         ) : mergedChapterData && mergedChapterData.length > 0 ? (
           mergedChapterData.map((item, index) => (
             <View
-              key={item.name}
+              key={item.id}
               className="flex-row items-center justify-between p-4 border-b border-input-border"
             >
               <View className="flex-row items-start gap-x-1 w-40">

@@ -15,8 +15,8 @@ const AccordionItem = ({
 }: {
   item: {
     _id: string;
-    label: string;
-    value: string;
+    name: string;
+    subItems: { _id: string; name: string }[];
   };
   selectedValues: {
     _id: string;
@@ -70,11 +70,11 @@ const AccordionItem = ({
             <Ionicons name="chevron-down" size={15} color={colors.iconGray} />
           </Animated.View>
           <Text className="flex-1 text-base font-mada-regular leading-5">
-            {capitalizeFirstLetter(item.label)}
+            {capitalizeFirstLetter(item.name)}
           </Text>
         </Pressable>
         <Pressable
-          key={item.value}
+          key={item.name}
           className="flex-row items-center "
           onPress={onSelectValue}
         >

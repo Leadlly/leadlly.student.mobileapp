@@ -9,11 +9,9 @@ import React, { useEffect, useState } from "react";
 import { ISubject } from "../../types/types";
 import clsx from "clsx";
 import {
-  useGetChapterTopics,
   useGetSubjectChapters,
-  useGetSubTopics,
+  useGetTopicsWithSubTopics,
 } from "../../services/queries/questionQuery";
-import { capitalizeFirstLetter } from "../../helpers/utils";
 import MultiSelect from "../shared/MultiSelect";
 import Select from "../shared/Select";
 import { useSaveStudyData } from "../../services/queries/studyDataQuery";
@@ -42,7 +40,13 @@ const NewTopicLearntForm = ({
   userStandard: number;
   userSubjects: ISubject[];
 }) => {
-  const [topicName, setTopicName] = useState("");
+  const [selectedValues, setSelectedValues] = useState<
+    Array<{
+      _id: string;
+      name: string;
+      subItems?: Array<{ _id: string; name: string }>;
+    }>
+  >([]);
 
   const form = useForm<z.infer<typeof StudyDataFormSchema>>({
     resolver: zodResolver(StudyDataFormSchema),
@@ -63,27 +67,21 @@ const NewTopicLearntForm = ({
   }, [activeSubject, refetchChapter, form.setValue]);
 
   const {
-    data: topicsData,
+    data: topicsWithSubtopicsData,
     isFetching: topicsFetching,
     isLoading: topicsLoading,
     refetch: refetchTopics,
-  } = useGetChapterTopics(activeSubject!, selectedChapter?.name, userStandard!);
+  } = useGetTopicsWithSubTopics(
+    activeSubject,
+    selectedChapter?._id,
+    userStandard
+  );
 
   useEffect(() => {
     form.setValue("topicNames", []);
+    setSelectedValues([]);
     refetchTopics();
   }, [activeSubject, selectedChapter, refetchTopics, form.setValue]);
-
-  const {
-    data: subTopicsData,
-    isFetching: subTopicsFetching,
-    isLoading: subTopicsLoading,
-  } = useGetSubTopics(
-    activeSubject,
-    selectedChapter?.name,
-    topicName,
-    userStandard
-  );
 
   const { mutateAsync: saveStudyData, isPending } = useSaveStudyData();
 
@@ -207,26 +205,17 @@ const NewTopicLearntForm = ({
                   defaultValue={field.value}
                   onValueChange={field.onChange}
                   items={
-                    topicsData?.topics.map((topic) => ({
+                    topicsWithSubtopicsData?.topics.map((topic) => ({
                       _id: topic._id,
-                      label: capitalizeFirstLetter(topic.name)!,
-                      value: topic.name,
+                      name: topic.name,
+                      subItems: topic.subtopics,
                     })) || []
                   }
-                  subItems={{
-                    itemName: topicName,
-                    subItems:
-                      subTopicsData?.subtopics.map((subTopic) => ({
-                        _id: subTopic._id,
-                        name: subTopic.name,
-                      })) || [],
-                  }}
                   loading={topicsLoading}
                   fetching={topicsFetching}
-                  subTopicFetching={subTopicsFetching}
-                  subTopicLoading={subTopicsLoading}
                   maxCount={3}
-                  setTopicName={setTopicName}
+                  selectedValues={selectedValues}
+                  setSelectedValues={setSelectedValues}
                 />
               )}
             />

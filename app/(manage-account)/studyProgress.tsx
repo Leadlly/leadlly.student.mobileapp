@@ -46,6 +46,7 @@ const StudyProgress = () => {
   });
 
   const selectedChapter = form.watch("chapterName");
+  const isSelectedChapter = !!selectedChapter;
 
   const {
     data: chapterData,
@@ -63,23 +64,35 @@ const StudyProgress = () => {
     data: topicsData,
     isFetching: topicsFetching,
     isLoading: topicsLoading,
+    isSuccess: topicsFetchingSuccess,
+    isFetched: topicsFetched,
     refetch: refetchTopics,
   } = useGetChapterTopics(
     activeSubject!,
-    selectedChapter?.name || "",
+    selectedChapter?._id || "",
     userStandard!
   );
 
   useEffect(() => {
     form.setValue("topicNames", []);
     refetchTopics();
-    const topicNames =
-      topicsData?.topics.map((topic) => ({
-        _id: topic._id,
-        name: topic.name,
-      })) || [];
-    form.setValue("topicNames", topicNames);
-  }, [activeSubject, selectedChapter, refetchTopics, form.setValue]);
+    if (topicsFetchingSuccess || topicsFetched) {
+      const topicNames =
+        topicsData?.topics.map((topic) => ({
+          _id: topic._id,
+          name: topic.name,
+          subtopics: [],
+        })) || [];
+      form.setValue("topicNames", topicNames);
+    }
+  }, [
+    activeSubject,
+    selectedChapter,
+    refetchTopics,
+    form.setValue,
+    topicsFetched,
+    topicsFetchingSuccess,
+  ]);
 
   const { mutateAsync: saveStudyData, isPending: savingStudyData } =
     useSaveStudyData();
@@ -97,6 +110,7 @@ const StudyProgress = () => {
       topics: data.topicNames.map((topic) => ({
         _id: topic._id,
         name: topic.name,
+        subtopics: [],
       })),
       chapter: {
         _id: data?.chapterName?._id,
@@ -140,7 +154,7 @@ const StudyProgress = () => {
 
   return (
     <View className="flex-1 bg-white p-3">
-      <Text className="text-base font-mada-medium leading-tight px-12 my-3">
+      <Text className="text-base font-mada-medium leading-tight px-12 my-2">
         Select the chapters and topics you've finished in your classes.
       </Text>
 
@@ -181,6 +195,35 @@ const StudyProgress = () => {
             )}
           />
         </View>
+        {form.formState.errors &&
+        form.formState.errors.chapterName &&
+        form.formState.errors.chapterName?.message ? (
+          <Text className="text-xs text-leadlly-red font-mada-medium -mt-2.5 mb-2 mx-1">
+            {form.formState.errors.chapterName?.message}
+          </Text>
+        ) : null}
+        {form.formState.errors &&
+        form.formState.errors.topicNames &&
+        form.formState.errors.topicNames?.message ? (
+          <Text className="text-xs text-leadlly-red font-mada-medium -mt-2.5 mb-2 mx-1">
+            {form.formState.errors.topicNames?.message}
+          </Text>
+        ) : null}
+
+        {isSelectedChapter && (topicsFetching || topicsLoading) ? (
+          <View className="flex-row items-start space-x-2">
+            <ActivityIndicator size={10} color={"black"} />
+
+            <Text className="flex-1 text-sm font-mada-medium text-black leading-4 mb-2">
+              Please wait while topics for the selected chapter is being
+              added...
+            </Text>
+          </View>
+        ) : isSelectedChapter && (topicsFetchingSuccess || topicsFetched) ? (
+          <Text className="text-sm font-mada-medium text-black leading-4 mb-2 -mt-2">
+            Topics for the selected chapter has been added.
+          </Text>
+        ) : null}
 
         {/* <View>
           <Controller
@@ -210,9 +253,20 @@ const StudyProgress = () => {
 
         <View className="items-center justify-center">
           <TouchableOpacity
-            className="w-20 h-8 bg-primary rounded-md items-center justify-center"
+            className={clsx(
+              "w-20 h-8 bg-primary rounded-md items-center justify-center",
+              savingStudyData ||
+                creatingPlanner ||
+                allocatingBackTopics ||
+                topicsFetching ||
+                (topicsLoading && "opacity-70")
+            )}
             disabled={
-              savingStudyData || creatingPlanner || allocatingBackTopics
+              savingStudyData ||
+              creatingPlanner ||
+              allocatingBackTopics ||
+              topicsFetching ||
+              topicsLoading
             }
             onPress={form.handleSubmit(onSubmitStudyData)}
           >
