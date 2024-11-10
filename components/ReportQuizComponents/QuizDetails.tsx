@@ -6,9 +6,10 @@ const QuizDetails: React.FC<{
   date: Date;
   timeTaken: string;
   totalQuestions: number;
+  attemptedQuestions: number;
   efficiency: number;
   correctAnswers: number;
-}> = ({ date, timeTaken, totalQuestions, efficiency, correctAnswers }) => {
+}> = ({ date, timeTaken, totalQuestions, attemptedQuestions, efficiency, correctAnswers }) => {
   return (
     <View>
       <View className="flex-col justify-around w-full p-3 space-y-5 ">
@@ -26,16 +27,16 @@ const QuizDetails: React.FC<{
                 {formatDate(date,true)}
               </Text>
             </View>
-            <View className="flex-row items-center gap-2">
+            {typeof timeTaken === 'number' && !isNaN(timeTaken) && <View className="flex-row items-center gap-2">
               <Ionicons name="time-outline" size={16} color="#6C6C6C" />
               <Text className="text-[#6C6C6C] text-sm font-mada-semibold">
                 {timeTaken} min
               </Text>
-            </View>
+            </View>}
             <View className="flex-row items-center gap-2">
               <FontAwesome name="pencil-square-o" size={16} color="#6C6C6C" />
               <Text className="text-[#6C6C6C] text-sm font-mada-semibold">
-                {totalQuestions} Questions
+              {attemptedQuestions} / {totalQuestions} Questions
               </Text>
             </View>
           </View>

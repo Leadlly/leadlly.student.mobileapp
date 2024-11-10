@@ -51,7 +51,8 @@ const Report = (props: Props) => {
               <QuizDetails
                 date={new Date(report.updatedAt || report.createdAt)}
                 timeTaken={Math.floor(report.timeTaken / 60).toString()}
-                totalQuestions={report.questions.length}
+                totalQuestions={report.maxScore / 4}
+                attemptedQuestions={report.questions.length}
                 efficiency={report.overallEfficiency}
                 correctAnswers={report.correctCount}
               />
@@ -60,12 +61,13 @@ const Report = (props: Props) => {
             <AttemptAnalysis
               correctAnswers={report.correctCount}
               incorrectAnswers={report.incorrectCount}
-              totalQuestions={report.questions.length}
+              attemptedQuestions={report.questions.length}
               efficiency={report.overallEfficiency}
+              maxScore={report.maxScore}
             />
             <Score
-              totalMarks={report.totalMarks}
-              marksScored={report.correctCount * 4 - report.incorrectCount}
+              maxScore={report.maxScore}
+              marksScored={report?.totalMarks || report.correctCount * 4 - report.incorrectCount}
             />
             <SolutionAnalysis questions={report.questions} />
           </View>

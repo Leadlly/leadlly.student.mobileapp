@@ -3,13 +3,13 @@ import { View, Text, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 type ScoreProps = {
-  totalMarks: number;
+  maxScore: number;
   marksScored: number;
   previousScore?: number;
 };
 
-const Score: React.FC<ScoreProps> = ({ totalMarks, marksScored, previousScore }) => {
-  const questions = Math.round(totalMarks / 4);
+const Score: React.FC<ScoreProps> = ({ maxScore, marksScored, previousScore }) => {
+  const questions = Math.round(maxScore / 4);
   
   const improvement = previousScore !== undefined
     ? ((marksScored - previousScore) / previousScore) * 100
@@ -31,7 +31,7 @@ const Score: React.FC<ScoreProps> = ({ totalMarks, marksScored, previousScore })
             <Text className="font-mada-medium text-lg text-[#666666]">marks</Text>
           </View>
           <Text className="font-mada-medium text-lg text-[#939393]">
-            Scored out of {totalMarks} marks ({questions}Q)
+            Scored out of {maxScore} marks ({questions}Q)
           </Text>
           <View className="flex-row font-mada-medium justify-start items-center gap-4 mt-3">
             <View className="w-3 h-3 rounded-full bg-[#0FD679]" />

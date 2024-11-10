@@ -5,17 +5,20 @@ import AttemptAnalysisChart from "./AttemptAnalysisChart";
 type AttemptAnalysisProps = {
   correctAnswers: number;
   incorrectAnswers: number;
-  totalQuestions: number;
+  attemptedQuestions: number;
   efficiency: number;
+  maxScore:number
 };
 
 const AttemptAnalysis: React.FC<AttemptAnalysisProps> = ({
   correctAnswers,
   incorrectAnswers,
-  totalQuestions,
+  attemptedQuestions,
   efficiency,
+  maxScore
 }) => {
-  const notAttempted = totalQuestions - (correctAnswers + incorrectAnswers);
+  const totalQuestions = maxScore / 4
+  const notAttempted =totalQuestions - attemptedQuestions
 
   return (
     <View className="shadow-lg shadow-gray-400 my-5 p-4 pt-5 rounded-[10px] flex-1 bg-white space-y-5">
@@ -61,7 +64,7 @@ const AttemptAnalysis: React.FC<AttemptAnalysisProps> = ({
             </Text>
             <Text className="text-base font-mada-medium">-</Text>
             <Text className="font-mada-medium text-base text-tab-item-gray flex-1 text-right">
-              <Text className="text-black">0</Text> marks ({notAttempted}Q)
+            {notAttempted} Questions
             </Text>
           </View>
         </View>
