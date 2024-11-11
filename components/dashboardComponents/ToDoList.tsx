@@ -45,7 +45,8 @@ const ToDoList = () => {
         <>
           {todaysTopics &&
           (todaysTopics.backRevisionTopics.length > 0 ||
-            todaysTopics?.continuousRevisionTopics.length > 0) ? (
+            todaysTopics?.continuousRevisionTopics.length > 0 ||
+            todaysTopics?.continuousRevisionSubTopics.length > 0) ? (
             <>
               <View className="mb-1.5 px-4">
                 <Text className="text-xl leading-tight font-mada-Bold text-primary">
@@ -78,6 +79,17 @@ const ToDoList = () => {
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
+                  />
+                ))}
+                {todaysTopics.continuousRevisionSubTopics.map((item) => (
+                  <ToDoListItem
+                    key={item._id}
+                    item={item}
+                    setModalVisible={setModalVisible}
+                    setTopic={setTopic}
+                    completedTopics={todaysTopics.completedTopics}
+                    incompleteTopics={todaysTopics.incompletedTopics}
+                    isSubtopic={true}
                   />
                 ))}
               </ScrollView>

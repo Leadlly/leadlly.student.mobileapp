@@ -3,6 +3,7 @@ import ProfileBox from "../../components/profileComponents/ProfileBox";
 import UserLevelPoints from "../../components/profileComponents/UserLevelPoints";
 import MoodEmojiSelector from "../../components/profileComponents/MoodEmojiSelectorBox";
 import DailyStreakQuestions from "../../components/profileComponents/DailyStreakQuestions";
+import ContinuousRevisionPreference from "../../components/profileComponents/ContinuousRevisionPreference";
 
 const Profile = () => {
   return (
@@ -11,6 +12,7 @@ const Profile = () => {
       showsVerticalScrollIndicator={false}
     >
       <ProfileBox />
+      <ContinuousRevisionPreference />
       <UserLevelPoints />
       <MoodEmojiSelector />
       <DailyStreakQuestions />

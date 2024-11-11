@@ -42,6 +42,9 @@ export type UserDataProps = {
     url?: string;
   };
   planner: boolean;
+  preferences: {
+    continuousData: { nextDay: boolean }; // to decide continuous topic placing in planner
+  };
   parent: {
     name?: string;
     phone?: string;
@@ -316,6 +319,7 @@ export type StudentPersonalInfoProps = {
   schoolOrCollegeAddress?: string;
   schoolOrCollegeName?: string;
   studentSchedule?: string;
+  nextDay?: boolean;
 };
 
 export interface InputFieldProps extends TextInputProps {

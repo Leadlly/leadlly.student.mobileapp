@@ -51,7 +51,9 @@ const AppWrapper = () => {
                 </View>
               ),
               headerRight: () =>
-                user && user.category !== "free" && <UpgradeButton />,
+                user &&
+                user.category !== "free" &&
+                user.category !== "premium" && <UpgradeButton />,
             }}
           />
           <Stack.Screen
