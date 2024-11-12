@@ -22,7 +22,7 @@ const Tracker = () => {
 
   const params = useLocalSearchParams<{ subject?: string }>();
 
-  const activeSubject = params.subject ?? userSubjects?.[0].name;
+  const activeSubject = params.subject ?? userSubjects?.[0]?.name;
 
   const {
     data: trackerData,
@@ -44,11 +44,11 @@ const Tracker = () => {
       <View className="flex-row items-center justify-between mb-5">
         {userSubjects?.map((subject) => (
           <Pressable
-            key={subject.name}
-            onPress={() => router.setParams({ subject: subject.name })}
+            key={subject?.name}
+            onPress={() => router.setParams({ subject: subject?.name })}
             className={clsx(
               "h-9 px-4 border items-center justify-center rounded-lg",
-              subject.name === activeSubject
+              subject?.name === activeSubject
                 ? "border-primary bg-primary/10"
                 : "border-tab-item-gray bg-transparent"
             )}
@@ -56,12 +56,12 @@ const Tracker = () => {
             <Text
               className={clsx(
                 "capitalize text-sm font-mada-semibold",
-                subject.name === activeSubject
+                subject?.name === activeSubject
                   ? "text-primary"
                   : "text-tab-item-gray"
               )}
             >
-              {subject.name}
+              {subject?.name}
             </Text>
           </Pressable>
         ))}
@@ -92,7 +92,7 @@ const Tracker = () => {
             <SubjectOverview
               subject={
                 userSubjects?.filter(
-                  (subject) => subject.name === activeSubject
+                  (subject) => subject?.name === activeSubject
                 )[0]
               }
             />

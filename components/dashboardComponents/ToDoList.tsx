@@ -15,9 +15,11 @@ import DashboardSkeletonLoader from "./DashboardSkeletonLoader";
 const ToDoList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [todaysTopics, setTodaysTopics] = useState<TDayProps | null>(null);
-  const [topic, setTopic] = useState<{ name: string; _id: string } | null>(
-    null
-  );
+  const [topic, setTopic] = useState<{
+    name: string;
+    _id: string;
+    isSubtopic: boolean;
+  } | null>(null);
 
   const { data, isLoading, isFetching, isSuccess } = useGetUserPlanner();
 

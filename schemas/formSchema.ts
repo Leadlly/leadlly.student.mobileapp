@@ -8,5 +8,11 @@ export const FormSchema = z.object({
   gender: z.enum(["male", "female", "other"]),
   class: z.enum(["11", "12", "13"]),
   course: z.enum(["JEE", "NEET"]),
+  coachingName: z
+    .object({
+      _id: z.string(),
+      name: z.string(),
+    })
+    .optional(),
   schedule: z.string().min(1, "Please select a schedule option."),
 });

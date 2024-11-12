@@ -24,6 +24,7 @@ import { StudyDataFormSchema } from "../../schemas/studyDataFormSchema";
 import ModalComponent from "../shared/ModalComponent";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { colors } from "../../constants/constants";
+import { filterItemsBySearch } from "../../helpers/utils";
 
 const NewTopicLearntForm = ({
   activeSubject,
@@ -40,6 +41,8 @@ const NewTopicLearntForm = ({
   userStandard: number;
   userSubjects: ISubject[];
 }) => {
+  const [searchValue, setSearchValue] = useState("");
+
   const [selectedValues, setSelectedValues] = useState<
     Array<{
       _id: string;
@@ -177,17 +180,20 @@ const NewTopicLearntForm = ({
                   label="Chapter"
                   labelStyle="text-xl ml-1"
                   placeholder="Select a chapter"
-                  items={
+                  items={filterItemsBySearch(
                     chapterData?.chapters.map((chapter) => ({
                       _id: chapter._id,
                       label: chapter.name,
                       value: chapter.name,
-                    })) || []
-                  }
+                    })) || [],
+                    searchValue
+                  )}
                   defaultValue={field.value}
                   onValueChange={field.onChange}
                   loading={chaptersLoading}
                   fetching={chaptersFetching}
+                  searchValue={searchValue}
+                  setSearchValue={setSearchValue}
                 />
               )}
             />

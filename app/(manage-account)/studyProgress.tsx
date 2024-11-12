@@ -16,7 +16,10 @@ import {
   useGetSubjectChapters,
 } from "../../services/queries/questionQuery";
 import MultiSelect from "../../components/shared/MultiSelect";
-import { capitalizeFirstLetter } from "../../helpers/utils";
+import {
+  capitalizeFirstLetter,
+  filterItemsBySearch,
+} from "../../helpers/utils";
 import Select from "../../components/shared/Select";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
@@ -33,6 +36,8 @@ import { setUser } from "../../services/redux/slices/userSlice";
 import TabNav from "../../components/shared/TabNav";
 
 const StudyProgress = () => {
+  const [searchValue, setSearchValue] = useState("");
+
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
 
@@ -180,17 +185,20 @@ const StudyProgress = () => {
                 labelStyle="text-xl ml-1"
                 inputStyle="w-full h-12"
                 placeholder="Select a chapter"
-                items={
+                items={filterItemsBySearch(
                   chapterData?.chapters.map((chapter) => ({
                     _id: chapter._id,
                     label: chapter.name,
                     value: chapter.name,
-                  })) || []
-                }
+                  })) || [],
+                  searchValue
+                )}
                 defaultValue={field.value}
                 onValueChange={field.onChange}
                 loading={chaptersLoading}
                 fetching={chaptersFetching}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
               />
             )}
           />

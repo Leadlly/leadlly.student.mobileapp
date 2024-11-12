@@ -26,6 +26,7 @@ import Toast from "react-native-toast-message";
 import { useAppDispatch } from "../../services/redux/hooks";
 import { setUser } from "../../services/redux/slices/userSlice";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import CoachingNameField from "../shared/CoachingNameField";
 
 const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -54,8 +55,11 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
         ? user.academic.schoolOrCollegeAddress
         : "",
       coachingName: user?.academic.coachingName
-        ? user.academic.coachingName
-        : "",
+        ? {
+            _id: user.academic.coachingName.intituteId,
+            name: user.academic.coachingName.name,
+          }
+        : undefined,
       coachingAddress: user?.academic.coachingAddress
         ? user.academic.coachingAddress
         : "",
@@ -93,6 +97,9 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
       phone: data.phone ? Number(data.phone) : null,
       parentsPhone: data.parentsPhone ? Number(data.parentsPhone) : null,
       pinCode: data.pinCode ? Number(data.pinCode) : null,
+      coachingName: data.coachingName
+        ? { ...data.coachingName, intituteId: data.coachingName._id }
+        : undefined,
     };
 
     try {
@@ -618,20 +625,12 @@ const PersonalInfoForm = ({ user }: { user: UserDataProps | null }) => {
           </View>
 
           <View>
-            <Controller
-              name="coachingName"
-              control={form.control}
-              render={({ field }) => (
-                <Input
-                  label="Coaching Name"
-                  labelStyle="text-secondary-text"
-                  onBlur={field.onBlur}
-                  onChangeText={field.onChange}
-                  value={field.value}
-                  placeholder="Enter your Coaching Name"
-                  inputStyle="px-3"
-                />
-              )}
+            <CoachingNameField
+              form={form}
+              overallClassName="mb-0"
+              labelStyle="text-secondary-text text-base"
+              inputStyle="h-10"
+              inputTextStyle="font-mada-regular"
             />
           </View>
 

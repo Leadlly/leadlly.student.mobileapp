@@ -35,7 +35,7 @@ const QuestionsModal = ({
 }: {
   modalVisible: boolean;
   setModalVisible: (modalVisible: boolean) => void;
-  topic: { name: string; _id: string } | null;
+  topic: { name: string; _id: string; isSubtopic: boolean } | null;
   questions: TQuizQuestionProps[];
 }) => {
   const { width } = useWindowDimensions();
@@ -101,7 +101,11 @@ const QuestionsModal = ({
   const onHandleSubmit = async () => {
     try {
       const res = await saveDailyQuiz({
-        topic: { name: topic?.name! },
+        data: {
+          name: topic?.name!,
+          _id: topic?._id!,
+          isSubtopic: topic?.isSubtopic!,
+        },
         questions: dailyQuizCurrentTopic?.attemptedQuestions!,
       });
 

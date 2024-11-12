@@ -12,13 +12,23 @@ export interface ISubject {
   };
 }
 
+export interface IInstituteProps {
+  _id: string;
+  createdAt: string;
+  intituteId: string;
+  name: string;
+  updatedAt: string;
+  type: string;
+  location: {};
+}
+
 export interface IAcademic {
   standard: number;
   competitiveExam?: string | null;
   subjects?: ISubject[];
   schedule?: string | null;
   coachingMode?: string | null;
-  coachingName?: string | null;
+  coachingName?: IInstituteProps;
   coachingAddress?: string | null;
   schoolOrCollegeName?: string | null;
   schoolOrCollegeAddress?: string | null;
@@ -292,6 +302,10 @@ export type FormType = UseFormReturn<
     gender?: "male" | "female" | "other" | undefined;
     class?: "11" | "12" | undefined;
     course?: "JEE" | "NEET" | undefined;
+    coachingName?: {
+      _id: string;
+      name: string;
+    };
   },
   any,
   undefined
@@ -301,7 +315,7 @@ export type StudentPersonalInfoProps = {
   address?: string;
   class?: number | null;
   coachingAddress?: string;
-  coachingName?: string;
+  coachingName?: { intituteId: string; name: string };
   coachingType?: string;
   competitiveExam?: string;
   country?: string;

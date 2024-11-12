@@ -19,6 +19,7 @@ const Select = ({
   defaultValue,
   onValueChange,
   inputStyle,
+  inputTextStyle,
   listContainerStyle,
   placeholder = "Select an item",
   label,
@@ -26,11 +27,14 @@ const Select = ({
   fetching,
   loading,
   overallClassName,
+  searchValue,
+  setSearchValue,
 }: {
   items: { _id: string; label: string | number; value: string | number }[];
   defaultValue: { name: string; _id: string } | null;
   onValueChange: (value: { name: string | number; _id: string }) => void;
   inputStyle?: string;
+  inputTextStyle?: string;
   listContainerStyle?: string;
   placeholder?: string;
   loading?: boolean;
@@ -38,9 +42,10 @@ const Select = ({
   label?: string;
   labelStyle?: string;
   overallClassName?: string;
+  searchValue: string;
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const [selectedValue, setSelectedValue] = useState<{
     name: string | number;
     _id: string;
@@ -49,10 +54,6 @@ const Select = ({
   useEffect(() => {
     setSelectedValue(defaultValue);
   }, [defaultValue]);
-
-  const filterItemsBasedOnSearch = items.filter((item) =>
-    item.value.toString().toLowerCase().includes(searchValue.toLowerCase())
-  );
 
   const handleSelectValue = (data: {
     _id: string;
@@ -87,6 +88,7 @@ const Select = ({
           <Text
             className={clsx(
               "font-mada-medium text-base  leading-tight",
+              inputTextStyle,
               !selectedValue ? "text-tab-item-gray" : "text-black"
             )}
           >
@@ -111,7 +113,7 @@ const Select = ({
           <View className="p-2 border-b border-input-border">
             <Input
               inputStyle="h-8 text-sm pr-3"
-              placeholder="Search a chapter"
+              placeholder={`Search a ${label}`}
               icon={<Feather name="search" size={15} color={colors.iconGray} />}
               icon2={
                 searchValue.length > 0 ? (
@@ -134,19 +136,16 @@ const Select = ({
             nestedScrollEnabled={true}
           >
             {loading || fetching ? (
-              <View>
+              <View className="mt-6">
                 <ActivityIndicator size={"small"} color={colors.primary} />
               </View>
-            ) : filterItemsBasedOnSearch &&
-              filterItemsBasedOnSearch.length > 0 ? (
-              filterItemsBasedOnSearch.map((item) => (
+            ) : items && items.length > 0 ? (
+              items.map((item) => (
                 <Pressable
                   key={item.value}
                   className={clsx(
                     "flex-row items-center justify-between px-4 py-3 border-b border-input-border",
-                    filterItemsBasedOnSearch[
-                      filterItemsBasedOnSearch.length - 1
-                    ].value === item.value && "border-b-0"
+                    items[items.length - 1].value === item.value && "border-b-0"
                   )}
                   onPress={() => handleSelectValue(item)}
                 >

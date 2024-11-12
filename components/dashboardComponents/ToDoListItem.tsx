@@ -17,11 +17,17 @@ const ToDoListItem = ({
   completedTopics: any[];
   incompleteTopics: any[];
   setModalVisible: (modalVisible: boolean) => void;
-  setTopic: (topic: { name: string; _id: string } | null) => void;
+  setTopic: (
+    topic: { name: string; _id: string; isSubtopic: boolean } | null
+  ) => void;
   isSubtopic?: boolean;
 }) => {
-  const handleTopicPress = (topic: string, topicId: string) => {
-    setTopic({ name: topic, _id: topicId });
+  const handleTopicPress = (
+    topic: string,
+    topicId: string,
+    isSubtopic: boolean
+  ) => {
+    setTopic({ name: topic, _id: topicId, isSubtopic });
     setModalVisible(true);
   };
 
@@ -33,7 +39,7 @@ const ToDoListItem = ({
           completedTopics &&
             completedTopics?.length &&
             completedTopics?.includes(
-              isSubtopic ? item.subtopic.name : item.topic.name
+              isSubtopic ? item.subtopic.id : item.topic.id
             ) &&
             "opacity-60"
         )}
@@ -41,12 +47,13 @@ const ToDoListItem = ({
         <TouchableOpacity
           className="flex-1 flex-row items-start space-x-3"
           disabled={completedTopics?.includes(
-            isSubtopic ? item.subtopic.name : item.topic.name
+            isSubtopic ? item.subtopic.id : item.topic.id
           )}
           onPress={() =>
             handleTopicPress(
               isSubtopic ? item.subtopic.name : item.topic.name,
-              isSubtopic ? item.subtopic.id : item.topic.id
+              isSubtopic ? item.subtopic.id : item.topic.id,
+              isSubtopic ? true : false
             )
           }
         >
@@ -56,13 +63,13 @@ const ToDoListItem = ({
               completedTopics &&
                 completedTopics.length > 0 &&
                 completedTopics.includes(
-                  isSubtopic ? item.subtopic.name : item.topic.name
+                  isSubtopic ? item.subtopic.id : item.topic.id
                 )
                 ? "bg-leadlly-green/20 border-0"
                 : incompleteTopics &&
                     incompleteTopics.length > 0 &&
                     incompleteTopics.includes(
-                      isSubtopic ? item.subtopic.name : item.topic.name
+                      isSubtopic ? item.subtopic.id : item.topic.id
                     )
                   ? "bg-leadlly-red/20 border-0"
                   : ""
@@ -71,13 +78,13 @@ const ToDoListItem = ({
             {completedTopics &&
             completedTopics.length > 0 &&
             completedTopics.includes(
-              isSubtopic ? item.subtopic.name : item.topic.name
+              isSubtopic ? item.subtopic.id : item.topic.id
             ) ? (
               <Feather name="check" size={14} color={colors.leadllyGreen} />
             ) : incompleteTopics &&
               incompleteTopics.length > 0 &&
               incompleteTopics.includes(
-                isSubtopic ? item.subtopic.name : item.topic.name
+                isSubtopic ? item.subtopic.id : item.topic.id
               ) ? (
               <Text className="text-leadlly-red text-sm leading-none font-mada-semibold">
                 !
@@ -94,7 +101,7 @@ const ToDoListItem = ({
         {completedTopics &&
         completedTopics.length > 0 &&
         completedTopics.includes(
-          isSubtopic ? item.subtopic.name : item.topic.name
+          isSubtopic ? item.subtopic.id : item.topic.id
         ) ? (
           <Text className="bg-leadlly-green/10 text-leadlly-green px-2 py-1 text-[10px] font-mada-medium rounded ml-3">
             Completed
@@ -102,7 +109,7 @@ const ToDoListItem = ({
         ) : incompleteTopics &&
           incompleteTopics.length > 0 &&
           incompleteTopics.includes(
-            isSubtopic ? item.subtopic.name : item.topic.name
+            isSubtopic ? item.subtopic.id : item.topic.id
           ) ? (
           <Text className="bg-leadlly-red/10 text-leadlly-red px-2 py-1 text-[10px] font-mada-medium rounded ml-3">
             Incomplete
