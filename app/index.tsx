@@ -1,10 +1,23 @@
 import { Redirect } from "expo-router";
 import { useAppSelector } from "../services/redux/hooks";
 import { freeTrialDays } from "../constants/constants";
+import * as Updates from 'expo-updates';
+import { useEffect } from "react";
+
 
 const WelcomeScreen = () => {
   const { loading, user } = useAppSelector((state) => state.user);
+  const { currentlyRunning, isUpdateAvailable, isUpdatePending } = Updates.useUpdates();
+
   const userCategory = user?.category || "free";
+
+  useEffect(() => {
+    if (isUpdatePending) {
+      // Update has been successfully downloaded,
+      // so reload with the new update bundle
+      Updates.reloadAsync();
+    }
+  }, [isUpdatePending]);
 
   if (!loading && !user) return <Redirect href={"/welcome"} />;
 
