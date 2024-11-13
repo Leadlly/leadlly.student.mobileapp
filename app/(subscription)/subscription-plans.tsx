@@ -22,10 +22,23 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import SubscriptionPlanCard from "../../components/subscriptionComponents/SubscriptionPlanCard";
+import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
+import useAppStateChange from "../../hooks/useAppStateChange";
+import { useLocalSearchParams } from "expo-router";
+import ReloadApp from "../../components/shared/ReloadApp";
 
 const SubscriptionPlansScreen: React.FC = () => {
+  const currentAppState = useAppStateChange();
+
+  const params = useLocalSearchParams<{
+    isRedirectedAfterSubscription?: string;
+  }>();
+
   const { data: pricingData, isLoading: fetchingPricing } =
     useGetSubscriptionPricing("main");
+
+  const { existingRemainingAmount, fetchingExistingPlanPrice } =
+    useGetExistingPlanRemainingAmount();
 
   const { user } = useAppSelector((state) => state.user);
 
@@ -135,6 +148,15 @@ const SubscriptionPlansScreen: React.FC = () => {
     };
   }, []);
 
+  if (params.isRedirectedAfterSubscription === "true") {
+    return (
+      <ReloadApp
+        isRedirected={params.isRedirectedAfterSubscription}
+        user={user}
+      />
+    );
+  }
+
   return (
     <>
       <ScrollView className="flex-1 bg-white">
@@ -166,7 +188,7 @@ const SubscriptionPlansScreen: React.FC = () => {
               soon. Thanks for choosing us!
             </Text>
           </View>
-        ) : fetchingPricing ? (
+        ) : fetchingPricing || fetchingExistingPlanPrice ? (
           <View className="flex-1 items-center justify-center">
             <ActivityIndicator size={"small"} color={colors.primary} />
           </View>
@@ -213,6 +235,8 @@ const SubscriptionPlansScreen: React.FC = () => {
                     scrollX={scrollX}
                     paginationIndex={paginationIndex}
                     cardWidth={cardWidth}
+                    user={user}
+                    existingRemainingAmount={existingRemainingAmount}
                   />
                 ))}
               </Animated.ScrollView>

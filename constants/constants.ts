@@ -139,8 +139,8 @@ export const features = [
 export const subscriptionDetails = [
   {
     category: "basic",
-    discountPercentage: 70,
-    initialPrice: 10999,
+    discountPercentage: 31,
+    initialPrice: 4346,
     image: require("../assets/images/paper_plane.png"),
     details: [
       "Personalized self-study strategies",
@@ -151,8 +151,8 @@ export const subscriptionDetails = [
   },
   {
     category: "pro",
-    discountPercentage: 70,
-    initialPrice: 12999,
+    discountPercentage: 51,
+    initialPrice: 7559,
     image: require("../assets/images/rocket.png"),
     details: [
       "Personalized self-study strategies",
@@ -165,8 +165,8 @@ export const subscriptionDetails = [
   },
   {
     category: "premium",
-    discountPercentage: 70,
-    initialPrice: 15999,
+    discountPercentage: 61,
+    initialPrice: 12818,
     image: require("../assets/images/small_satellite.png"),
     details: [
       "Personalized self-study strategies",

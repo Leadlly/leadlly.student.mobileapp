@@ -14,11 +14,21 @@ import { registerForPushNotificationsAsync } from "../../helpers/registerForPush
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSavePushToken } from "../../services/queries/notificationQuery";
 import { colors } from "../../constants/constants";
+import ReloadApp from "../../components/shared/ReloadApp";
+import useAppStateChange from "../../hooks/useAppStateChange";
 
 const Dashboard = () => {
+  const currentAppState = useAppStateChange();
+
   const params = useLocalSearchParams<{
     initialSetup?: string;
+    isRedirectedAfterSubscription?: string;
   }>();
+
+  console.log(
+    "isRedirectedAfterSubscription====> ",
+    params.isRedirectedAfterSubscription
+  );
 
   const user = useAppSelector((state) => state.user.user);
 
@@ -39,11 +49,20 @@ const Dashboard = () => {
     getPushToken();
   }, []);
 
+  if (params.isRedirectedAfterSubscription === "true") {
+    return (
+      <ReloadApp
+        isRedirected={params.isRedirectedAfterSubscription}
+        user={user}
+      />
+    );
+  }
+
   return (
     <>
       {savingPushToken ? (
         <View className="flex-1 bg-white mb-16 items-center justify-center">
-          <ActivityIndicator size={"large"} color={colors.primary} />
+          <ActivityIndicator size={15} color={colors.primary} />
         </View>
       ) : (
         <ScrollView

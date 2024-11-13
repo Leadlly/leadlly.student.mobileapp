@@ -3,7 +3,7 @@ export default {
     owner: "leadlly_edusolutions_private_limited",
     name: "Leadlly",
     slug: "leadlly",
-    version: "1.0.1",
+    version: "1.0.2",
     scheme: "leadlly-student-app",
     orientation: "portrait",
     icon: "./assets/icon.png",
