@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../services/redux/hooks";
 import { usePathname, useRouter } from "expo-router";
 import { formatTime } from "../../helpers/utils";
-import { freeTrialDays } from "../../constants/constants";
 
 const FreeTrialTimer = () => {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -17,14 +16,15 @@ const FreeTrialTimer = () => {
 
   useEffect(() => {
     const checkTrialStatus = () => {
-      const trialStartDate = new Date(freeTrialActivation?.dateOfActivation!);
-      const trialEndDate = new Date(trialStartDate.getTime() + freeTrialDays);
+      const trialEndDate = new Date(freeTrialActivation?.dateOfDeactivation!);
       const now = new Date();
 
+      // Redirect if the trial has ended and the user is not on the subscription page
       if (now >= trialEndDate && pathname !== "/subscription-plans") {
         console.log(trialEndDate, now >= trialEndDate);
         router.replace("/subscription-plans");
       } else {
+        // Calculate remaining time in seconds
         const remainingTime = Math.max(
           0,
           Math.floor((trialEndDate.getTime() - now.getTime()) / 1000)
@@ -36,15 +36,17 @@ const FreeTrialTimer = () => {
 
     checkTrialStatus();
 
+    // Update the timer every second
     const timerInterval = setInterval(() => {
       checkTrialStatus();
     }, 1000);
 
     return () => clearInterval(timerInterval);
-  }, [freeTrialActivation?.dateOfActivation, router]);
+  }, [freeTrialActivation?.dateOfDeactivation, pathname, router]);
+
   return (
     <Text className="text-[10px] leading-tight font-mada-medium text-white">
-      {formatTime(timeLeft!)}
+      {timeLeft !== null ? formatTime(timeLeft) : "Loading..."}
     </Text>
   );
 };
