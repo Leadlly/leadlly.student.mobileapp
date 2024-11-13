@@ -26,8 +26,8 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
     } else if (user && !isPublicPath) {
       const hasSubmittedInitialInfo = !!user.academic.standard;
 
-      const trialStartDate = new Date(user.freeTrial.dateOfActivation!);
-      const trialEndDate = new Date(trialStartDate.getTime() + freeTrialDays);
+      const trialEndDate = new Date(user.freeTrial.dateOfDeactivation!);
+
       const now = new Date();
 
       if (!hasSubmittedInitialInfo && pathname !== "/initialInfo") {

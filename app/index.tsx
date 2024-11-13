@@ -1,13 +1,13 @@
 import { Redirect } from "expo-router";
 import { useAppSelector } from "../services/redux/hooks";
 import { freeTrialDays } from "../constants/constants";
-import * as Updates from 'expo-updates';
+import * as Updates from "expo-updates";
 import { useEffect } from "react";
-
 
 const WelcomeScreen = () => {
   const { loading, user } = useAppSelector((state) => state.user);
-  const { currentlyRunning, isUpdateAvailable, isUpdatePending } = Updates.useUpdates();
+  const { currentlyRunning, isUpdateAvailable, isUpdatePending } =
+    Updates.useUpdates();
 
   const userCategory = user?.category || "free";
 
@@ -25,8 +25,7 @@ const WelcomeScreen = () => {
     return <Redirect href={"/initialInfo"} />;
 
   if (!loading && user && userCategory === "free") {
-    const trialStartDate = new Date(user.freeTrial.dateOfActivation!);
-    const trialEndDate = new Date(trialStartDate.getTime() + freeTrialDays);
+    const trialEndDate = new Date(user.freeTrial.dateOfDeactivation!);
     const now = new Date();
 
     if (now >= trialEndDate) {
