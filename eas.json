@@ -6,7 +6,8 @@
   "build": {
     "production": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+         "channel": "production"
       }
     },
     "development": {
@@ -15,10 +16,12 @@
     },
     "preview": {
       "ios": {
-        "simulator": true
+        "simulator": true,
+         "channel": "preview"
       },
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+         "channel": "preview"
       }
     },
     "preview2": {

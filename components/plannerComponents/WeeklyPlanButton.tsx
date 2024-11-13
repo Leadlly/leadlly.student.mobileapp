@@ -74,10 +74,19 @@ const WeeklyPlanButton = ({
                   .join(" / ")}
                 {item.backRevisionTopics.length > 0 &&
                   item.continuousRevisionTopics.length > 0 &&
-                  "/"}
+                  " / "}
                 {item.continuousRevisionTopics
                   .map((topics: TRevisionProps) =>
                     capitalizeFirstLetter(topics.topic.name)
+                  )
+                  .join(" / ")}
+                {(item.backRevisionTopics.length > 0 ||
+                  item.continuousRevisionTopics.length > 0) &&
+                  item.continuousRevisionSubTopics.length > 0 &&
+                  " / "}
+                {item.continuousRevisionSubTopics
+                  .map((subtopics: TRevisionProps) =>
+                    capitalizeFirstLetter(subtopics.subtopic.name)
                   )
                   .join(" / ")}
               </>

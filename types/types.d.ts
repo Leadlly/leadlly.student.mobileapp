@@ -12,13 +12,23 @@ export interface ISubject {
   };
 }
 
+export interface IInstituteProps {
+  _id: string;
+  createdAt: string;
+  intituteId: string;
+  name: string;
+  updatedAt: string;
+  type: string;
+  location: {};
+}
+
 export interface IAcademic {
   standard: number;
   competitiveExam?: string | null;
   subjects?: ISubject[];
   schedule?: string | null;
   coachingMode?: string | null;
-  coachingName?: string | null;
+  coachingName?: IInstituteProps;
   coachingAddress?: string | null;
   schoolOrCollegeName?: string | null;
   schoolOrCollegeAddress?: string | null;
@@ -42,6 +52,9 @@ export type UserDataProps = {
     url?: string;
   };
   planner: boolean;
+  preferences: {
+    continuousData: { nextDay: boolean }; // to decide continuous topic placing in planner
+  };
   parent: {
     name?: string;
     phone?: string;
@@ -129,6 +142,18 @@ export type Topic = {
   }[];
 };
 
+export type SubTopic = {
+  id: string;
+  name: string;
+  plannerFrequency?: number;
+  level?: string;
+  overall_efficiency?: number;
+  studiedAt: {
+    date?: Date;
+    efficiency?: number;
+  }[];
+};
+
 export type Chapter = {
   id: string;
   name: string;
@@ -152,6 +177,7 @@ export type TRevisionProps = {
   tag: string;
   topic: Topic;
   chapter: Chapter;
+  subtopic: SubTopic;
   subject: ISubject;
   standard: number;
   createdAt?: Date;
@@ -165,6 +191,7 @@ export type TDayProps = {
   date: string;
   day: string;
   continuousRevisionTopics: TRevisionProps[];
+  continuousRevisionSubTopics: TRevisionProps[];
   backRevisionTopics: TRevisionProps[];
   questions: { [key: string]: any };
   completedTopics: any[];
@@ -226,6 +253,28 @@ export type ChapterTopicsProps = {
   updatedAt: string;
 };
 
+export type SubTopic = {
+  _id: string;
+  chapterId: string;
+  chapterName: string;
+  name: string;
+  standard: number;
+  subjectName: string;
+  subtopics: any[];
+  topicId: string;
+  topicName: string;
+};
+
+export type TopicsWithSubtopicsProps = {
+  _id: string;
+  chapterId: string;
+  name: string;
+  subtopics: Array<{
+    _id: string;
+    name: string;
+  }>;
+};
+
 export type TStudentReportProps = {
   startDate: string;
   endDate: string;
@@ -253,6 +302,10 @@ export type FormType = UseFormReturn<
     gender?: "male" | "female" | "other" | undefined;
     class?: "11" | "12" | undefined;
     course?: "JEE" | "NEET" | undefined;
+    coachingName?: {
+      _id: string;
+      name: string;
+    };
   },
   any,
   undefined
@@ -262,7 +315,7 @@ export type StudentPersonalInfoProps = {
   address?: string;
   class?: number | null;
   coachingAddress?: string;
-  coachingName?: string;
+  coachingName?: { intituteId: string; name: string };
   coachingType?: string;
   competitiveExam?: string;
   country?: string;
@@ -280,6 +333,7 @@ export type StudentPersonalInfoProps = {
   schoolOrCollegeAddress?: string;
   schoolOrCollegeName?: string;
   studentSchedule?: string;
+  nextDay?: boolean;
 };
 
 export interface InputFieldProps extends TextInputProps {

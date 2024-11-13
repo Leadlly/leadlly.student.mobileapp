@@ -23,7 +23,13 @@ export default {
       },
       package: "com.leadlly.app",
       googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
-      versionCode: 4,
+      versionCode: 7,
+    },
+    updates: {
+      url: "https://u.expo.dev/91b0599c-a56a-4e2e-87b0-a5614b4fd0ae"
+    },
+    runtimeVersion: {
+      policy: "appVersion"
     },
     web: {
       favicon: "./assets/favicon.png",
@@ -31,6 +37,11 @@ export default {
     plugins: [
       "expo-router",
       "expo-font",
+      ["expo-updates",
+        {
+          "username": "leadlly"
+        }
+      ],
       ["@react-native-google-signin/google-signin"],
       [
         "@react-native-community/datetimepicker",

@@ -14,7 +14,7 @@ export const useSaveDailyQuiz = () => {
 
   return useMutation({
     mutationFn: async (data: {
-      topic: { name: string };
+      data: { name: string; _id: string; isSubtopic: boolean };
       questions: TQuizAnswerProps[];
     }) => {
       try {

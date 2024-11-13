@@ -8,13 +8,16 @@ import { TDayProps } from "../../../types/types";
 import { setTodaysPlan } from "../../../services/redux/slices/plannerSlice";
 import { colors } from "../../../constants/constants";
 import NoPlannerComponent from "../../../components/plannerComponents/NoPlannerComponent";
+import { useRouter } from "expo-router";
 
 const Planner = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>();
 
+  const router = useRouter();
+
   const dispatch = useAppDispatch();
 
-  const { data, isLoading, error, isError } = useGetUserPlanner();
+  const { data, isLoading, isError } = useGetUserPlanner();
 
   const plannerData = data?.data;
 
@@ -29,6 +32,7 @@ const Planner = () => {
         onPress={() => {
           setSelectedPlan(item._id);
           dispatch(setTodaysPlan(item));
+          router.push("/active");
         }}
       />
     );

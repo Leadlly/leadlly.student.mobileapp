@@ -1,20 +1,37 @@
-import { View, Text, Dimensions } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { TRevisionProps } from "../../types/types";
 import { capitalizeFirstLetter } from "../../helpers/utils";
+import clsx from "clsx";
 
-const ChapterTopicItem = ({ item }: { item: TRevisionProps }) => {
+const ChapterTopicItem = ({
+  item,
+  isSubtopics = false,
+}: {
+  item: TRevisionProps;
+  isSubtopics?: boolean;
+}) => {
   return (
-    <View className="bg-primary/30 rounded-md px-2 py-1">
+    <View
+      className={clsx(
+        "rounded-md px-2 py-1",
+        isSubtopics ? "bg-leadlly-cyan/20" : "bg-primary/20 "
+      )}
+    >
       <Text
         numberOfLines={1}
         ellipsizeMode="tail"
-        className="text-primary font-mada-semibold capitalize"
+        className={clsx(
+          "font-mada-semibold capitalize",
+          isSubtopics ? "text-leadlly-cyan" : "text-primary"
+        )}
       >
-        {item.chapter.name}
+        {isSubtopics ? item.topic?.name : item.chapter.name}
       </Text>
-      <Text className="font-mada-medium leading-tight">
-        {capitalizeFirstLetter(item.topic.name)}
+      <Text className="font-mada-medium">
+        {capitalizeFirstLetter(
+          isSubtopics ? item.subtopic?.name : item.topic.name
+        )}
       </Text>
     </View>
   );

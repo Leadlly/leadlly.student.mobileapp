@@ -39,6 +39,39 @@ export const useSaveStudyData = () => {
   });
 };
 
+export const useStoreUnrevisedTopics = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      chapterIds: string[];
+      tag: string;
+      subject: string;
+      standard: number;
+    }) => {
+      try {
+        const res = await axiosClient.post(
+          "/api/user/unrevisedtopics/save",
+          data
+        );
+
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error("An unknown error while saving unrevised topics!!");
+        }
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["unrevised_topics"],
+      });
+    },
+  });
+};
+
 export const useDeleteUnrevisedTopics = () => {
   const queryClient = useQueryClient();
 

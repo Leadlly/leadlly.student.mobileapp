@@ -158,10 +158,10 @@ const SubscriptionPlansScreen: React.FC = () => {
   }
 
   return (
-    <SafeAreaView className="bg-white flex-1">
-      <ScrollView className="flex-1">
+    <>
+      <ScrollView className="flex-1 bg-white">
         <View
-          className="relative mx-5 mt-5 mb-2 bg-primary rounded-xl h-28 justify-center pl-6"
+          className="relative mx-5 mb-2 bg-primary rounded-xl h-28 justify-center pl-6"
           style={{ overflow: "hidden" }}
         >
           <ImageBackground
@@ -268,7 +268,7 @@ const SubscriptionPlansScreen: React.FC = () => {
           referenceId={referenceId}
         />
       )}
-    </SafeAreaView>
+    </>
   );
 };
 

@@ -27,6 +27,11 @@ export const AccountPersonalInfoSchema = z.object({
   schoolOrCollegeName: z.string().optional(),
   schoolOrCollegeAddress: z.string().optional(),
   coachingType: z.string().optional(),
-  coachingName: z.string().optional(),
+  coachingName: z
+    .object({
+      _id: z.string(),
+      name: z.string(),
+    })
+    .optional(),
   coachingAddress: z.string().optional(),
 });

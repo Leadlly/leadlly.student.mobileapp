@@ -1,15 +1,12 @@
 import { Image } from "expo-image";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import {
   ImageBackground,
   Pressable,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from "react-native";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { FormType } from "../../types/types";
 const CourseForm = ({ next, form }: { next: () => void; form: FormType }) => {
@@ -24,7 +21,7 @@ const CourseForm = ({ next, form }: { next: () => void; form: FormType }) => {
         className="w-[20vh] h-[20vh]"
       />
       <Text className="text-2xl font-mada-semibold leading-tight text-center">
-        Are your Studying for?
+        What are you Studying for?
       </Text>
       <Text className="text-base leading-tight font-mada-medium text-center">
         Focus on core topics with hands-on practice and real-world examples for

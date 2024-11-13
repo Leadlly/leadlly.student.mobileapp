@@ -32,7 +32,26 @@ const AppWrapper = () => {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
             name="(subscription)"
-            options={{ headerShown: false }}
+            options={{
+              headerTitle: "Subscription Plans",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontFamily: "Mada-SemiBold",
+                fontSize: 20,
+              },
+              headerLeft: () => (
+                <View className="mr-3">
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <AntDesign name="arrowleft" size={22} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ),
+              headerRight: () => (
+                <View>
+                  <LogoutButton />
+                </View>
+              ),
+            }}
           />
           <Stack.Screen
             name="(profile)/profile"
@@ -43,7 +62,7 @@ const AppWrapper = () => {
                 fontFamily: "Mada-SemiBold",
                 fontSize: 20,
               },
-              headerLeft: (props) => (
+              headerLeft: () => (
                 <View className="mr-4">
                   <TouchableOpacity onPress={() => router.back()}>
                     <AntDesign name="arrowleft" size={22} color="black" />
@@ -51,7 +70,9 @@ const AppWrapper = () => {
                 </View>
               ),
               headerRight: () =>
-                user && user.category !== "free" && <UpgradeButton />,
+                user &&
+                user.category !== "free" &&
+                user.category !== "premium" && <UpgradeButton />,
             }}
           />
           <Stack.Screen
@@ -63,7 +84,7 @@ const AppWrapper = () => {
                 fontFamily: "Mada-SemiBold",
                 fontSize: 20,
               },
-              headerLeft: (props) => (
+              headerLeft: () => (
                 <View className="mr-4">
                   <TouchableOpacity onPress={() => router.back()}>
                     <AntDesign name="arrowleft" size={22} color="black" />

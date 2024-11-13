@@ -5,14 +5,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ISubject } from "../../types/types";
 import clsx from "clsx";
 import {
-  useGetChapterTopics,
   useGetSubjectChapters,
+  useGetTopicsWithSubTopics,
 } from "../../services/queries/questionQuery";
-import { capitalizeFirstLetter } from "../../helpers/utils";
 import MultiSelect from "../shared/MultiSelect";
 import Select from "../shared/Select";
 import { useSaveStudyData } from "../../services/queries/studyDataQuery";
@@ -25,6 +24,7 @@ import { StudyDataFormSchema } from "../../schemas/studyDataFormSchema";
 import ModalComponent from "../shared/ModalComponent";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { colors } from "../../constants/constants";
+import { filterItemsBySearch } from "../../helpers/utils";
 
 const NewTopicLearntForm = ({
   activeSubject,
@@ -41,6 +41,16 @@ const NewTopicLearntForm = ({
   userStandard: number;
   userSubjects: ISubject[];
 }) => {
+  const [searchValue, setSearchValue] = useState("");
+
+  const [selectedValues, setSelectedValues] = useState<
+    Array<{
+      _id: string;
+      name: string;
+      subItems?: Array<{ _id: string; name: string }>;
+    }>
+  >([]);
+
   const form = useForm<z.infer<typeof StudyDataFormSchema>>({
     resolver: zodResolver(StudyDataFormSchema),
   });
@@ -60,18 +70,19 @@ const NewTopicLearntForm = ({
   }, [activeSubject, refetchChapter, form.setValue]);
 
   const {
-    data: topicsData,
+    data: topicsWithSubtopicsData,
     isFetching: topicsFetching,
     isLoading: topicsLoading,
     refetch: refetchTopics,
-  } = useGetChapterTopics(
-    activeSubject!,
-    selectedChapter?.name || "",
-    userStandard!
+  } = useGetTopicsWithSubTopics(
+    activeSubject,
+    selectedChapter?._id,
+    userStandard
   );
 
   useEffect(() => {
     form.setValue("topicNames", []);
+    setSelectedValues([]);
     refetchTopics();
   }, [activeSubject, selectedChapter, refetchTopics, form.setValue]);
 
@@ -86,6 +97,7 @@ const NewTopicLearntForm = ({
       topics: data.topicNames.map((topic) => ({
         _id: topic._id,
         name: topic.name,
+        subtopics: topic.subItems,
       })),
       chapter: {
         _id: data?.chapterName?._id,
@@ -168,17 +180,19 @@ const NewTopicLearntForm = ({
                   label="Chapter"
                   labelStyle="text-xl ml-1"
                   placeholder="Select a chapter"
-                  items={
+                  items={filterItemsBySearch(
                     chapterData?.chapters.map((chapter) => ({
                       _id: chapter._id,
-                      label: chapter.name,
-                      value: chapter.name,
-                    })) || []
-                  }
+                      name: chapter.name,
+                    })) || [],
+                    searchValue
+                  )}
                   defaultValue={field.value}
                   onValueChange={field.onChange}
                   loading={chaptersLoading}
                   fetching={chaptersFetching}
+                  searchValue={searchValue}
+                  setSearchValue={setSearchValue}
                 />
               )}
             />
@@ -196,15 +210,17 @@ const NewTopicLearntForm = ({
                   defaultValue={field.value}
                   onValueChange={field.onChange}
                   items={
-                    topicsData?.topics.map((topic) => ({
+                    topicsWithSubtopicsData?.topics.map((topic) => ({
                       _id: topic._id,
-                      label: capitalizeFirstLetter(topic.name)!,
-                      value: topic.name,
+                      name: topic.name,
+                      subItems: topic.subtopics,
                     })) || []
                   }
                   loading={topicsLoading}
                   fetching={topicsFetching}
                   maxCount={3}
+                  selectedValues={selectedValues}
+                  setSelectedValues={setSelectedValues}
                 />
               )}
             />

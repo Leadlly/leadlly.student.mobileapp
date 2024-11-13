@@ -12,6 +12,7 @@ import { FormSchema } from "../../schemas/formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useStudentPersonalInfo } from "../../services/queries/userQuery";
+import CoachingNameForm from "../../components/AuthComponents/CoachingNameForm";
 
 const initialInfo = () => {
   const { mutateAsync: saveInitialInfo, isPending: isSavingInitialInfo } =
@@ -46,6 +47,7 @@ const initialInfo = () => {
     <GenderForm next={next} form={form} />,
     <ClassForm next={next} form={form} />,
     <CourseForm next={next} form={form} />,
+    <CoachingNameForm next={next} form={form} />,
     <ScheduleForm
       next={next}
       form={form}

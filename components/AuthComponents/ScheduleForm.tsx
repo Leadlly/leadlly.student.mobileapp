@@ -54,6 +54,9 @@ const ScheduleForm = ({
         competitiveExam: data.course,
         studentSchedule: data.schedule,
         gender: data.gender,
+        coachingName: data.coachingName
+          ? { intituteId: data.coachingName._id, name: data.coachingName.name }
+          : undefined,
       });
 
       const freeTrialResponse = await activateFreeTrial();
@@ -131,11 +134,27 @@ const ScheduleForm = ({
           )}
         />
 
-        {form.formState.errors.schedule && (
+        {form.formState.errors.schedule ? (
           <Text className="text-red-600 font-mada-medium">
             {form.formState.errors.schedule.message}
           </Text>
-        )}
+        ) : form.formState.errors.phoneNumber ? (
+          <Text className="text-red-600 font-mada-medium">
+            {form.formState.errors.phoneNumber.message}
+          </Text>
+        ) : form.formState.errors.gender ? (
+          <Text className="text-red-600 font-mada-medium">
+            {form.formState.errors.gender.message}
+          </Text>
+        ) : form.formState.errors.class ? (
+          <Text className="text-red-600 font-mada-medium">
+            {form.formState.errors.class.message}
+          </Text>
+        ) : form.formState.errors.course ? (
+          <Text className="text-red-600 font-mada-medium">
+            {form.formState.errors.course.message}
+          </Text>
+        ) : null}
       </View>
 
       <Pressable
@@ -147,7 +166,7 @@ const ScheduleForm = ({
           <ActivityIndicator size={"small"} color={"white"} />
         ) : (
           <>
-            <Text className="text-white font-semibold">Next</Text>
+            <Text className="text-white font-semibold">Save</Text>
             <Feather name="arrow-right" size={16} color="white" />
           </>
         )}

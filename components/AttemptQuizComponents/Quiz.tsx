@@ -23,6 +23,8 @@ import { weeklyQuizData } from "../../services/redux/slices/weeklyQuizSlice";
 import { getMonthDate } from "../../helpers/utils";
 import { useSaveWeeklyQuizQuestion } from "../../services/queries/WekklyQuizqueries";
 import { useGenerateQuizReport } from "../../services/queries/reportQueries";
+import { colors } from "../../constants/constants";
+import clsx from "clsx";
 
 const Quiz = ({
   quizId,
@@ -108,6 +110,7 @@ const Quiz = ({
   };
 
   const handlePrevQuestion = () => {
+    setSelectedOption(null);
     setCurrentQuestion((prev: number) => Math.max(prev - 1, 0));
   };
 
@@ -196,10 +199,17 @@ const Quiz = ({
       <View className="bg-primary/20 flex-row justify-between items-center p-4">
         <TouchableOpacity
           onPress={handlePrevQuestion}
-          className="mr-2 flex items-center flex-row justify-center bg-white border-2 border-gray-400 rounded-lg p-2"
+          disabled={
+            currentQuestion === 0 ||
+            isSaving === questions[currentQuestion]?._id
+          }
+          className={clsx(
+            "mr-2 items-center flex-row justify-center bg-white border-2 border-input-border rounded-lg p-2",
+            currentQuestion === 0 && "opacity-70"
+          )}
         >
-          <AntDesign name="left" size={12} color="gray" />
-          <Text className="text-gray-400 font-mada-semibold ml-2">
+          <AntDesign name="left" size={12} color={colors.iconGray} />
+          <Text className="text-tab-item-gray font-mada-semibold ml-2">
             Previous
           </Text>
         </TouchableOpacity>
@@ -207,20 +217,24 @@ const Quiz = ({
           onPress={handleNextQuestion}
           disabled={
             isSaving === questions[currentQuestion]?._id ||
-            currentQuestion === questions.length - 1
+            (!selectedOption && currentQuestion === questions.length - 1)
           }
-          className={`ml-2 flex min-w-[100px] items-center flex-row justify-center rounded-lg p-2 border-2 ${
+          className={`ml-2 flex min-w-[100px] items-center flex-row justify-center rounded-lg p-2 border-2 bg-primary border-primary ${
             isSaving === questions[currentQuestion]?._id ||
-            currentQuestion === questions.length - 1
-              ? "bg-gray-400 border-gray-400"
-              : "bg-primary border-primary"
+            (!selectedOption && currentQuestion === questions.length - 1)
+              ? "opacity-70"
+              : ""
           }`}
         >
           {isSaving === questions[currentQuestion]?._id ? (
             <ActivityIndicator size="small" color="#ffffff" />
-          ) : (
+          ) : !(currentQuestion === questions.length - 1) ? (
             <Text className="text-white text-center font-mada-semibold">
               {selectedOption ? "Save & Next" : "Next"}
+            </Text>
+          ) : (
+            <Text className="text-white text-center font-mada-semibold">
+              Save
             </Text>
           )}
         </TouchableOpacity>
