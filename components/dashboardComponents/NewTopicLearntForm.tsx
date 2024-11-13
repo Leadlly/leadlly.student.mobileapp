@@ -183,8 +183,7 @@ const NewTopicLearntForm = ({
                   items={filterItemsBySearch(
                     chapterData?.chapters.map((chapter) => ({
                       _id: chapter._id,
-                      label: chapter.name,
-                      value: chapter.name,
+                      name: chapter.name,
                     })) || [],
                     searchValue
                   )}

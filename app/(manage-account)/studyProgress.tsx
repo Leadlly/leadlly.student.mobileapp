@@ -26,7 +26,10 @@ import * as z from "zod";
 import { StudyDataFormSchema } from "../../schemas/studyDataFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import UnrevisedTopicsList from "../../components/manageAccountComponents/UnrevisedTopicsList";
-import { useSaveStudyData } from "../../services/queries/studyDataQuery";
+import {
+  useSaveStudyData,
+  useStoreUnrevisedTopics,
+} from "../../services/queries/studyDataQuery";
 import Toast from "react-native-toast-message";
 import {
   useAllocateBackTopics,
@@ -34,6 +37,19 @@ import {
 } from "../../services/queries/plannerQuery";
 import { setUser } from "../../services/redux/slices/userSlice";
 import TabNav from "../../components/shared/TabNav";
+import MultiSelectWithoutAccordion from "../../components/shared/MultiSelectWithoutAccordion";
+
+export const UnrevisedTopicsFormSchema = z.object({
+  chapters: z
+    .array(
+      z.object({
+        _id: z.string(),
+        name: z.string(),
+      })
+    )
+    .min(1, { message: "Please select at least one chapter" })
+    .default([]),
+});
 
 const StudyProgress = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -46,12 +62,9 @@ const StudyProgress = () => {
 
   const [activeSubject, setActiveSubject] = useState(userSubjects?.[0].name);
 
-  const form = useForm<z.infer<typeof StudyDataFormSchema>>({
-    resolver: zodResolver(StudyDataFormSchema),
+  const form = useForm<z.infer<typeof UnrevisedTopicsFormSchema>>({
+    resolver: zodResolver(UnrevisedTopicsFormSchema),
   });
-
-  const selectedChapter = form.watch("chapterName");
-  const isSelectedChapter = !!selectedChapter;
 
   const {
     data: chapterData,
@@ -61,66 +74,24 @@ const StudyProgress = () => {
   } = useGetSubjectChapters(activeSubject!, userStandard!);
 
   useEffect(() => {
-    form.setValue("chapterName", null);
+    form.setValue("chapters", []);
     refetchChapter();
-  }, [activeSubject, refetchChapter, form.setValue]);
+  }, [activeSubject, refetchChapter, form.setValue, userStandard]);
 
-  const {
-    data: topicsData,
-    isFetching: topicsFetching,
-    isLoading: topicsLoading,
-    isSuccess: topicsFetchingSuccess,
-    isFetched: topicsFetched,
-    refetch: refetchTopics,
-  } = useGetChapterTopics(
-    activeSubject!,
-    selectedChapter?._id || "",
-    userStandard!
-  );
-
-  useEffect(() => {
-    form.setValue("topicNames", []);
-    refetchTopics();
-    if (topicsFetchingSuccess || topicsFetched) {
-      const topicNames =
-        topicsData?.topics.map((topic) => ({
-          _id: topic._id,
-          name: topic.name,
-          subtopics: [],
-        })) || [];
-      form.setValue("topicNames", topicNames);
-    }
-  }, [
-    activeSubject,
-    selectedChapter,
-    refetchTopics,
-    form.setValue,
-    topicsFetched,
-    topicsFetchingSuccess,
-  ]);
-
-  const { mutateAsync: saveStudyData, isPending: savingStudyData } =
-    useSaveStudyData();
+  const { mutateAsync: saveUnrevisedTopics, isPending: savingStudyData } =
+    useStoreUnrevisedTopics();
 
   const { mutateAsync: createPlanner, isPending: creatingPlanner } =
     useCreatePlanner();
   const { mutateAsync: allocateBackTopics, isPending: allocatingBackTopics } =
     useAllocateBackTopics();
 
-  const onSubmitStudyData = async (
-    data: z.infer<typeof StudyDataFormSchema>
+  const onSubmitUnrevisedData = async (
+    data: z.infer<typeof UnrevisedTopicsFormSchema>
   ) => {
     const formattedData = {
       tag: "unrevised_topic",
-      topics: data.topicNames.map((topic) => ({
-        _id: topic._id,
-        name: topic.name,
-        subtopics: [],
-      })),
-      chapter: {
-        _id: data?.chapterName?._id,
-        name: data?.chapterName?.name,
-      },
+      chapterIds: data.chapters.map((item) => item._id),
       subject: activeSubject!,
       standard: userStandard!,
     };
@@ -128,7 +99,7 @@ const StudyProgress = () => {
     try {
       let plannerResponse;
 
-      const studyDataResponse = await saveStudyData(formattedData);
+      const studyDataResponse = await saveUnrevisedTopics(formattedData);
       if (user && user.planner === false) {
         plannerResponse = await createPlanner();
         dispatch(setUser({ ...user, planner: true }));
@@ -146,8 +117,7 @@ const StudyProgress = () => {
           : "Planner updated.",
       });
       form.reset({
-        chapterName: null,
-        topicNames: [],
+        chapters: [],
       });
     } catch (error: any) {
       Toast.show({
@@ -177,19 +147,17 @@ const StudyProgress = () => {
 
         <View className="mt-5">
           <Controller
-            name="chapterName"
+            name="chapters"
             control={form.control}
             render={({ field }) => (
-              <Select
+              <MultiSelectWithoutAccordion
                 label="Chapter"
                 labelStyle="text-xl ml-1"
-                inputStyle="w-full h-12"
                 placeholder="Select a chapter"
                 items={filterItemsBySearch(
                   chapterData?.chapters.map((chapter) => ({
                     _id: chapter._id,
-                    label: chapter.name,
-                    value: chapter.name,
+                    name: chapter.name,
                   })) || [],
                   searchValue
                 )}
@@ -199,65 +167,18 @@ const StudyProgress = () => {
                 fetching={chaptersFetching}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
+                maxCount={3}
               />
             )}
           />
         </View>
         {form.formState.errors &&
-        form.formState.errors.chapterName &&
-        form.formState.errors.chapterName?.message ? (
+        form.formState.errors.chapters &&
+        form.formState.errors.chapters?.message ? (
           <Text className="text-xs text-leadlly-red font-mada-medium -mt-2.5 mb-2 mx-1">
-            {form.formState.errors.chapterName?.message}
+            {form.formState.errors.chapters?.message}
           </Text>
         ) : null}
-        {form.formState.errors &&
-        form.formState.errors.topicNames &&
-        form.formState.errors.topicNames?.message ? (
-          <Text className="text-xs text-leadlly-red font-mada-medium -mt-2.5 mb-2 mx-1">
-            {form.formState.errors.topicNames?.message}
-          </Text>
-        ) : null}
-
-        {isSelectedChapter && (topicsFetching || topicsLoading) ? (
-          <View className="flex-row items-start space-x-2">
-            <ActivityIndicator size={10} color={"black"} />
-
-            <Text className="flex-1 text-sm font-mada-medium text-black leading-4 mb-2">
-              Please wait while topics for the selected chapter is being
-              added...
-            </Text>
-          </View>
-        ) : isSelectedChapter && (topicsFetchingSuccess || topicsFetched) ? (
-          <Text className="text-sm font-mada-medium text-black leading-4 mb-2 -mt-2">
-            Topics for the selected chapter has been added.
-          </Text>
-        ) : null}
-
-        {/* <View>
-          <Controller
-            name="topicNames"
-            control={form.control}
-            render={({ field }) => (
-              <MultiSelect
-                label="Topics"
-                labelStyle="text-xl ml-1"
-                placeholder="Select topics"
-                defaultValue={field.value}
-                onValueChange={field.onChange}
-                items={
-                  topicsData?.topics.map((topic) => ({
-                    _id: topic._id,
-                    label: capitalizeFirstLetter(topic.name)!,
-                    value: topic.name,
-                  })) || []
-                }
-                loading={topicsLoading}
-                fetching={topicsFetching}
-                maxCount={3}
-              />
-            )}
-          />
-        </View> */}
 
         <View className="items-center justify-center">
           <TouchableOpacity
@@ -265,18 +186,12 @@ const StudyProgress = () => {
               "w-20 h-8 bg-primary rounded-md items-center justify-center",
               savingStudyData ||
                 creatingPlanner ||
-                allocatingBackTopics ||
-                topicsFetching ||
-                (topicsLoading && "opacity-70")
+                (allocatingBackTopics && "opacity-70")
             )}
             disabled={
-              savingStudyData ||
-              creatingPlanner ||
-              allocatingBackTopics ||
-              topicsFetching ||
-              topicsLoading
+              savingStudyData || creatingPlanner || allocatingBackTopics
             }
-            onPress={form.handleSubmit(onSubmitStudyData)}
+            onPress={form.handleSubmit(onSubmitUnrevisedData)}
           >
             {savingStudyData || creatingPlanner || allocatingBackTopics ? (
               <ActivityIndicator size={"small"} color={"white"} />

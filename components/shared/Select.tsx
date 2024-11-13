@@ -30,7 +30,7 @@ const Select = ({
   searchValue,
   setSearchValue,
 }: {
-  items: { _id: string; label: string | number; value: string | number }[];
+  items: { _id: string; name: string | number }[];
   defaultValue: { name: string; _id: string } | null;
   onValueChange: (value: { name: string | number; _id: string }) => void;
   inputStyle?: string;
@@ -55,13 +55,9 @@ const Select = ({
     setSelectedValue(defaultValue);
   }, [defaultValue]);
 
-  const handleSelectValue = (data: {
-    _id: string;
-    label: string | number;
-    value: string | number;
-  }) => {
-    setSelectedValue({ name: data.value, _id: data._id });
-    onValueChange({ name: data.value, _id: data._id });
+  const handleSelectValue = (data: { _id: string; name: string | number }) => {
+    setSelectedValue({ name: data.name, _id: data._id });
+    onValueChange({ name: data.name, _id: data._id });
     setShowDropdown(false);
   };
 
@@ -142,17 +138,17 @@ const Select = ({
             ) : items && items.length > 0 ? (
               items.map((item) => (
                 <Pressable
-                  key={item.value}
+                  key={item.name}
                   className={clsx(
                     "flex-row items-center justify-between px-4 py-3 border-b border-input-border",
-                    items[items.length - 1].value === item.value && "border-b-0"
+                    items[items.length - 1].name === item.name && "border-b-0"
                   )}
                   onPress={() => handleSelectValue(item)}
                 >
                   <Text className="flex-1 text-base font-mada-regular leading-5">
-                    {capitalizeFirstLetter(String(item.label))}
+                    {capitalizeFirstLetter(String(item.name))}
                   </Text>
-                  {selectedValue?.name === item.value && (
+                  {selectedValue?.name === item.name && (
                     <Feather name="check" size={20} color="black" />
                   )}
                 </Pressable>

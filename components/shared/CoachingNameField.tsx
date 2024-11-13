@@ -40,8 +40,7 @@ const CoachingNameField = ({
             coachingData.institutes.length > 0
               ? coachingData.institutes.map((item) => ({
                   _id: item.intituteId,
-                  label: item.name,
-                  value: item.name,
+                  name: item.name,
                 }))
               : []
           }

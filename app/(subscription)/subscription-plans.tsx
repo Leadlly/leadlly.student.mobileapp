@@ -62,17 +62,19 @@ const SubscriptionPlansScreen: React.FC = () => {
     return null;
   });
 
-
   const [paginationIndex, setPaginationIndex] = useState<number>(0);
 
- useEffect(() => {
-   if (filteredPlans && filteredPlans.length > 0) {
-     const defaultPaginationIndex =
-       filteredPlans.findIndex((plan) => plan.category === "pro");
- 
-     setPaginationIndex(defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0);
-   }
- }, [filteredPlans]);
+  useEffect(() => {
+    if (filteredPlans && filteredPlans.length > 0) {
+      const defaultPaginationIndex = filteredPlans.findIndex(
+        (plan) => plan.category === "pro"
+      );
+
+      setPaginationIndex(
+        defaultPaginationIndex !== -1 ? defaultPaginationIndex : 0
+      );
+    }
+  }, [filteredPlans]);
 
   const [transactionCancelled, setIsTransactionCancelled] = useState(false);
   const [transactionSuccess, setIsTransactionSuccess] = useState(false);
@@ -134,10 +136,10 @@ const SubscriptionPlansScreen: React.FC = () => {
   }, []);
 
   return (
-    <SafeAreaView className="bg-white flex-1">
-      <ScrollView className="flex-1">
+    <>
+      <ScrollView className="flex-1 bg-white">
         <View
-          className="relative mx-5 mt-5 mb-2 bg-primary rounded-xl h-28 justify-center pl-6"
+          className="relative mx-5 mb-2 bg-primary rounded-xl h-28 justify-center pl-6"
           style={{ overflow: "hidden" }}
         >
           <ImageBackground
@@ -242,7 +244,7 @@ const SubscriptionPlansScreen: React.FC = () => {
           referenceId={referenceId}
         />
       )}
-    </SafeAreaView>
+    </>
   );
 };
 

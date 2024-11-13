@@ -133,7 +133,10 @@ export function formatDate(
 }
 
 export const filterItemsBySearch = (
-  items: { _id: string; label: string | number; value: string | number }[],
+  items: {
+    _id: string;
+    name: string | number;
+  }[],
   searchValue: string
 ) => {
   if (!Array.isArray(items) || !searchValue) return items;
@@ -141,6 +144,6 @@ export const filterItemsBySearch = (
   const lowerSearchValue = searchValue.toLowerCase();
 
   return items.filter((item) =>
-    item.value?.toString().toLowerCase().includes(lowerSearchValue)
+    item.name?.toString().toLowerCase().includes(lowerSearchValue)
   );
 };
