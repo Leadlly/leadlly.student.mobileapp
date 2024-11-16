@@ -65,7 +65,8 @@ const WeeklyPlanButton = ({
             }`}
           >
             {item.backRevisionTopics.length > 0 ||
-            item.continuousRevisionTopics.length > 0 ? (
+            item.continuousRevisionTopics.length > 0 ||
+            item.continuousRevisionSubTopics.length > 0 ? (
               <>
                 {item.backRevisionTopics
                   .map((topics: TRevisionProps) =>

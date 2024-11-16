@@ -25,11 +25,6 @@ const Dashboard = () => {
     isRedirectedAfterSubscription?: string;
   }>();
 
-  console.log(
-    "isRedirectedAfterSubscription====> ",
-    params.isRedirectedAfterSubscription
-  );
-
   const user = useAppSelector((state) => state.user.user);
 
   const { mutateAsync: savePushToken, isPending: savingPushToken } =
