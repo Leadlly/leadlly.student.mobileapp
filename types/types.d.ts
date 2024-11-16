@@ -78,8 +78,10 @@ export type UserDataProps = {
     points?: { number: number };
     streak?: { number: number; updatedAt: Date };
     mood?: Array<{
+      _id?: string;
       day: string;
-      emoji: string;
+      date: string | null;
+      emoji: string | null;
     }>;
     report?: {
       dailyReport?: {
@@ -193,9 +195,15 @@ export type TDayProps = {
   continuousRevisionTopics: TRevisionProps[];
   continuousRevisionSubTopics: TRevisionProps[];
   backRevisionTopics: TRevisionProps[];
+  chapters: Array<{
+    id: string;
+    name: string;
+    quizId: string;
+    subject: ISubject;
+  }>;
   questions: { [key: string]: any };
-  completedTopics: any[];
-  incompletedTopics: any[];
+  completedTopics: string[];
+  incompletedTopics: string[];
   _id: string;
 };
 

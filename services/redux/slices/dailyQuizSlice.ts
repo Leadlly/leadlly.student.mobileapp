@@ -57,7 +57,7 @@ const dailyQuizSlice = createSlice({
       state,
       action: PayloadAction<{ topicName: string }>
     ) => {
-      state.dailyQuizzes.filter(
+      state.dailyQuizzes = state.dailyQuizzes.filter(
         (quiz) => quiz.topicName !== action.payload.topicName
       );
       AsyncStorage.setItem(
