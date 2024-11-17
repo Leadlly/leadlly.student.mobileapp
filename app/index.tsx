@@ -2,6 +2,12 @@ import { Redirect } from "expo-router";
 import { useAppSelector } from "../services/redux/hooks";
 import * as Updates from "expo-updates";
 import { useEffect } from "react";
+import SpInAppUpdates, {
+  NeedsUpdateResponse,
+  IAUUpdateKind,
+  StartUpdateOptions,
+} from "sp-react-native-in-app-updates";
+import { Platform } from "react-native";
 
 const WelcomeScreen = () => {
   const { loading, user } = useAppSelector((state) => state.user);
@@ -10,20 +16,25 @@ const WelcomeScreen = () => {
 
   const userCategory = user?.category || "free";
 
-  const checkForUpdates = async () => {
-    try {
-      const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable) {
-        await Updates.fetchUpdateAsync();
-        await Updates.reloadAsync();
+  const inAppUpdates = new SpInAppUpdates(true);
+
+  const checkForBundleUpdates = () => {
+    inAppUpdates.checkNeedsUpdate().then((result) => {
+      if (result.shouldUpdate) {
+        let updateOptions: StartUpdateOptions = {};
+        if (Platform.OS === "android") {
+          // android only, on iOS the user will be prompted to go to your app store page
+          updateOptions = {
+            updateType: IAUUpdateKind.IMMEDIATE,
+          };
+        }
+        inAppUpdates.startUpdate(updateOptions);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
 
   useEffect(() => {
-    checkForUpdates();
+    checkForBundleUpdates();
   }, []);
 
   useEffect(() => {
