@@ -1,10 +1,15 @@
 import { View, Text, Pressable } from "react-native";
 import {
   capitalizeFirstLetter,
+  formatTopicString,
   getFormattedDate,
   getTodaysFormattedDate,
 } from "../../helpers/utils";
-import { TDayProps, TRevisionProps } from "../../types/types";
+import {
+  TChapterRevisionProps,
+  TDayProps,
+  TRevisionProps,
+} from "../../types/types";
 
 const WeeklyPlanButton = ({
   item,
@@ -15,6 +20,8 @@ const WeeklyPlanButton = ({
   onPress: () => void;
   borderColor: string;
 }) => {
+  const formattedString = formatTopicString(item);
+
   return (
     <Pressable
       key={item._id}
@@ -65,33 +72,12 @@ const WeeklyPlanButton = ({
             }`}
           >
             {item.backRevisionTopics.length > 0 ||
-            item.continuousRevisionTopics.length > 0 ? (
-              <>
-                {item.backRevisionTopics
-                  .map((topics: TRevisionProps) =>
-                    capitalizeFirstLetter(topics.topic.name)
-                  )
-                  .join(" / ")}
-                {item.backRevisionTopics.length > 0 &&
-                  item.continuousRevisionTopics.length > 0 &&
-                  " / "}
-                {item.continuousRevisionTopics
-                  .map((topics: TRevisionProps) =>
-                    capitalizeFirstLetter(topics.topic.name)
-                  )
-                  .join(" / ")}
-                {(item.backRevisionTopics.length > 0 ||
-                  item.continuousRevisionTopics.length > 0) &&
-                  item.continuousRevisionSubTopics.length > 0 &&
-                  " / "}
-                {item.continuousRevisionSubTopics
-                  .map((subtopics: TRevisionProps) =>
-                    capitalizeFirstLetter(subtopics.subtopic.name)
-                  )
-                  .join(" / ")}
-              </>
+            item.continuousRevisionTopics.length > 0 ||
+            item.continuousRevisionSubTopics.length > 0 ||
+            item.chapters.length > 0 ? (
+              <>{formattedString}</>
             ) : (
-              <>No topics</>
+              "No topics"
             )}
           </Text>
         </View>

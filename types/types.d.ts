@@ -189,18 +189,20 @@ export type TRevisionProps = {
   weeklyTestScore?: number;
 };
 
+export type TChapterRevisionProps = {
+  id: string;
+  name: string;
+  quizId: string;
+  subject: ISubject;
+};
+
 export type TDayProps = {
   date: string;
   day: string;
   continuousRevisionTopics: TRevisionProps[];
   continuousRevisionSubTopics: TRevisionProps[];
   backRevisionTopics: TRevisionProps[];
-  chapters: Array<{
-    id: string;
-    name: string;
-    quizId: string;
-    subject: ISubject;
-  }>;
+  chapters: TChapterRevisionProps[];
   questions: { [key: string]: any };
   completedTopics: string[];
   incompletedTopics: string[];

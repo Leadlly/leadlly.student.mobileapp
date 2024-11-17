@@ -1,6 +1,5 @@
 import { Redirect } from "expo-router";
 import { useAppSelector } from "../services/redux/hooks";
-import { freeTrialDays } from "../constants/constants";
 import * as Updates from "expo-updates";
 import { useEffect } from "react";
 
@@ -10,6 +9,22 @@ const WelcomeScreen = () => {
     Updates.useUpdates();
 
   const userCategory = user?.category || "free";
+
+  const checkForUpdates = async () => {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        await Updates.reloadAsync();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    checkForUpdates();
+  }, []);
 
   useEffect(() => {
     if (isUpdatePending) {

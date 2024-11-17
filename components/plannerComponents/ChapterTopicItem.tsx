@@ -15,7 +15,7 @@ const ChapterTopicItem = ({
     <View
       className={clsx(
         "rounded-md px-2 py-1",
-        isSubtopics ? "bg-leadlly-cyan/20" : "bg-primary/20 "
+        isSubtopics ? "bg-leadlly-cyan/20" : "bg-leadlly-yellow/20 "
       )}
     >
       <Text
@@ -23,7 +23,7 @@ const ChapterTopicItem = ({
         ellipsizeMode="tail"
         className={clsx(
           "font-mada-semibold capitalize",
-          isSubtopics ? "text-leadlly-cyan" : "text-primary"
+          isSubtopics ? "text-leadlly-cyan" : "text-leadlly-yellow"
         )}
       >
         {isSubtopics ? item.topic?.name : item.chapter.name}
