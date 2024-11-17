@@ -13,21 +13,13 @@ import LottieView from "lottie-react-native";
 import DashboardSkeletonLoader from "./DashboardSkeletonLoader";
 import { useRouter } from "expo-router";
 
-const chapters = [
-  {
-    id: "1",
-    name: "Atoms",
-    quizId: "123",
-  },
-  {
-    id: "2",
-    name: "Atoms & molecules",
-    quizId: "1234",
-  },
-];
-
-const ToDoList = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+const ToDoList = ({
+  modalVisible,
+  setModalVisible,
+}: {
+  modalVisible: boolean;
+  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [todaysTopics, setTodaysTopics] = useState<TDayProps | null>(null);
   const [topic, setTopic] = useState<{
     name: string;

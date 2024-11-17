@@ -9,7 +9,7 @@ import InitialSetupInfoModal from "../../components/dashboardComponents/InitialS
 import InitialTodoBox from "../../components/dashboardComponents/InitialTodoBox";
 import { useAppSelector } from "../../services/redux/hooks";
 import { BlurView } from "expo-blur";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { registerForPushNotificationsAsync } from "../../helpers/registerForPushNotificationsAsync";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSavePushToken } from "../../services/queries/notificationQuery";
@@ -18,11 +18,13 @@ import ReloadApp from "../../components/shared/ReloadApp";
 import useAppStateChange from "../../hooks/useAppStateChange";
 
 const Dashboard = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   const currentAppState = useAppStateChange();
 
   const params = useLocalSearchParams<{
     initialSetup?: string;
-    isRedirectedAfterSubscription?: string;
+    isReloadingApp?: string;
   }>();
 
   const user = useAppSelector((state) => state.user.user);
@@ -44,13 +46,8 @@ const Dashboard = () => {
     getPushToken();
   }, []);
 
-  if (params.isRedirectedAfterSubscription === "true") {
-    return (
-      <ReloadApp
-        isRedirected={params.isRedirectedAfterSubscription}
-        user={user}
-      />
-    );
+  if (params.isReloadingApp === "true" && !modalVisible) {
+    return <ReloadApp isRedirected={params.isReloadingApp} user={user} />;
   }
 
   return (
@@ -64,7 +61,14 @@ const Dashboard = () => {
           showsVerticalScrollIndicator={false}
           className="flex-1 bg-white px-4 mb-16"
         >
-          {user && user.planner === false ? <InitialTodoBox /> : <ToDoList />}
+          {user && user.planner === false ? (
+            <InitialTodoBox />
+          ) : (
+            <ToDoList
+              modalVisible={modalVisible}
+              setModalVisible={setModalVisible}
+            />
+          )}
 
           <View className="flex-1 relative">
             {user && user.planner === false && (
