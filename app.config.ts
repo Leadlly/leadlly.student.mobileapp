@@ -15,6 +15,9 @@ export default {
     },
     ios: {
       supportsTablet: true,
+      infoPlist: {
+        LSApplicationQueriesSchemes: ["itms-apps"],
+      },
     },
     android: {
       adaptiveIcon: {
@@ -26,10 +29,10 @@ export default {
       versionCode: 7,
     },
     updates: {
-      url: "https://u.expo.dev/91b0599c-a56a-4e2e-87b0-a5614b4fd0ae"
+      url: "https://u.expo.dev/91b0599c-a56a-4e2e-87b0-a5614b4fd0ae",
     },
     runtimeVersion: {
-      policy: "appVersion"
+      policy: "appVersion",
     },
     web: {
       favicon: "./assets/favicon.png",
@@ -37,10 +40,11 @@ export default {
     plugins: [
       "expo-router",
       "expo-font",
-      ["expo-updates",
+      [
+        "expo-updates",
         {
-          "username": "leadlly"
-        }
+          username: "leadlly",
+        },
       ],
       ["@react-native-google-signin/google-signin"],
       [
