@@ -7,7 +7,6 @@ import {
 } from "../../types/types";
 import ChapterTopicItem from "./ChapterTopicItem";
 import LottieView from "lottie-react-native";
-import ChapterItem from "./ChapterItem";
 
 const PlannerSubjectList = ({
   item,
@@ -56,7 +55,7 @@ const PlannerSubjectList = ({
         (mergedChapters && mergedChapters.length > 0) ? (
           <>
             {mergedChapters.map((item) => (
-              <ChapterItem key={item.id} item={item} />
+              <ChapterTopicItem key={item.id} item2={item} isChapter={true} />
             ))}
             {mergedData.map((item) => (
               <ChapterTopicItem key={item._id} item={item} />
