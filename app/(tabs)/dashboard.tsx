@@ -16,9 +16,17 @@ import { useSavePushToken } from "../../services/queries/notificationQuery";
 import { colors } from "../../constants/constants";
 import ReloadApp from "../../components/shared/ReloadApp";
 import useAppStateChange from "../../hooks/useAppStateChange";
+import { TCustomNotificationsType } from "../../types/types";
+import { useCheckForCustomNotifications } from "../../services/queries/userQuery";
+import CustomNotificationsModal from "../../components/dashboardComponents/CustomNotificationsModal";
 
 const Dashboard = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [toggleNotificationsModal, setToggleNotificationsModal] =
+    useState(false);
+  const [notificationsData, setNotificationsData] = useState<
+    TCustomNotificationsType[]
+  >([]);
 
   const currentAppState = useAppStateChange();
 
@@ -32,6 +40,13 @@ const Dashboard = () => {
   const { mutateAsync: savePushToken, isPending: savingPushToken } =
     useSavePushToken();
 
+  const {
+    data: customNotifications,
+    isLoading,
+    isSuccess,
+    refetch,
+  } = useCheckForCustomNotifications("false");
+
   useEffect(() => {
     const getPushToken = async () => {
       const pushTokenString = await registerForPushNotificationsAsync();
@@ -44,7 +59,25 @@ const Dashboard = () => {
     };
 
     getPushToken();
+    refetch();
   }, []);
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (
+      isSuccess &&
+      customNotifications &&
+      customNotifications.notifications.length > 0
+    ) {
+      setNotificationsData(customNotifications.notifications);
+    }
+  }, [customNotifications, isLoading, isSuccess]);
+
+  useEffect(() => {
+    if (notificationsData && notificationsData.length > 0) {
+      setToggleNotificationsModal(true);
+    }
+  }, [notificationsData]);
 
   if (params.isReloadingApp === "true" && !modalVisible) {
     return <ReloadApp isRedirected={params.isReloadingApp} user={user} />;
@@ -82,6 +115,13 @@ const Dashboard = () => {
           <ProgressAnalytics />
 
           <InitialSetupInfoModal params={params} />
+
+          <CustomNotificationsModal
+            modalVisible={toggleNotificationsModal}
+            setModalVisible={setToggleNotificationsModal}
+            notificationsData={notificationsData}
+            setNotificationsData={setNotificationsData}
+          />
         </ScrollView>
       )}
     </>

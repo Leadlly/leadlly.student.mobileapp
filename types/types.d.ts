@@ -616,3 +616,13 @@ export type QuizReport = QuizReportSummary & {
   subjectWiseReport: SubjectWiseReport;
   questions: SolvedQuestion[];
 };
+
+export type TCustomNotificationsType = {
+  _id: string;
+  sender: string;
+  studentId: string;
+  message: string;
+  url: string[];
+  isRead: boolean;
+  createdAt: string;
+};

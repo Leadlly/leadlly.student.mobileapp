@@ -19,6 +19,7 @@ const ModalComponent = ({
   children,
   className,
   isCloseIcon = true,
+  closeIconClassName,
   isSavingDailyQuiz = false,
   handleBackSubmit,
 }: {
@@ -27,6 +28,7 @@ const ModalComponent = ({
   setModalVisible: (modalVisible: boolean) => void;
   className?: string;
   isCloseIcon?: boolean;
+  closeIconClassName?: string;
   isSavingDailyQuiz?: boolean;
   handleBackSubmit?: () => Promise<void>;
 }) => {
@@ -54,7 +56,10 @@ const ModalComponent = ({
           {children}
           {isCloseIcon && (
             <TouchableOpacity
-              className="absolute top-6 right-4 w-7 h-7 border items-center justify-center rounded-md"
+              className={clsx(
+                "absolute top-6 right-4 w-7 h-7 border items-center justify-center rounded-md",
+                closeIconClassName
+              )}
               onPress={() => setModalVisible(false)}
             >
               <AntDesign name="close" size={15} color="black" />
