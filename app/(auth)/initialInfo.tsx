@@ -47,7 +47,7 @@ const initialInfo = () => {
     <GenderForm next={next} form={form} />,
     <ClassForm next={next} form={form} />,
     <CourseForm next={next} form={form} />,
-    <CoachingNameForm next={next} form={form} />,
+    // <CoachingNameForm next={next} form={form} />,
     <ScheduleForm
       next={next}
       form={form}
