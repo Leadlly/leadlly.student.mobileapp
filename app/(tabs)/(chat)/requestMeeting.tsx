@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { View } from "react-native";
 import { useRequestMeeting } from "../../../services/queries/meetingQuery";
 import { RequestMeetingFormSchema } from "../../../schemas/requestMeetingFormSchema";
 import { z } from "zod";
 import RequestMeetingForm from "../../../components/MeetingComponents/RequestMeetingForm";
 import SuccessMessage from "../../../components/MeetingComponents/SuccessMessage";
-import { useAppSelector } from "../../../services/redux/hooks";
-import ModalComponent from "../../../components/shared/ModalComponent";
-import { BlurView } from "expo-blur";
-import UpgradeButton from "../../../components/shared/UpgradeButton";
 
 const RequestMeetingComponent: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);

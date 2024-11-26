@@ -35,7 +35,6 @@ const PaymentSuccessModal = ({
       modalVisible={transactionSuccess}
       setModalVisible={setIsTransactionSuccess}
       isCloseIcon={false}
-      className="flex-1"
     >
       <View className="h-96 w-full relative items-center justify-center space-y-5">
         {loadingUserData ? (

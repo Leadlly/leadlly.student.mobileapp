@@ -1,5 +1,11 @@
-import { Text, StyleSheet, View, useWindowDimensions } from "react-native";
-import React, { useEffect } from "react";
+import {
+  Text,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+  TouchableOpacity,
+} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import { TCustomNotificationsType } from "../../types/types";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -12,6 +18,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { useUpdateCustomNotification } from "../../services/queries/userQuery";
 import { Extrapolate } from "@shopify/react-native-skia";
+import { colors } from "../../constants/constants";
+import { FontAwesome } from "@expo/vector-icons";
 
 const NotificationCard = ({
   notification,
@@ -38,6 +46,10 @@ const NotificationCard = ({
   >;
   setModalVisible: (modalVisible: boolean) => void;
 }) => {
+  const [isMessageExpanded, setIsMessageExpanded] = useState(false);
+  const [notificationCardHeight, setNotificationCardHeight] = useState(0);
+  const notificationCardRef = useRef<View>(null);
+
   const { width } = useWindowDimensions();
   const translateX = useSharedValue(0);
   const direction = useSharedValue(0);
@@ -46,6 +58,20 @@ const NotificationCard = ({
   useEffect(() => {
     currentIndexRef.value = currentIndex;
   }, [currentIndex]);
+
+  const onNotificationCardLayout = () => {
+    if (notificationCardRef.current) {
+      notificationCardRef.current.measure((x, y, width, height) => {
+        setNotificationCardHeight(height);
+      });
+    }
+  };
+
+  const displayMessage = isMessageExpanded
+    ? notification.message
+    : notification.message.length > 200
+      ? notification.message.slice(0, 200) + "..."
+      : notification.message;
 
   const { mutateAsync: updateNotificationStatus } =
     useUpdateCustomNotification();
@@ -84,7 +110,7 @@ const NotificationCard = ({
           translateX.value = withTiming(width * direction.value, {}, () => {
             runOnJS(handleCardDismiss)();
             runOnJS(handleUpdateNotificationStatus)();
-            if (notificationsData.length <= 0) {
+            if (notificationLength <= 1) {
               runOnJS(setModalVisible)(false);
             }
           });
@@ -109,7 +135,7 @@ const NotificationCard = ({
     const translateY = interpolate(
       animatedValue.value,
       [index - 1, index, index + 1],
-      [-30, 0, 0],
+      [-notificationCardHeight * 0.1, 0, 0],
       Extrapolate.CLAMP
     );
 
@@ -146,6 +172,8 @@ const NotificationCard = ({
   return (
     <GestureDetector gesture={pan}>
       <Animated.View
+        ref={notificationCardRef}
+        onLayout={onNotificationCardLayout}
         style={[
           styles.notificationCard,
           {
@@ -155,11 +183,45 @@ const NotificationCard = ({
           animatedStyle,
         ]}
       >
-        <Text className="text-lg font-mada-semibold leading-5">
-          {notification.message}
+        <Text className="text-base text-center text-secondary-text font-mada-medium leading-5">
+          {index + 1}/{notificationLength}
         </Text>
-        <Text className="text-sm font-mada-semibold leading-5">
-          {notification._id}
+        <View className="flex-row items-center space-x-2">
+          <FontAwesome name="bell" size={18} color={colors.primary} />
+
+          <Text className="text-base font-mada-semibold">
+            Message from your Mentor
+          </Text>
+        </View>
+        <View className="space-y-3">
+          <Text className="text-base font-mada-medium leading-5 px-5">
+            {displayMessage}
+          </Text>
+          {notification.message.length > 200 ? (
+            <View className="items-end">
+              <TouchableOpacity onPress={() => setIsMessageExpanded(true)}>
+                <Text className="text-sm font-mada-medium text-secondary-text -mt-2">
+                  {isMessageExpanded ? "Read Less" : "...Read More"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+          {notification.url && notification.url.length > 0 ? (
+            <View className="border bg-primary/25 px-5 py-3 rounded-lg">
+              <Text className="text-sm font-mada-semibold leading-5">
+                More Information -
+              </Text>
+              {notification.url.map((item, i) => (
+                <Text key={i} className="text-sm font-mada-regular leading-5">
+                  {item}
+                </Text>
+              ))}
+            </View>
+          ) : null}
+        </View>
+
+        <Text className="text-xs text-center text-secondary-text font-mada-regular">
+          {"<<<"} Swipe to Close {">>>"}
         </Text>
       </Animated.View>
     </GestureDetector>
@@ -168,21 +230,23 @@ const NotificationCard = ({
 
 const styles = StyleSheet.create({
   notificationCard: {
-    height: 240,
+    flex: 1,
+    gap: 20,
+    minHeight: 240,
     position: "absolute",
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: colors.primary50,
     alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
+    justifyContent: "space-between",
+    borderRadius: 25,
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
       height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3.5,
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 6,
   },
 });
 

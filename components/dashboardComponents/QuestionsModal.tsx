@@ -155,7 +155,6 @@ const QuestionsModal = ({
       isCloseIcon={false}
       isSavingDailyQuiz={savingDailyQuiz}
       handleBackSubmit={handleBackSubmit}
-      className="flex-1"
     >
       <ScrollView
         showsVerticalScrollIndicator={false}

@@ -17,20 +17,22 @@ const ModalComponent = ({
   modalVisible,
   setModalVisible,
   children,
-  className,
+  containerClassName,
   isCloseIcon = true,
   closeIconClassName,
   isSavingDailyQuiz = false,
   handleBackSubmit,
+  isShadow = true,
 }: {
   children: React.ReactNode;
   modalVisible: boolean;
   setModalVisible: (modalVisible: boolean) => void;
-  className?: string;
+  containerClassName?: string;
   isCloseIcon?: boolean;
   closeIconClassName?: string;
   isSavingDailyQuiz?: boolean;
   handleBackSubmit?: () => Promise<void>;
+  isShadow?: boolean;
 }) => {
   return (
     <Modal
@@ -50,8 +52,11 @@ const ModalComponent = ({
         className="flex-1 items-center justify-center p-5"
       >
         <View
-          className={clsx("relative w-full bg-white p-4 rounded-xl", className)}
-          style={styles.modalContentContainer}
+          className={clsx(
+            "relative w-full bg-white p-4 rounded-xl",
+            containerClassName
+          )}
+          style={isShadow ? styles.modalContentContainer : null}
         >
           {children}
           {isCloseIcon && (
