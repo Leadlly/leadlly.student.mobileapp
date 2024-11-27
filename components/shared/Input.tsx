@@ -72,7 +72,7 @@ const Input = ({
               selectionColor={colors.primary200}
               {...props}
               className={clsx(
-                "text-left text-base h-10 flex-1 font-mada-regular",
+                "text-left text-base min-h-[40px] flex-1 font-mada-regular",
                 inputStyle
               )}
             />

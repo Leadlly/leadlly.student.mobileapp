@@ -1,9 +1,8 @@
-import { colors } from '../../../constants/constants';
-import { MaterialTobTabs } from '../../../components/shared/MaterialTobTabsConfig';
-
+import { colors } from "../../../constants/constants";
+import { MaterialTobTabs } from "../../../components/shared/MaterialTobTabsConfig";
 
 const PlannerLayout = () => {
-	return (
+  return (
     <MaterialTobTabs
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
@@ -25,6 +24,7 @@ const PlannerLayout = () => {
         },
       }}
     >
+      <MaterialTobTabs.Screen name="chat" options={{ title: "Chat" }} />
       <MaterialTobTabs.Screen name="meetings" options={{ title: "Meetings" }} />
       <MaterialTobTabs.Screen
         name="requestMeeting"
