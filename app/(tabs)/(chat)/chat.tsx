@@ -6,21 +6,57 @@ import {
   FlatList,
   StyleSheet,
   ImageBackground,
+  Pressable,
+  Alert,
 } from "react-native";
 import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
 import Input from "../../../components/shared/Input";
 import { colors } from "../../../constants/constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSocket } from "../../../context/SocketContext";
+import { useAppSelector } from "../../../services/redux/hooks";
+import { useRouter } from "expo-router";
 
 const ChatScreen = () => {
   const [messageValue, setMessageValue] = useState("");
+
+  const user = useAppSelector((state) => state.user.user);
+
+  const { socket } = useSocket();
+
+  const router = useRouter();
 
   const handleMessageSubmit = () => {
     console.log(messageValue);
   };
 
+  const getMessages = async () => {
+    if (!user)
+      return Alert.alert("No user", "No logged in user available!", [
+        {
+          text: "Back",
+          onPress: () => router.replace("/welcome"),
+          style: "cancel",
+        },
+      ]);
+    if (!socket)
+      return Alert.alert("No socket", "No socket available!", [
+        {
+          text: "Back",
+          onPress: () => router.replace("/welcome"),
+          style: "cancel",
+        },
+      ]);
+
+    socket.emit("student_joining_room", { userEmail: user.email });
+  };
+
+  useEffect(() => {
+    getMessages();
+  }, []);
+
   return (
-    <View className="mb-16 bg-white px-3 py-2 flex-1">
+    <View className="mb-16 bg-white p-2 flex-1">
       <View className="flex-1 border border-input-border rounded-3xl overflow-hidden">
         <View className="bg-primary/20 flex-row items-center justify-between space-x-3 py-2 px-4">
           <View className="flex-1 flex-row items-center space-x-3">
@@ -56,49 +92,57 @@ const ChatScreen = () => {
           </View>
         </View>
 
-        <View className="flex-1 pb-3 px-3 bg-white">
+        <View className="flex-1 pb-3 bg-primary/[0.03]">
           <ImageBackground
             source={require("../../../assets/images/chat_bg.jpg")}
             resizeMode="cover"
-            className="absolute top-0 right-0 bottom-0 left-0 opacity-10"
+            className="absolute top-0 right-0 bottom-0 left-0 opacity-[0.06]"
           />
 
           <FlatList
-            data={Array.from({ length: 1 })}
+            data={Array.from({ length: 100 })}
             renderItem={({ index, item }) => (
-              <TouchableOpacity className="px-2 py-1 rounded-lg bg-white max-w-[40%] w-full my-2">
-                <Text>Hello {index + 1}</Text>
-              </TouchableOpacity>
+              <Pressable>
+                <View
+                  style={styles.boxShadow}
+                  className="p-2.5 rounded-lg bg-white max-w-[50%] my-2 mx-3"
+                >
+                  <Text className="text-base font-mada-regular leading-5">
+                    Hello {index + 1}
+                  </Text>
+                </View>
+              </Pressable>
             )}
             className="flex-1"
           />
 
-          <View
-            style={styles.boxShadow}
-            className="flex-row items-center space-x-3 bg-white rounded-full px-3 py-2 mt-2"
-          >
-            <TouchableOpacity>
-              <Entypo name="emoji-happy" size={20} color={colors.iconGray} />
-            </TouchableOpacity>
+          <View className="flex-row items-center space-x-1 mt-2 mx-1.5">
+            <View
+              style={styles.boxShadow}
+              className="flex-row flex-1 items-center space-x-3 bg-white rounded-full px-3 py-2"
+            >
+              <TouchableOpacity>
+                <Entypo name="emoji-happy" size={20} color={colors.iconGray} />
+              </TouchableOpacity>
 
-            <View className="flex-1">
-              <Input
-                value={messageValue}
-                onChangeText={(text) => setMessageValue(text)}
-                placeholder="Type a message here..."
-                multiline={true}
-                containerStyle="border-0"
-                inputStyle="px-3 max-h-24"
-              />
+              <View className="flex-1">
+                <Input
+                  value={messageValue}
+                  onChangeText={(text) => setMessageValue(text)}
+                  placeholder="Type a message here..."
+                  multiline={true}
+                  containerStyle="border-0"
+                  inputStyle="px-3 max-h-24"
+                />
+              </View>
             </View>
-
             <TouchableOpacity
-              className="bg-primary rounded-md px-2.5 h-8 items-center justify-center"
+              className="bg-primary rounded-full h-11 w-11 items-center justify-center"
               onPress={handleMessageSubmit}
             >
               <Ionicons
                 name="paper-plane"
-                size={18}
+                size={20}
                 color="white"
                 style={{
                   transform: [{ rotate: "45deg" }],
@@ -122,7 +166,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 1.5,
+    elevation: 1,
   },
 });
 
