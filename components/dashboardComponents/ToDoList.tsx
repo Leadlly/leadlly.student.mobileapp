@@ -12,18 +12,7 @@ import ToDoListItem from "./ToDoListItem";
 import LottieView from "lottie-react-native";
 import DashboardSkeletonLoader from "./DashboardSkeletonLoader";
 import { useRouter } from "expo-router";
-import QuizzesIcon from "../icons/QuizzesIcon";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors } from "../../constants/constants";
-
-const chaptersData = [
-  {
-    id: "1",
-    name: "Atoms",
-    quizId: "123",
-    subject: { name: "Physics" },
-  },
-];
 
 const ToDoList = ({
   modalVisible,
@@ -84,7 +73,7 @@ const ToDoList = ({
                 persistentScrollbar
                 className="flex-1 space-y-4 px-4 max-h-48"
               >
-                {chaptersData.map((chapter) => (
+                {todaysTopics.chapters.map((chapter) => (
                   <View
                     key={chapter.id}
                     className="flex-row items-center justify-between"
