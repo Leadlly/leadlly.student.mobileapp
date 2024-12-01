@@ -12,6 +12,18 @@ import ToDoListItem from "./ToDoListItem";
 import LottieView from "lottie-react-native";
 import DashboardSkeletonLoader from "./DashboardSkeletonLoader";
 import { useRouter } from "expo-router";
+import QuizzesIcon from "../icons/QuizzesIcon";
+import { MaterialIcons } from "@expo/vector-icons";
+import { colors } from "../../constants/constants";
+
+const chaptersData = [
+  {
+    id: "1",
+    name: "Atoms",
+    quizId: "123",
+    subject: { name: "Physics" },
+  },
+];
 
 const ToDoList = ({
   modalVisible,
@@ -72,21 +84,23 @@ const ToDoList = ({
                 persistentScrollbar
                 className="flex-1 space-y-4 px-4 max-h-48"
               >
-                {todaysTopics.chapters.map((chapter) => (
+                {chaptersData.map((chapter) => (
                   <View
                     key={chapter.id}
                     className="flex-row items-center justify-between"
                   >
-                    <Text className="flex-1 text-[15px] font-mada-semibold">
-                      {chapter.name}
-                    </Text>
+                    <View className="flex-row items-center space-x-3 flex-1">
+                      <MaterialIcons name="quiz" size={20} color="#787878" />
+                      <Text className="flex-1 text-[15px] font-mada-semibold">
+                        {chapter.name}
+                      </Text>
+                    </View>
                     <TouchableOpacity
                       onPress={() =>
                         router.push(`/quiz/${chapter.quizId}/attempt`)
                       }
-                      className="bg-primary rounded py-1.5 px-3"
                     >
-                      <Text className="text-white text-[8px] font-mada-medium">
+                      <Text className="text-primary underline text-[11px] font-mada-semibold">
                         Attempt Quiz
                       </Text>
                     </TouchableOpacity>
