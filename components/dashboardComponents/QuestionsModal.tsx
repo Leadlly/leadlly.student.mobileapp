@@ -25,7 +25,6 @@ import {
   dailyQuizAttemptedQuestions,
   filterCompletedTopics,
 } from "../../services/redux/slices/dailyQuizSlice";
-import LottieView from "lottie-react-native";
 
 const QuestionsModal = ({
   modalVisible,
@@ -139,6 +138,8 @@ const QuestionsModal = ({
 
   const handleBackSubmit = async () => {
     if (
+      questions &&
+      questions.length > 0 &&
       dailyQuizCurrentTopic &&
       dailyQuizCurrentTopic?.attemptedQuestions?.length > 0
     ) {
@@ -152,9 +153,8 @@ const QuestionsModal = ({
       modalVisible={modalVisible}
       setModalVisible={setModalVisible}
       isCloseIcon={false}
-      isSavingDailyQuiz={true}
+      isSavingDailyQuiz={savingDailyQuiz}
       handleBackSubmit={handleBackSubmit}
-      className="flex-1"
     >
       <ScrollView
         showsVerticalScrollIndicator={false}

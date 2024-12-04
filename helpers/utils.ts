@@ -1,5 +1,9 @@
 import { Dimensions } from "react-native";
-import { SubjectChaptersProps } from "../types/types";
+import {
+  SubjectChaptersProps,
+  TChapterRevisionProps,
+  TRevisionProps,
+} from "../types/types";
 
 const { width, height } = Dimensions.get("window");
 
@@ -146,4 +150,53 @@ export const filterItemsBySearch = (
   return items.filter((item) =>
     item.name?.toString().toLowerCase().includes(lowerSearchValue)
   );
+};
+
+// Helper function to format an array of items with a mapper function
+export const formatItems = <T>(
+  items: T[],
+  mapper: (item: T) => string
+): string => {
+  return items.map(mapper).map(capitalizeFirstLetter).join(" / ");
+};
+
+// Main function to format the topic string for weekly plan
+export const formatTopicString = (item: {
+  chapters: TChapterRevisionProps[];
+  backRevisionTopics: TRevisionProps[];
+  continuousRevisionTopics: TRevisionProps[];
+  continuousRevisionSubTopics: TRevisionProps[];
+}): string => {
+  const parts: string[] = [];
+
+  // Format chapters
+  if (item.chapters.length > 0) {
+    parts.push(formatItems(item.chapters, (chapter) => chapter.name));
+  }
+
+  // Format back revision topics
+  if (item.backRevisionTopics.length > 0) {
+    parts.push(
+      formatItems(item.backRevisionTopics, (topic) => topic.topic.name)
+    );
+  }
+
+  // Format continuous revision topics
+  if (item.continuousRevisionTopics.length > 0) {
+    parts.push(
+      formatItems(item.continuousRevisionTopics, (topic) => topic.topic.name)
+    );
+  }
+
+  // Format continuous revision subtopics
+  if (item.continuousRevisionSubTopics.length > 0) {
+    parts.push(
+      formatItems(
+        item.continuousRevisionSubTopics,
+        (subtopic) => subtopic.subtopic.name
+      )
+    );
+  }
+
+  return parts.join(" / ");
 };

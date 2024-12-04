@@ -1,7 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../axios/axios";
 import axios, { AxiosResponse } from "axios";
-import { StudentPersonalInfoProps } from "../../types/types";
+import {
+  StudentPersonalInfoProps,
+  TCustomNotificationsType,
+} from "../../types/types";
 
 export const useGoogleSignIn = () => {
   const queryClient = useQueryClient();
@@ -247,6 +250,61 @@ export const useStudentPersonalInfo = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["user"],
+      });
+    },
+  });
+};
+
+export const useCheckForCustomNotifications = (isRead: string) => {
+  return useQuery({
+    queryKey: ["customNotifications"],
+    queryFn: async () => {
+      try {
+        const res: AxiosResponse<{
+          notifications: TCustomNotificationsType[];
+          success: boolean;
+        }> = await axiosClient.get(
+          `/api/user/notification/check?isRead=${isRead}`
+        );
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error(
+            "An unknown error while fetching custom notifications!!"
+          );
+        }
+      }
+    },
+  });
+};
+
+export const useUpdateCustomNotification = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { id: string; status: string }) => {
+      try {
+        const res: AxiosResponse<{ success: boolean; message: string }> =
+          await axiosClient.put(
+            `/api/user/notification/update/${data.id}?status=${data.status}`
+          );
+
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error(
+            "An unknown error while updating the notification status!"
+          );
+        }
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["customNotifications"],
       });
     },
   });

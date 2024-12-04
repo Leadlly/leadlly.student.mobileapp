@@ -78,8 +78,10 @@ export type UserDataProps = {
     points?: { number: number };
     streak?: { number: number; updatedAt: Date };
     mood?: Array<{
+      _id?: string;
       day: string;
-      emoji: string;
+      date: string | null;
+      emoji: string | null;
     }>;
     report?: {
       dailyReport?: {
@@ -187,15 +189,23 @@ export type TRevisionProps = {
   weeklyTestScore?: number;
 };
 
+export type TChapterRevisionProps = {
+  id: string;
+  name: string;
+  quizId: string;
+  subject: ISubject;
+};
+
 export type TDayProps = {
   date: string;
   day: string;
   continuousRevisionTopics: TRevisionProps[];
   continuousRevisionSubTopics: TRevisionProps[];
   backRevisionTopics: TRevisionProps[];
+  chapters: TChapterRevisionProps[];
   questions: { [key: string]: any };
-  completedTopics: any[];
-  incompletedTopics: any[];
+  completedTopics: string[];
+  incompletedTopics: string[];
   _id: string;
 };
 
@@ -605,4 +615,14 @@ export type SolvedQuestion = {
 export type QuizReport = QuizReportSummary & {
   subjectWiseReport: SubjectWiseReport;
   questions: SolvedQuestion[];
+};
+
+export type TCustomNotificationsType = {
+  _id: string;
+  sender: string;
+  studentId: string;
+  message: string;
+  url: string[];
+  isRead: boolean;
+  createdAt: string;
 };

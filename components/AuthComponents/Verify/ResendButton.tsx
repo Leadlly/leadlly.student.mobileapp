@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axiosClient from "../../../services/axios/axios";
+import { colors } from "../../../constants/constants";
 
 const ResendOtpButton: React.FC = () => {
   const [isResendingOTP, setIsResendingOTP] = useState(false);
@@ -14,7 +15,7 @@ const ResendOtpButton: React.FC = () => {
     const email = await AsyncStorage.getItem("email");
 
     try {
-      const response = await axios.post("/api/auth/resend", { email });
+      const response = await axiosClient.post("/api/auth/resend", { email });
       const data = response.data;
 
       if (data.success) {
@@ -66,7 +67,7 @@ const ResendOtpButton: React.FC = () => {
         disabled={disableResend || isResendingOTP}
       >
         {isResendingOTP ? (
-          <ActivityIndicator size="small" color="#0000ff" />
+          <ActivityIndicator size="small" color={colors.primary} />
         ) : (
           <Text
             className={` ${disableResend ? "text-primary/70" : "text-primary"}`}

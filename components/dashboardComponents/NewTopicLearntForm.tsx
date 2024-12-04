@@ -67,6 +67,7 @@ const NewTopicLearntForm = ({
   useEffect(() => {
     form.setValue("chapterName", null);
     refetchChapter();
+    setSelectedValues([]);
   }, [activeSubject, refetchChapter, form.setValue]);
 
   const {
@@ -123,6 +124,7 @@ const NewTopicLearntForm = ({
         chapterName: null,
         topicNames: [],
       });
+      setSelectedValues([]);
     } catch (error: any) {
       Toast.show({
         type: "error",
