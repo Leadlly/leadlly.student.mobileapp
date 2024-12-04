@@ -4,6 +4,7 @@ import {
   View,
   useWindowDimensions,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { TCustomNotificationsType } from "../../types/types";
@@ -206,13 +207,17 @@ const NotificationCard = ({
               </TouchableOpacity>
             </View>
           ) : null}
-          {notification.url && notification.url.length > 0 ? (
+          {notification.urls && notification.urls.length > 0 ? (
             <View className="border bg-primary/25 px-5 py-3 rounded-lg">
               <Text className="text-sm font-mada-semibold leading-5">
                 More Information -
               </Text>
-              {notification.url.map((item, i) => (
-                <Text key={i} className="text-sm font-mada-regular leading-5">
+              {notification.urls.map((item, i) => (
+                <Text
+                  key={i}
+                  className="text-sm font-mada-regular leading-5 text-blue-500"
+                  onPress={() => Linking.openURL(item)}
+                >
                   {item}
                 </Text>
               ))}
