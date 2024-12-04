@@ -622,7 +622,7 @@ export type TCustomNotificationsType = {
   sender: string;
   studentId: string;
   message: string;
-  url: string[];
+  urls: string[];
   isRead: boolean;
   createdAt: string;
 };
