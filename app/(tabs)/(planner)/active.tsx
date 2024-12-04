@@ -1,10 +1,9 @@
-import { View, Text, ActivityIndicator, FlatList, Image } from "react-native";
+import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import { useGetUserPlanner } from "../../../services/queries/plannerQuery";
 import { useAppDispatch, useAppSelector } from "../../../services/redux/hooks";
 import { useEffect } from "react";
 import { setTodaysPlan } from "../../../services/redux/slices/plannerSlice";
 import {
-  capitalizeFirstLetter,
   getFormattedDate,
   getTodaysDay,
   getTodaysFormattedDate,
@@ -12,12 +11,11 @@ import {
 import PlannerSubjectList from "../../../components/plannerComponents/PlannerSubjectList";
 import { colors } from "../../../constants/constants";
 import InitialTodoBox from "../../../components/dashboardComponents/InitialTodoBox";
-import LottieView from "lottie-react-native";
 import NoPlannerComponent from "../../../components/plannerComponents/NoPlannerComponent";
-import { TRevisionProps } from "../../../types/types";
+import { TChapterRevisionProps, TRevisionProps } from "../../../types/types";
 
 const ActivePlannerPage = () => {
-  const { data, isError, isLoading, isFetching, isSuccess, error } =
+  const { data, isError, isLoading, isFetching, isSuccess } =
     useGetUserPlanner();
 
   const dispatch = useAppDispatch();
@@ -64,6 +62,21 @@ const ActivePlannerPage = () => {
       ((plan?.backRevisionTopics.length ?? 0) ||
         (plan?.continuousRevisionTopics.length ?? 0)) > 0
       ? subtopics
+      : [];
+  }
+
+  function getChapterRevisionForSubject(
+    subject: string
+  ): TChapterRevisionProps[] {
+    const chapters =
+      plan?.chapters.filter((chapter) => chapter.subject.name === subject) ??
+      [];
+
+    return chapters?.length ||
+      ((plan?.backRevisionTopics.length ?? 0) ||
+        (plan?.continuousRevisionTopics.length ?? 0) ||
+        (plan?.continuousRevisionSubTopics.length ?? 0)) > 0
+      ? chapters
       : [];
   }
 
@@ -135,6 +148,7 @@ const ActivePlannerPage = () => {
               getContinuousRevisionSubTopicsForSubject={
                 getContinuousRevisionSubTopicsForSubject
               }
+              getChapterRevisionForSubject={getChapterRevisionForSubject}
             />
           )}
         />

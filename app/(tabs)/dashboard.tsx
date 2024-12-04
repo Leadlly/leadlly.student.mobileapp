@@ -9,31 +9,43 @@ import InitialSetupInfoModal from "../../components/dashboardComponents/InitialS
 import InitialTodoBox from "../../components/dashboardComponents/InitialTodoBox";
 import { useAppSelector } from "../../services/redux/hooks";
 import { BlurView } from "expo-blur";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { registerForPushNotificationsAsync } from "../../helpers/registerForPushNotificationsAsync";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSavePushToken } from "../../services/queries/notificationQuery";
 import { colors } from "../../constants/constants";
 import ReloadApp from "../../components/shared/ReloadApp";
 import useAppStateChange from "../../hooks/useAppStateChange";
+import { TCustomNotificationsType } from "../../types/types";
+import { useCheckForCustomNotifications } from "../../services/queries/userQuery";
+import CustomNotificationsModal from "../../components/dashboardComponents/CustomNotificationsModal";
 
 const Dashboard = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [toggleNotificationsModal, setToggleNotificationsModal] =
+    useState(false);
+  const [notificationsData, setNotificationsData] = useState<
+    TCustomNotificationsType[]
+  >([]);
+
   const currentAppState = useAppStateChange();
 
   const params = useLocalSearchParams<{
     initialSetup?: string;
-    isRedirectedAfterSubscription?: string;
+    isReloadingApp?: string;
   }>();
-
-  console.log(
-    "isRedirectedAfterSubscription====> ",
-    params.isRedirectedAfterSubscription
-  );
 
   const user = useAppSelector((state) => state.user.user);
 
   const { mutateAsync: savePushToken, isPending: savingPushToken } =
     useSavePushToken();
+
+  const {
+    data: customNotifications,
+    isLoading,
+    isSuccess,
+    refetch,
+  } = useCheckForCustomNotifications("false");
 
   useEffect(() => {
     const getPushToken = async () => {
@@ -47,15 +59,28 @@ const Dashboard = () => {
     };
 
     getPushToken();
+    refetch();
   }, []);
 
-  if (params.isRedirectedAfterSubscription === "true") {
-    return (
-      <ReloadApp
-        isRedirected={params.isRedirectedAfterSubscription}
-        user={user}
-      />
-    );
+  useEffect(() => {
+    if (isLoading) return;
+    if (
+      isSuccess &&
+      customNotifications &&
+      customNotifications.notifications.length > 0
+    ) {
+      setNotificationsData(customNotifications.notifications);
+    }
+  }, [customNotifications, isLoading, isSuccess]);
+
+  useEffect(() => {
+    if (notificationsData && notificationsData.length > 0) {
+      setToggleNotificationsModal(true);
+    }
+  }, [notificationsData]);
+
+  if (params.isReloadingApp === "true" && !modalVisible) {
+    return <ReloadApp isRedirected={params.isReloadingApp} user={user} />;
   }
 
   return (
@@ -69,7 +94,14 @@ const Dashboard = () => {
           showsVerticalScrollIndicator={false}
           className="flex-1 bg-white px-4 mb-16"
         >
-          {user && user.planner === false ? <InitialTodoBox /> : <ToDoList />}
+          {user && user.planner === false ? (
+            <InitialTodoBox />
+          ) : (
+            <ToDoList
+              modalVisible={modalVisible}
+              setModalVisible={setModalVisible}
+            />
+          )}
 
           <View className="flex-1 relative">
             {user && user.planner === false && (
@@ -83,6 +115,13 @@ const Dashboard = () => {
           <ProgressAnalytics />
 
           <InitialSetupInfoModal params={params} />
+
+          <CustomNotificationsModal
+            modalVisible={toggleNotificationsModal}
+            setModalVisible={setToggleNotificationsModal}
+            notificationsData={notificationsData}
+            setNotificationsData={setNotificationsData}
+          />
         </ScrollView>
       )}
     </>

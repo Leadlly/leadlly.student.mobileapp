@@ -12,7 +12,7 @@ const useAppStateChange = () => {
         appState.current.match(/inactive|background/) &&
         nextAppState === "active"
       ) {
-        router.setParams({ isRedirectedAfterSubscription: "true" });
+        router.setParams({ isReloadingApp: "true" });
       }
 
       appState.current = nextAppState;

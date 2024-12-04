@@ -18,10 +18,13 @@ const MoodEmojiSelector = () => {
   const user = useAppSelector((state) => state.user.user);
 
   const userCurrentMood = user?.details?.mood;
-  const today = new Date().toISOString().split("T")[0];
+
+  const today = new Date();
+  const formattedToday = today.toISOString().split("T")[0];
+  const dayOfWeek = today.toLocaleString("en-US", { weekday: "long" });
 
   const currentDateMoodIndex = userCurrentMood?.findIndex(
-    (mood) => mood.day === today
+    (mood) => mood.date === formattedToday
   );
 
   const [currentMood, setCurrentMood] = useState(
@@ -52,7 +55,10 @@ const MoodEmojiSelector = () => {
           ...user!,
           details: {
             ...user?.details,
-            mood: [...(user?.details?.mood || []), { day: today, emoji: mood }],
+            mood: [
+              ...(user?.details?.mood || []),
+              { day: dayOfWeek, date: formattedToday, emoji: mood },
+            ],
           },
         })
       );
@@ -78,7 +84,7 @@ const MoodEmojiSelector = () => {
   };
 
   const isDisabled = isMoodButtonDisabled(
-    userCurrentMood?.[currentDateMoodIndex!]?.day!
+    userCurrentMood?.[currentDateMoodIndex!]?.date!
   );
   return (
     <View className="border border-input-border rounded-xl p-4 mb-3">

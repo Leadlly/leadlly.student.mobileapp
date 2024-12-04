@@ -35,13 +35,11 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
       } else if (
         hasSubmittedInitialInfo &&
         user.subscription.status !== "active" &&
-        user.freeTrial.active &&
+        user.freeTrial.availed &&
         now >= trialEndDate &&
         pathname !== "/subscription-plans"
       ) {
-        if (pathname !== "/apply-coupon") {
-          router.replace("/subscription-plans");
-        }
+        router.replace("/subscription-plans");
       }
     } else if (user && isPublicPath) {
       router.replace("/dashboard");

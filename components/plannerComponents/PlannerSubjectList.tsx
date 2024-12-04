@@ -1,6 +1,10 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
-import { ISubject, TRevisionProps } from "../../types/types";
+import {
+  ISubject,
+  TChapterRevisionProps,
+  TRevisionProps,
+} from "../../types/types";
 import ChapterTopicItem from "./ChapterTopicItem";
 import LottieView from "lottie-react-native";
 
@@ -9,11 +13,13 @@ const PlannerSubjectList = ({
   getBackRevisionTopicsForSubject,
   getContinuousRevisionTopicsForSubject,
   getContinuousRevisionSubTopicsForSubject,
+  getChapterRevisionForSubject,
 }: {
   item: ISubject;
   getContinuousRevisionTopicsForSubject: (subject: string) => TRevisionProps[];
   getBackRevisionTopicsForSubject: (subject: string) => TRevisionProps[];
   getContinuousRevisionSubTopicsForSubject(subject: string): TRevisionProps[];
+  getChapterRevisionForSubject(subject: string): TChapterRevisionProps[];
 }) => {
   const mergedData = [
     ...getContinuousRevisionTopicsForSubject(item.name),
@@ -23,6 +29,8 @@ const PlannerSubjectList = ({
   const mergedSubtopics = [
     ...getContinuousRevisionSubTopicsForSubject(item.name),
   ];
+
+  const mergedChapters = [...getChapterRevisionForSubject(item.name)];
 
   return (
     <View
@@ -43,8 +51,12 @@ const PlannerSubjectList = ({
         showsVerticalScrollIndicator={false}
       >
         {(mergedData && mergedData.length > 0) ||
-        (mergedSubtopics && mergedSubtopics.length > 0) ? (
+        (mergedSubtopics && mergedSubtopics.length > 0) ||
+        (mergedChapters && mergedChapters.length > 0) ? (
           <>
+            {mergedChapters.map((item) => (
+              <ChapterTopicItem key={item.id} item2={item} isChapter={true} />
+            ))}
             {mergedData.map((item) => (
               <ChapterTopicItem key={item._id} item={item} />
             ))}

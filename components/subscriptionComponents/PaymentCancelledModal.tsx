@@ -15,7 +15,6 @@ const PaymentCancelledModal = ({
     <ModalComponent
       modalVisible={transactionCancelled}
       setModalVisible={setIsTransactionCancelled}
-      className="flex-1"
     >
       <View className="h-80 items-center justify-center space-y-5">
         <MaterialCommunityIcons

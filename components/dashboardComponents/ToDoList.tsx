@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import {
   getFormattedDate,
@@ -11,15 +11,24 @@ import { TDayProps } from "../../types/types";
 import ToDoListItem from "./ToDoListItem";
 import LottieView from "lottie-react-native";
 import DashboardSkeletonLoader from "./DashboardSkeletonLoader";
+import { useRouter } from "expo-router";
+import { MaterialIcons } from "@expo/vector-icons";
 
-const ToDoList = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+const ToDoList = ({
+  modalVisible,
+  setModalVisible,
+}: {
+  modalVisible: boolean;
+  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [todaysTopics, setTodaysTopics] = useState<TDayProps | null>(null);
   const [topic, setTopic] = useState<{
     name: string;
     _id: string;
     isSubtopic: boolean;
   } | null>(null);
+
+  const router = useRouter();
 
   const { data, isLoading, isFetching, isSuccess } = useGetUserPlanner();
 
@@ -46,7 +55,8 @@ const ToDoList = () => {
       ) : (
         <>
           {todaysTopics &&
-          (todaysTopics.backRevisionTopics.length > 0 ||
+          (todaysTopics.chapters.length > 0 ||
+            todaysTopics.backRevisionTopics.length > 0 ||
             todaysTopics?.continuousRevisionTopics.length > 0 ||
             todaysTopics?.continuousRevisionSubTopics.length > 0) ? (
             <>
@@ -63,6 +73,28 @@ const ToDoList = () => {
                 persistentScrollbar
                 className="flex-1 space-y-4 px-4 max-h-48"
               >
+                {todaysTopics.chapters.map((chapter) => (
+                  <View
+                    key={chapter.id}
+                    className="flex-row items-center justify-between"
+                  >
+                    <View className="flex-row items-center space-x-3 flex-1">
+                      <MaterialIcons name="quiz" size={20} color="#787878" />
+                      <Text className="flex-1 text-[15px] font-mada-semibold">
+                        {chapter.name}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        router.push(`/quiz/${chapter.quizId}/attempt`)
+                      }
+                    >
+                      <Text className="text-primary underline text-[11px] font-mada-semibold">
+                        Attempt Quiz
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
                 {todaysTopics.backRevisionTopics.map((item) => (
                   <ToDoListItem
                     key={item._id}
@@ -71,6 +103,9 @@ const ToDoList = () => {
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
+                    totalQuestions={
+                      todaysTopics.questions?.[item.topic.name]?.length
+                    }
                   />
                 ))}
                 {todaysTopics.continuousRevisionTopics.map((item) => (
@@ -81,6 +116,9 @@ const ToDoList = () => {
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
+                    totalQuestions={
+                      todaysTopics.questions?.[item.topic.name]?.length
+                    }
                   />
                 ))}
                 {todaysTopics.continuousRevisionSubTopics.map((item) => (
@@ -92,6 +130,9 @@ const ToDoList = () => {
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
                     isSubtopic={true}
+                    totalQuestions={
+                      todaysTopics.questions?.[item.subtopic.name]?.length
+                    }
                   />
                 ))}
               </ScrollView>

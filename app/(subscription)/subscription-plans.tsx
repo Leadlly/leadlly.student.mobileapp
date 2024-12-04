@@ -31,7 +31,7 @@ const SubscriptionPlansScreen: React.FC = () => {
   const currentAppState = useAppStateChange();
 
   const params = useLocalSearchParams<{
-    isRedirectedAfterSubscription?: string;
+    isReloadingApp?: string;
   }>();
 
   const { data: pricingData, isLoading: fetchingPricing } =
@@ -148,13 +148,8 @@ const SubscriptionPlansScreen: React.FC = () => {
     };
   }, []);
 
-  if (params.isRedirectedAfterSubscription === "true") {
-    return (
-      <ReloadApp
-        isRedirected={params.isRedirectedAfterSubscription}
-        user={user}
-      />
-    );
+  if (params.isReloadingApp === "true") {
+    return <ReloadApp isRedirected={params.isReloadingApp} user={user} />;
   }
 
   return (
