@@ -14,6 +14,7 @@ import { useGetMeetings } from "../../../services/queries/meetingQuery";
 import { colors } from "../../../constants/constants";
 import { Image } from "expo-image";
 import { TMeetingsProps } from "../../../types/types";
+import clsx from "clsx";
 
 const UpcomingMeetings = () => {
   const { data, isLoading, isFetching } = useGetMeetings("");
@@ -30,16 +31,18 @@ const UpcomingMeetings = () => {
         meetings.map((meeting: TMeetingsProps) => (
           <View
             key={meeting._id}
-            className="flex-row border-2 border-gray-200 rounded-lg p-3 my-2 bg-white shadow shadow-primary/70"
+            className="flex-row border border-input-border rounded-lg p-3 my-2 bg-white shadow shadow-primary/70"
           >
             <View className="bg-primary/10 rounded-lg w-24 h-24 items-center justify-center p-2">
               <Text className="text-sm font-mada-semibold">
                 {meeting.rescheduled.isRescheduled
-                  ? formatDate(new Date(meeting.date))
+                  ? formatDate(new Date(meeting.rescheduled.date))
                   : formatDate(new Date(meeting.date))}
               </Text>
               <Text className="text-xs text-gray-600 font-mada-semibold">
-                {meeting.time}
+                {meeting.rescheduled.isRescheduled
+                  ? meeting.rescheduled.time
+                  : meeting.time}
               </Text>
             </View>
             <View className="flex-1 pl-3 justify-between">
@@ -47,17 +50,43 @@ const UpcomingMeetings = () => {
                 {meeting.message ? meeting.message : "New Meeting"}
               </Text>
               <View className="flex items-center gap-1 flex-row">
-                <AntDesign name="clockcircleo" size={14} color="blue" />
+                <AntDesign
+                  name="clockcircleo"
+                  size={14}
+                  color={colors.primary}
+                />
                 <Text className="text-sm text-primary">
-                  {meeting.isCompleted ? "Meeting Over" : "Upcoming Meeting"}
+                  {meeting.isCompleted ||
+                  (new Date(meeting.date) ||
+                    new Date(meeting.rescheduled.date)) < new Date(Date.now())
+                    ? "Meeting Over"
+                    : "Upcoming Meeting"}
                 </Text>
               </View>
 
               {meeting.gmeet && meeting.gmeet.link ? (
                 <TouchableOpacity
                   onPress={() => Linking.openURL(meeting.gmeet.link || "#")}
+                  disabled={
+                    meeting.isCompleted ||
+                    (new Date(meeting.date) ||
+                      new Date(meeting.rescheduled.date)) <
+                      new Date(Date.now()) ||
+                    !meeting.accepted
+                  }
                 >
-                  <View className="bg-primary rounded-md py-2 px-4 mt-3">
+                  <View
+                    className={clsx(
+                      "bg-primary rounded-md py-2 px-4 mt-3",
+                      meeting.isCompleted ||
+                        !meeting.accepted ||
+                        (new Date(meeting.date) ||
+                          new Date(meeting.rescheduled.date)) <
+                          new Date(Date.now())
+                        ? "opacity-70"
+                        : ""
+                    )}
+                  >
                     <Text className="text-white text-center text-sm font-mada-semibold">
                       Join Meeting
                     </Text>
@@ -112,11 +141,13 @@ const DoneMeetings = () => {
             <View className="bg-primary/10 rounded-lg w-24 h-24 items-center justify-center p-2">
               <Text className="text-sm font-mada-semibold">
                 {meeting.rescheduled.isRescheduled
-                  ? formatDate(new Date(meeting.date))
+                  ? formatDate(new Date(meeting.rescheduled.date))
                   : formatDate(new Date(meeting.date))}
               </Text>
               <Text className="text-xs text-gray-600 font-mada-semibold">
-                {meeting.time}
+                {meeting.rescheduled.isRescheduled
+                  ? meeting.rescheduled.time
+                  : meeting.time}
               </Text>
             </View>
             <View className="flex-1 pl-3 justify-between">
@@ -124,8 +155,12 @@ const DoneMeetings = () => {
                 {meeting.message ? meeting.message : "Completed Meeting"}
               </Text>
               <View className="flex items-center gap-1 flex-row">
-                <AntDesign name="checkcircleo" size={14} color="green" />
-                <Text className="text-sm text-green-600">
+                <AntDesign
+                  name="checkcircleo"
+                  size={14}
+                  color={colors.leadllyGreen}
+                />
+                <Text className="text-sm text-leadlly-green">
                   Meeting Completed
                 </Text>
               </View>
@@ -161,9 +196,7 @@ const MeetingsComponent: React.FC = () => {
         <TouchableOpacity
           onPress={() => setSelectedTab("upcoming")}
           className={`w-28 rounded-3xl ${
-            selectedTab === "upcoming"
-              ? "bg-primary/80 border border-primary"
-              : "bg-transparent"
+            selectedTab === "upcoming" ? "bg-primary" : "bg-transparent"
           } p-2`}
         >
           <Text
