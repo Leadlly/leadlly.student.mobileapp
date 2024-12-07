@@ -145,7 +145,7 @@ const QuestionsModal = ({
     ) {
       await onHandleSubmit();
     }
-    setModalVisible(false);
+    // setModalVisible(false);
   };
 
   return (

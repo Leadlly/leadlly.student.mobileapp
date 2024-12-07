@@ -47,7 +47,7 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
   const handleFormSubmit = async (
     data: z.infer<typeof RequestMeetingFormSchema>
   ) => {
-    if (userCategory !== "premium") {
+    if (userCategory !== "premium" && userCategory !== "free") {
       setIsCategory(true);
     } else {
       try {
