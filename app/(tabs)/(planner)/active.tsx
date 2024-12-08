@@ -69,8 +69,7 @@ const ActivePlannerPage = () => {
     subject: string
   ): TChapterRevisionProps[] {
     const chapters =
-      plan?.chapters.filter((chapter) => chapter.subject.name === subject) ??
-      [];
+      plan?.chapters.filter((chapter) => chapter.subject === subject) ?? [];
 
     return chapters?.length ||
       ((plan?.backRevisionTopics.length ?? 0) ||
