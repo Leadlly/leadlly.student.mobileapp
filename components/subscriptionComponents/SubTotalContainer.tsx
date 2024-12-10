@@ -54,9 +54,9 @@ const SubTotalContainer = ({
 
       const redirectUrl = Linking.createURL("subscription-plans");
 
-      const subscriptionUrl = `${webBaseUrl}/subscription-plans?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
+      const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
 
-      await WebBrowser.openBrowserAsync(subscriptionUrl);
+      Linking.openURL(subscriptionUrl);
     } catch (error: any) {
       return Toast.show({
         type: "error",

@@ -7,8 +7,14 @@ import {
   ImageBackground,
   Pressable,
   Dimensions,
+  TouchableOpacity,
+  Image,
 } from "react-native";
-import { colors, subscriptionDetails } from "../../constants/constants";
+import {
+  colors,
+  premiumPlanFeatures,
+  subscriptionDetails,
+} from "../../constants/constants";
 import { MergedPlanData, Plan } from "../../types/types";
 import * as Linking from "expo-linking";
 import { useAppSelector } from "../../services/redux/hooks";
@@ -24,8 +30,9 @@ import Animated, {
 import SubscriptionPlanCard from "../../components/subscriptionComponents/SubscriptionPlanCard";
 import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
 import useAppStateChange from "../../hooks/useAppStateChange";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import ReloadApp from "../../components/shared/ReloadApp";
+import { LinearGradient } from "expo-linear-gradient";
 
 const SubscriptionPlansScreen: React.FC = () => {
   const currentAppState = useAppStateChange();
@@ -169,9 +176,15 @@ const SubscriptionPlansScreen: React.FC = () => {
           </Text>
         </View>
 
-        <View className="items-center space-y-3 my-4">
-          <Text className="text-xl font-mada-Bold leading-tight">
-            Choose Your Plan
+        <View className="items-center space-y-1 mt-4 mb-6">
+          <View className="flex-row items-center justify-center space-x-1">
+            <Text className="text-xl text-primary font-mada-Bold leading-tight">
+              Flexible
+            </Text>
+            <Text className="text-xl font-mada-Bold leading-tight">Plans</Text>
+          </View>
+          <Text className="max-w-[300px] text-base font-mada-medium text-center">
+            Choose your best premium plan that works best for you
           </Text>
         </View>
 
@@ -188,8 +201,8 @@ const SubscriptionPlansScreen: React.FC = () => {
             <ActivityIndicator size={"small"} color={colors.primary} />
           </View>
         ) : (
-          <>
-            <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-center space-x-10 mb-8">
+          <View className="space-y-6 pb-4">
+            {/* <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-center space-x-10 mb-8">
               {filteredPlans?.map((item, index) => (
                 <Pressable
                   key={item._id}
@@ -210,9 +223,9 @@ const SubscriptionPlansScreen: React.FC = () => {
                   </Text>
                 </Pressable>
               ))}
-            </View>
+            </View> */}
 
-            {mergedPricingData && mergedPricingData.length > 0 ? (
+            {/* {mergedPricingData && mergedPricingData.length > 0 ? (
               <Animated.ScrollView
                 ref={scrollViewRef as React.RefObject<Animated.ScrollView>}
                 horizontal
@@ -220,7 +233,6 @@ const SubscriptionPlansScreen: React.FC = () => {
                 pagingEnabled
                 onScroll={onScrollHandler}
                 scrollEventThrottle={16}
-                scrollEnabled={false}
               >
                 {mergedPricingData?.map((data, index) => (
                   <SubscriptionPlanCard
@@ -235,9 +247,119 @@ const SubscriptionPlansScreen: React.FC = () => {
                   />
                 ))}
               </Animated.ScrollView>
-            ) : null}
-          </>
+            ) : null} */}
+
+            {mergedPricingData && mergedPricingData.length > 0
+              ? mergedPricingData.map((plan) => (
+                  <View
+                    key={plan?._id}
+                    style={{
+                      shadowColor: "#000",
+                      shadowOpacity: 0.3,
+                      elevation: 2.5,
+                    }}
+                    className={clsx(
+                      "px-7 py-2 rounded-xl mx-5",
+                      plan?.category === "basic"
+                        ? "bg-[#FFD9AE]"
+                        : plan?.category === "pro"
+                          ? "bg-[#D8BDFF]"
+                          : "bg-[#C8FFB6]"
+                    )}
+                  >
+                    <View className="border-b border-tab-item-gray py-2 flex-row items-center justify-between">
+                      <Text className="capitalize text-lg font-mada-Bold leading-6">
+                        {plan?.category} Plan
+                      </Text>
+                      {plan?.category === "pro" && (
+                        <LinearGradient
+                          colors={[
+                            "rgba(248, 155, 5, 1)",
+                            "rgba(180, 56, 243, 1)",
+                          ]}
+                          dither={false}
+                          start={{ x: 0.1, y: 0 }}
+                          end={{ x: 1, y: 1 }}
+                          className="items-center justify-center py-1 px-3 rounded-full"
+                        >
+                          <Text className="text-[10px] font-mada-Bold leading-4 text-white">
+                            Most Popular
+                          </Text>
+                        </LinearGradient>
+                      )}
+                    </View>
+
+                    <View className="flex-row items-center space-x-1 pt-3">
+                      <Text className="text-3xl leading-8 font-mada-Bold">
+                        ₹{plan?.amount}
+                      </Text>
+                      <Text className="text-base font-mada-semibold">
+                        for {plan?.["duration(months)"]} months
+                      </Text>
+                    </View>
+
+                    <View className="flex-row items-center space-x-1">
+                      <Text className="text-xs font-mada-regular">33% OFF</Text>
+                      <View className="relative">
+                        <View className="absolute top-1/2 left-0 -translate-y-0.5 -rotate-12 w-9 h-0.5 bg-leadlly-red" />
+                        <Text className="text-xs font-mada-regular">
+                          ₹{plan?.initialPrice}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <Link
+                      href={{
+                        pathname: "/apply-coupon",
+                        params: {
+                          category: plan?.category,
+                          planId: plan?.planId,
+                          price: String(plan?.amount),
+                        },
+                      }}
+                      asChild
+                    >
+                      <TouchableOpacity className="bg-black rounded-full h-10 my-2 items-center justify-center">
+                        <Text className="text-white text-sm font-mada-medium">
+                          Apply Coupon
+                        </Text>
+                      </TouchableOpacity>
+                    </Link>
+                  </View>
+                ))
+              : null}
+          </View>
         )}
+
+        <View
+          style={{
+            shadowColor: "#000",
+            shadowOpacity: 0.3,
+            elevation: 2.5,
+          }}
+          className="bg-white rounded-lg px-7 py-4 mx-5 mt-3 mb-7"
+        >
+          <View className="items-center justify-center border-b border-tab-item-gray pb-3">
+            <Text className="text-xl font-mada-semibold">
+              Why join Premium?
+            </Text>
+          </View>
+
+          <View className="space-y-5 mt-4 mb-2">
+            {premiumPlanFeatures.map((feat) => (
+              <View key={feat.id} className="flex-row items-center space-x-3">
+                <Image
+                  source={feat.icon}
+                  resizeMode="contain"
+                  className="w-7 h-7 -mt-0.5"
+                />
+                <Text className="text-base font-mada-regular">
+                  {feat.label}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
       </ScrollView>
 
       {transactionCancelled && (
