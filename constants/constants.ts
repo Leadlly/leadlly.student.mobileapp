@@ -191,6 +191,44 @@ export const subscriptionFeatures = [
   "On demand sessions with mentor",
 ];
 
+export const premiumPlanFeatures = [
+  {
+    id: 1,
+    label: "Personalized self-study strategies",
+    icon: require("../assets/images/student-center.png"),
+  },
+  {
+    id: 2,
+    label: "Subject, chapter & topic tracking",
+    icon: require("../assets/images/rules.png"),
+  },
+  {
+    id: 3,
+    label: "Daily, Weekly & monthly report",
+    icon: require("../assets/images/syllabus.png"),
+  },
+  {
+    id: 4,
+    label: "Weekly mentor sessions",
+    icon: require("../assets/images/training.png"),
+  },
+  {
+    id: 5,
+    label: "Error book",
+    icon: require("../assets/images/brake-warning.png"),
+  },
+  {
+    id: 6,
+    label: "Active monitoring by mentor",
+    icon: require("../assets/images/workspace.png"),
+  },
+  {
+    id: 7,
+    label: "On demand sessions with mentor",
+    icon: require("../assets/images/browse-podcasts.png"),
+  },
+];
+
 export const unattemptedQuizTabs = [
   { id: "weeklyQuiz", label: "Weekly Quiz", mobileOnly: false },
   { id: "chapterQuiz", label: "Chapter Quiz", mobileOnly: false },

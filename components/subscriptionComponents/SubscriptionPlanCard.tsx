@@ -89,12 +89,12 @@ const SubscriptionPlanCard = ({
           paginationIndex === index && "border border-primary"
         )}
       >
-        <View className="absolute -top-5 -right-10 w-40 h-40 bg-primary/5 rounded-full items-center justify-center" />
+        {/* <View className="absolute -top-5 -right-10 w-40 h-40 bg-primary/5 rounded-full items-center justify-center" />
         <Image
           source={data?.image}
           className="absolute top-7 right-5 w-24 h-24"
           resizeMode="contain"
-        />
+        /> */}
 
         <View className="flex-row items-center gap-x-4">
           <Text className="text-xl font-mada-Bold capitalize leading-tight">
@@ -131,7 +131,7 @@ const SubscriptionPlanCard = ({
           </View>
         </View>
 
-        <View className="space-y-5">
+        {/* <View className="space-y-5">
           {subscriptionFeatures.map((feature, index) => (
             <View key={index} className="flex-row items-center gap-x-4">
               <View
@@ -157,7 +157,7 @@ const SubscriptionPlanCard = ({
               </Text>
             </View>
           ))}
-        </View>
+        </View> */}
 
         <View className="items-center justify-center mt-6 mb-2">
           {/* <Link
