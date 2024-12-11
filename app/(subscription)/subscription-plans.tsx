@@ -338,7 +338,10 @@ const SubscriptionPlansScreen: React.FC = () => {
                                 user.subscription.dateOfDeactivation || ""
                               ).getMonth() + Number(plan?.["duration(months)"])
                             )
-                          ).toLocaleDateString("en-GB")
+                          ).toLocaleDateString("en-GB", {
+                            month: "short",
+                            year: "numeric",
+                          })
                         : `${plan?.["duration(months)"]} month${Number(plan?.["duration(months)"]) > 1 ? "s" : ""}`}
                       {user?.subscription.status === "active" &&
                         plan?.title === "momentum" &&
