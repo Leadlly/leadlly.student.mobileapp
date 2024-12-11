@@ -56,17 +56,11 @@ const SubscriptionPlansScreen: React.FC = () => {
   const userCategory = user?.category || "free"; // Assume "free" if user category is null or undefined
 
   // Filter the plans based on userCategory
-  const filteredPlans = pricingData?.pricing.filter((plan) => {
-    const planIndex = planHierarchy.indexOf(plan.category);
-    const userIndex = planHierarchy.indexOf(userCategory);
-
-    // Show plans that are hierarchically above the user's plan
-    return userIndex === -1 || planIndex > userIndex;
-  });
+  const filteredPlans = pricingData?.pricing
 
   const mergedPricingData = filteredPlans?.map((pricing) => {
     const matchingDetails = subscriptionDetails.find(
-      (detail) => detail.category === pricing.category
+      (detail) => detail.title === pricing.title
     );
 
     if (matchingDetails) {
@@ -260,18 +254,18 @@ const SubscriptionPlansScreen: React.FC = () => {
                     }}
                     className={clsx(
                       "px-7 py-2 rounded-xl mx-5",
-                      plan?.category === "basic"
+                      plan?.title === "momentum"
                         ? "bg-[#FFD9AE]"
-                        : plan?.category === "pro"
+                        : plan?.title === "consistency"
                           ? "bg-[#D8BDFF]"
                           : "bg-[#C8FFB6]"
                     )}
                   >
                     <View className="border-b border-tab-item-gray py-2 flex-row items-center justify-between">
                       <Text className="capitalize text-lg font-mada-Bold leading-6">
-                        {plan?.category} Plan
+                        {plan?.title} Plan
                       </Text>
-                      {plan?.category === "pro" && (
+                      {plan?.title === "consistency" && (
                         <LinearGradient
                           colors={[
                             "rgba(248, 155, 5, 1)",
@@ -291,22 +285,29 @@ const SubscriptionPlansScreen: React.FC = () => {
 
                     <View className="flex-row items-center space-x-1 pt-3">
                       <Text className="text-3xl leading-8 font-mada-Bold">
-                        ₹{plan?.amount}
+                        ₹{Math.round(Number(plan?.amount) / Number(plan?.["duration(months)"]))} 
                       </Text>
                       <Text className="text-base font-mada-semibold">
-                        for {plan?.["duration(months)"]} months
+                        /months
                       </Text>
                     </View>
 
                     <View className="flex-row items-center space-x-1">
-                      <Text className="text-xs font-mada-regular">33% OFF</Text>
+                      <Text className="text-xs font-mada-regular">{plan?.discountPercentage}% OFF</Text>
                       <View className="relative">
                         <View className="absolute top-1/2 left-0 -translate-y-0.5 -rotate-12 w-9 h-0.5 bg-leadlly-red" />
                         <Text className="text-xs font-mada-regular">
-                          ₹{plan?.initialPrice}
+                          ₹{Math.round(Number(plan?.initialPrice) / Number(plan?.["duration(months)"]))}/month
                         </Text>
                       </View>
                     </View>
+                    <Text className="text-xs font-mada-regular font-bold py-1">
+                      Valid till: {new Date(new Date().setMonth(new Date().getMonth() + Number(plan?.["duration(months)"])))
+                        .toLocaleDateString('en-GB')}
+                      {plan?.title === "momentum" && " (1 month)"}
+                      {plan?.title === "consistency" && " (JEE/NEET 2025)"}
+                      {plan?.title === "sturdy-step" && " (JEE/NEET 2026)"}
+                    </Text>
 
                     <Link
                       href={{

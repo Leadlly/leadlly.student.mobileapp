@@ -40,7 +40,7 @@ export type UserDataProps = {
   firstname: string;
   lastname?: string;
   email: string;
-  category: "basic" | "pro" | "premium" | "free" | null;
+  category: string;
   phone: {
     personal?: number;
     other?: number;
@@ -471,6 +471,7 @@ export type Question = {
 export interface Plan {
   _id: string;
   amount: number;
+  title: string;
   category: string;
   createdAt: string;
   currency: string;
