@@ -54,13 +54,15 @@ export type UserDataProps = {
   planner: boolean;
   preferences: {
     continuousData: { nextDay: boolean }; // to decide continuous topic placing in planner
+    dailyQuestions: number;
+    backRevisionTopics: number;
   };
   parent: {
     name?: string;
     phone?: string;
   };
   mentor: {
-    id?: string;
+    _id?: string;
   };
   address: {
     country?: string;
@@ -193,7 +195,7 @@ export type TChapterRevisionProps = {
   id: string;
   name: string;
   quizId: string;
-  subject: ISubject;
+  subject: string;
 };
 
 export type TDayProps = {
@@ -344,6 +346,8 @@ export type StudentPersonalInfoProps = {
   schoolOrCollegeName?: string;
   studentSchedule?: string;
   nextDay?: boolean;
+  dailyQuestions?: number;
+  backRevisionTopics?: number;
 };
 
 export interface InputFieldProps extends TextInputProps {
@@ -622,7 +626,7 @@ export type TCustomNotificationsType = {
   sender: string;
   studentId: string;
   message: string;
-  url: string[];
+  urls: string[];
   isRead: boolean;
   createdAt: string;
 };

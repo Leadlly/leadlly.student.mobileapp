@@ -40,10 +40,11 @@ const ModalComponent = ({
       transparent={true}
       visible={modalVisible}
       onRequestClose={async () => {
-        if (isSavingDailyQuiz && handleBackSubmit) {
+        if (handleBackSubmit) {
           await handleBackSubmit();
+        } else {
+          setModalVisible(!modalVisible);
         }
-        setModalVisible(!modalVisible);
       }}
     >
       <BlurView

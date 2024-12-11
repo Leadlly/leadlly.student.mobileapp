@@ -8,7 +8,7 @@ const ManageAccountLayout = () => {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: "#000000",
         tabBarLabelStyle: {
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: "Mada-SemiBold",
           textTransform: "capitalize",
         },
@@ -30,6 +30,10 @@ const ManageAccountLayout = () => {
       <MaterialTobTabs.Screen
         name="studyProgress"
         options={{ title: "Study Progress" }}
+      />
+      <MaterialTobTabs.Screen
+        name="controlPanel"
+        options={{ title: "Control Panel" }}
       />
     </MaterialTobTabs>
   );
