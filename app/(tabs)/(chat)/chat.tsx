@@ -16,44 +16,35 @@ import { useEffect, useState } from "react";
 import { useSocket } from "../../../context/SocketContext";
 import { useAppSelector } from "../../../services/redux/hooks";
 import { useRouter } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
+
+const chatInputFormSchema = z.object({
+  message: z
+    .string({ required_error: "Please type a message!" })
+    .min(1, { message: "Please type a message!" }),
+});
 
 const ChatScreen = () => {
-  const [messageValue, setMessageValue] = useState("");
-
   const user = useAppSelector((state) => state.user.user);
+  const router = useRouter();
 
   const { socket } = useSocket();
 
-  const router = useRouter();
+  const form = useForm<z.infer<typeof chatInputFormSchema>>({
+    resolver: zodResolver(chatInputFormSchema),
+    defaultValues: {
+      message: "",
+    },
+  });
 
-  const handleMessageSubmit = () => {
-    console.log(messageValue);
+  const messageValue = form.watch("message");
+
+  const handleMessageSubmit = (data: z.infer<typeof chatInputFormSchema>) => {
+    console.log(data);
   };
-
-  const getMessages = async () => {
-    if (!user)
-      return Alert.alert("No user", "No logged in user available!", [
-        {
-          text: "Back",
-          onPress: () => router.replace("/welcome"),
-          style: "cancel",
-        },
-      ]);
-    if (!socket)
-      return Alert.alert("No socket", "No socket available!", [
-        {
-          text: "Back",
-          onPress: () => router.replace("/welcome"),
-          style: "cancel",
-        },
-      ]);
-
-    socket.emit("student_joining_room", { userEmail: user.email });
-  };
-
-  useEffect(() => {
-    getMessages();
-  }, []);
 
   return (
     <View className="mb-16 bg-white p-2 flex-1">
@@ -126,19 +117,29 @@ const ChatScreen = () => {
               </TouchableOpacity>
 
               <View className="flex-1">
-                <Input
-                  value={messageValue}
-                  onChangeText={(text) => setMessageValue(text)}
-                  placeholder="Type a message here..."
-                  multiline={true}
-                  containerStyle="border-0"
-                  inputStyle="px-3 max-h-24"
+                <Controller
+                  name="message"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Input
+                      value={field.value}
+                      onChangeText={field.onChange}
+                      placeholder="Type a message here..."
+                      multiline={true}
+                      containerStyle="border-0"
+                      inputStyle="px-3 max-h-24"
+                    />
+                  )}
                 />
               </View>
             </View>
             <TouchableOpacity
-              className="bg-primary rounded-full h-11 w-11 items-center justify-center"
-              onPress={handleMessageSubmit}
+              className={clsx(
+                "bg-primary rounded-full h-11 w-11 items-center justify-center",
+                messageValue.length <= 0 && "opacity-70"
+              )}
+              disabled={messageValue.length <= 0}
+              onPress={form.handleSubmit(handleMessageSubmit)}
             >
               <Ionicons
                 name="paper-plane"
