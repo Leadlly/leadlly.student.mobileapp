@@ -37,7 +37,8 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
         user.subscription.status !== "active" &&
         user.freeTrial.availed &&
         now >= trialEndDate &&
-        pathname !== "/subscription-plans"
+        pathname !== "/subscription-plans" &&
+        pathname !== "/apply-coupon"
       ) {
         router.replace("/subscription-plans");
       }
