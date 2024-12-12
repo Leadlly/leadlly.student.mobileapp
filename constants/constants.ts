@@ -139,9 +139,9 @@ export const features = [
 
 export const subscriptionDetails = [
   {
-    category: "basic",
-    discountPercentage: 31,
-    initialPrice: 4346,
+    title: "momentum",
+    discountPercentage: 33,
+    initialPrice: 775,
     image: require("../assets/images/paper_plane.png"),
     details: [
       "Personalized self-study strategies",
@@ -151,9 +151,9 @@ export const subscriptionDetails = [
     ],
   },
   {
-    category: "pro",
+    title: "consistency",
     discountPercentage: 51,
-    initialPrice: 7559,
+    initialPrice: 2824,
     image: require("../assets/images/rocket.png"),
     details: [
       "Personalized self-study strategies",
@@ -165,9 +165,9 @@ export const subscriptionDetails = [
     ],
   },
   {
-    category: "premium",
+    title: "sturdy-step",
     discountPercentage: 61,
-    initialPrice: 12818,
+    initialPrice: 8026,
     image: require("../assets/images/small_satellite.png"),
     details: [
       "Personalized self-study strategies",
@@ -189,6 +189,44 @@ export const subscriptionFeatures = [
   "Error book",
   "Active monitoring by mentor",
   "On demand sessions with mentor",
+];
+
+export const premiumPlanFeatures = [
+  {
+    id: 1,
+    label: "Personalized self-study strategies",
+    icon: require("../assets/images/student-center.png"),
+  },
+  {
+    id: 2,
+    label: "Subject, chapter & topic tracking",
+    icon: require("../assets/images/rules.png"),
+  },
+  {
+    id: 3,
+    label: "Daily, Weekly & monthly report",
+    icon: require("../assets/images/syllabus.png"),
+  },
+  {
+    id: 4,
+    label: "Weekly mentor sessions",
+    icon: require("../assets/images/training.png"),
+  },
+  {
+    id: 5,
+    label: "Error book",
+    icon: require("../assets/images/brake-warning.png"),
+  },
+  {
+    id: 6,
+    label: "Active monitoring by mentor",
+    icon: require("../assets/images/workspace.png"),
+  },
+  {
+    id: 7,
+    label: "On demand sessions with mentor",
+    icon: require("../assets/images/browse-podcasts.png"),
+  },
 ];
 
 export const unattemptedQuizTabs = [

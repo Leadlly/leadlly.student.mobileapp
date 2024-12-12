@@ -82,7 +82,7 @@ const ApplyCoupon = () => {
     isLoading,
     isSuccess,
   } = useGetCoupon({
-    plan: category,
+    plan: planId,
     category: "listed",
   });
 
@@ -97,7 +97,7 @@ const ApplyCoupon = () => {
   }, [listedCouponData, isSuccess]);
 
   return (
-    <SafeAreaView className="relative flex-1 bg-white">
+    <View className="relative flex-1 bg-white">
       {isLoading || fetchingExistingPlanPrice ? (
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size={"small"} color={colors.primary} />
@@ -109,12 +109,12 @@ const ApplyCoupon = () => {
             showsVerticalScrollIndicator={false}
             className="flex-1"
           >
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => router.back()}
               className="py-4 px-5"
             >
               <AntDesign name="arrowleft" size={24} color="black" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <LinearGradient
               colors={["rgba(204, 162, 255, 0.51)", "rgba(150, 84, 244, 0.72)"]}
@@ -202,15 +202,14 @@ const ApplyCoupon = () => {
               </View>
             </LinearGradient>
 
-            {!isExistingRemainingAmount && (
-              <View className="items-center justify-center pt-8 pb-4 px-5">
+              <View className="items-center justify-center p-4 px-5">
                 <Text className="text-xl leading-6 font-mada-semibold">
                   New Offers
                 </Text>
               </View>
-            )}
+          
 
-            {!isExistingRemainingAmount &&
+            {
             availableCoupons &&
             availableCoupons.length > 0 ? (
               <View className="flex-1 space-y-3">
@@ -256,7 +255,7 @@ const ApplyCoupon = () => {
           />
         </>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

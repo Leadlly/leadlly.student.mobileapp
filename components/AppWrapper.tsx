@@ -32,26 +32,7 @@ const AppWrapper = () => {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
             name="(subscription)"
-            options={{
-              headerTitle: "Subscription Plans",
-              headerTitleAlign: "left",
-              headerTitleStyle: {
-                fontFamily: "Mada-SemiBold",
-                fontSize: 20,
-              },
-              headerLeft: () => (
-                <View className="mr-3">
-                  <TouchableOpacity onPress={() => router.back()}>
-                    <AntDesign name="arrowleft" size={22} color="black" />
-                  </TouchableOpacity>
-                </View>
-              ),
-              headerRight: () => (
-                <View>
-                  <LogoutButton />
-                </View>
-              ),
-            }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="(profile)/profile"
