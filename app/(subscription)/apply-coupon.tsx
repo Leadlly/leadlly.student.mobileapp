@@ -82,7 +82,7 @@ const ApplyCoupon = () => {
     isLoading,
     isSuccess,
   } = useGetCoupon({
-    plan: category,
+    plan: planId,
     category: "listed",
   });
 
@@ -202,15 +202,14 @@ const ApplyCoupon = () => {
               </View>
             </LinearGradient>
 
-            {!isExistingRemainingAmount && (
-              <View className="items-center justify-center pt-8 pb-4 px-5">
+              <View className="items-center justify-center p-4 px-5">
                 <Text className="text-xl leading-6 font-mada-semibold">
                   New Offers
                 </Text>
               </View>
-            )}
+          
 
-            {!isExistingRemainingAmount &&
+            {
             availableCoupons &&
             availableCoupons.length > 0 ? (
               <View className="flex-1 space-y-3">

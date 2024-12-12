@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "expo-router";
 import { formatTime } from "../../helpers/utils";
 
 const FreeTrialTimer = () => {
-  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState<string>("");
 
   const router = useRouter();
   const pathname = usePathname();
@@ -30,7 +30,12 @@ const FreeTrialTimer = () => {
           Math.floor((trialEndDate.getTime() - now.getTime()) / 1000)
         );
 
-        setTimeLeft(remainingTime);
+        // Format remaining time to hours, minutes, and seconds
+        const totalHours = Math.floor(remainingTime / 3600);
+        const minutes = Math.floor((remainingTime % 3600) / 60);
+        const seconds = remainingTime % 60;
+
+        setTimeLeft(`${totalHours}h : ${minutes}m : ${seconds}s`);
       }
     };
 
@@ -46,7 +51,7 @@ const FreeTrialTimer = () => {
 
   return (
     <Text className="text-[10px] leading-tight font-mada-medium text-white">
-      {timeLeft !== null ? formatTime(timeLeft) : "Loading..."}
+      {timeLeft !== null ? timeLeft : "Loading..."}
     </Text>
   );
 };

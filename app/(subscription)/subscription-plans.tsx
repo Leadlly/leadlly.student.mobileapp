@@ -50,7 +50,7 @@ const SubscriptionPlansScreen: React.FC = () => {
   const { user } = useAppSelector((state) => state.user);
 
   // Plan hierarchy
-  const planHierarchy = ["basic", "pro", "premium"];
+  const planHierarchy = ["momentum", "consistency", "sturdy-step"];
 
   // Get the user's current plan
   const userCategory = user?.category || "free"; // Assume "free" if user category is null or undefined
@@ -58,23 +58,33 @@ const SubscriptionPlansScreen: React.FC = () => {
   // Filter the plans based on userCategory
   const filteredPlans = pricingData?.pricing;
 
-  const mergedPricingData = filteredPlans?.map((pricing) => {
-    const matchingDetails = subscriptionDetails.find(
-      (detail) => detail.title === pricing.title
-    );
+  const mergedPricingData = filteredPlans
+    ?.map((pricing) => {
+      const matchingDetails = subscriptionDetails.find(
+        (detail) => detail.title === pricing.title
+      );
 
-    if (matchingDetails) {
-      return {
-        ...pricing,
-        discountPercentage: matchingDetails.discountPercentage,
-        initialPrice: matchingDetails.initialPrice,
-        features: matchingDetails.details,
-        image: matchingDetails?.image,
-      } as MergedPlanData;
-    }
+      if (matchingDetails) {
+        return {
+          ...pricing,
+          discountPercentage: matchingDetails.discountPercentage,
+          initialPrice: matchingDetails.initialPrice,
+          features: matchingDetails.details,
+          image: matchingDetails?.image,
+        } as MergedPlanData;
+      }
 
-    return null;
-  });
+      return null;
+    })
+    // Sort the plans based on planHierarchy
+    .sort((a, b) => {
+      if (!a || !b) return 0;
+      const indexA = planHierarchy.indexOf(a.title);
+      const indexB = planHierarchy.indexOf(b.title);
+      return indexA - indexB;
+    })
+    // Remove any null values
+    .filter(Boolean);
 
   const [paginationIndex, setPaginationIndex] = useState<number>(0);
 
@@ -262,7 +272,7 @@ const SubscriptionPlansScreen: React.FC = () => {
                       user &&
                         user.subscription.status === "active" &&
                         user?.subscription.planId === plan?.planId
-                        ? "border-2 border-primary"
+                        ? "border-4 border-primary"
                         : ""
                     )}
                   >
@@ -333,11 +343,8 @@ const SubscriptionPlansScreen: React.FC = () => {
                       Valid till:{" "}
                       {user?.subscription.status === "active"
                         ? new Date(
-                            new Date().setMonth(
-                              new Date(
-                                user.subscription.dateOfDeactivation || ""
-                              ).getMonth() + Number(plan?.["duration(months)"])
-                            )
+                            new Date(user.subscription.dateOfDeactivation || new Date()).getTime() +
+                            Number(plan?.["duration(months)"]) * 30 * 24 * 60 * 60 * 1000
                           ).toLocaleDateString("en-GB", {
                             month: "short",
                             year: "numeric",
@@ -348,10 +355,18 @@ const SubscriptionPlansScreen: React.FC = () => {
                         " (1 month)"}
                       {user?.subscription.status === "active" &&
                         plan?.title === "consistency" &&
-                        " (JEE/NEET 2025)"}
+                        (user?.academic?.competitiveExam === "neet"
+                          ? " (NEET 2025)"
+                          : user?.academic?.competitiveExam === "jee"
+                            ? " (JEE 2025)"
+                            : "")}
                       {user?.subscription.status === "active" &&
                         plan?.title === "sturdy-step" &&
-                        " (JEE/NEET 2026)"}
+                        (user?.academic?.competitiveExam === "neet"
+                          ? " (NEET 2026)"
+                          : user?.academic?.competitiveExam === "jee"
+                            ? " (JEE 2026)"
+                            : "")}
                     </Text>
 
                     <Link
