@@ -22,7 +22,7 @@ const FreeTrialTimer = () => {
       // Redirect if the trial has ended and the user is not on the subscription page
       if (now >= trialEndDate && pathname !== "/subscription-plans") {
         console.log(trialEndDate, now >= trialEndDate);
-        router.replace("/subscription-plans");
+        router.replace("/subscription-end");
       } else {
         // Calculate remaining time in seconds
         const remainingTime = Math.max(
@@ -31,9 +31,14 @@ const FreeTrialTimer = () => {
         );
 
         // Format remaining time to hours, minutes, and seconds
-        const totalHours = Math.floor(remainingTime / 3600);
-        const minutes = Math.floor((remainingTime % 3600) / 60);
-        const seconds = remainingTime % 60;
+        const totalHours = String(Math.floor(remainingTime / 3600)).padStart(
+          2,
+          "0"
+        );
+        const minutes = String(
+          Math.floor((remainingTime % 3600) / 60)
+        ).padStart(2, "0");
+        const seconds = String(remainingTime % 60).padStart(2, "0");
 
         setTimeLeft(`${totalHours}h : ${minutes}m : ${seconds}s`);
       }

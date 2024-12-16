@@ -52,6 +52,8 @@ const SubscriptionLayout = () => {
           ),
         }}
       />
+
+      <Stack.Screen name="subscription-end" options={{ headerShown: false }} />
     </Stack>
   );
 };

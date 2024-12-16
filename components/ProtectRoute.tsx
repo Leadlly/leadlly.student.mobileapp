@@ -38,9 +38,10 @@ const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
         user.freeTrial.availed &&
         now >= trialEndDate &&
         pathname !== "/subscription-plans" &&
-        pathname !== "/apply-coupon"
+        pathname !== "/apply-coupon" &&
+        pathname !== "/subscription-end"
       ) {
-        router.replace("/subscription-plans");
+        router.replace("/subscription-end");
       }
     } else if (user && isPublicPath) {
       router.replace("/dashboard");

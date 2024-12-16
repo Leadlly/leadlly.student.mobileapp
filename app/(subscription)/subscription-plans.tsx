@@ -5,34 +5,23 @@ import {
   Text,
   ActivityIndicator,
   ImageBackground,
-  Pressable,
   Dimensions,
-  TouchableOpacity,
   Image,
 } from "react-native";
-import {
-  colors,
-  premiumPlanFeatures,
-  subscriptionDetails,
-} from "../../constants/constants";
-import { MergedPlanData, Plan } from "../../types/types";
+import { colors, premiumPlanFeatures } from "../../constants/constants";
 import * as Linking from "expo-linking";
 import { useAppSelector } from "../../services/redux/hooks";
-import { useGetSubscriptionPricing } from "../../services/queries/subscriptionQuery";
 import PaymentSuccessModal from "../../components/subscriptionComponents/PaymentSuccessModal";
 import PaymentCancelledModal from "../../components/subscriptionComponents/PaymentCancelledModal";
-import { SafeAreaView } from "react-native-safe-area-context";
-import clsx from "clsx";
-import Animated, {
+import {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
-import SubscriptionPlanCard from "../../components/subscriptionComponents/SubscriptionPlanCard";
-import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
 import useAppStateChange from "../../hooks/useAppStateChange";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import ReloadApp from "../../components/shared/ReloadApp";
-import { LinearGradient } from "expo-linear-gradient";
+import useMergePricingData from "../../hooks/useMergePricingData";
+import RefactoredSubscriptionPlanCard from "../../components/subscriptionComponents/RefactoredSubscriptionPlanCard";
 
 const SubscriptionPlansScreen: React.FC = () => {
   const currentAppState = useAppStateChange();
@@ -41,50 +30,13 @@ const SubscriptionPlansScreen: React.FC = () => {
     isReloadingApp?: string;
   }>();
 
-  const { data: pricingData, isLoading: fetchingPricing } =
-    useGetSubscriptionPricing("main");
-
-  const { existingRemainingAmount, fetchingExistingPlanPrice } =
-    useGetExistingPlanRemainingAmount();
+  const { fetchingPricing, filteredPlans, mergedPricingData } =
+    useMergePricingData();
 
   const { user } = useAppSelector((state) => state.user);
 
-  // Plan hierarchy
-  const planHierarchy = ["momentum", "consistency", "sturdy-step"];
-
   // Get the user's current plan
-  const userCategory = user?.category || "free"; // Assume "free" if user category is null or undefined
-
-  // Filter the plans based on userCategory
-  const filteredPlans = pricingData?.pricing;
-
-  const mergedPricingData = filteredPlans
-    ?.map((pricing) => {
-      const matchingDetails = subscriptionDetails.find(
-        (detail) => detail.title === pricing.title
-      );
-
-      if (matchingDetails) {
-        return {
-          ...pricing,
-          discountPercentage: matchingDetails.discountPercentage,
-          initialPrice: matchingDetails.initialPrice,
-          features: matchingDetails.details,
-          image: matchingDetails?.image,
-        } as MergedPlanData;
-      }
-
-      return null;
-    })
-    // Sort the plans based on planHierarchy
-    .sort((a, b) => {
-      if (!a || !b) return 0;
-      const indexA = planHierarchy.indexOf(a.title);
-      const indexB = planHierarchy.indexOf(b.title);
-      return indexA - indexB;
-    })
-    // Remove any null values
-    .filter(Boolean);
+  // const userCategory = user?.category || "free"; // Assume "free" if user category is null or undefined
 
   const [paginationIndex, setPaginationIndex] = useState<number>(0);
 
@@ -192,21 +144,23 @@ const SubscriptionPlansScreen: React.FC = () => {
           </Text>
         </View>
 
-        {userCategory === "premium" ? (
-          <View className="bg-yellow-100 p-4 rounded-md mx-5 mb-5">
-            <Text className="text-base text-center font-mada-Bold">
-              Hi! You are a premium user. Further upgrades are not present. If
-              you want to extend your plan, please wait; it will be available
-              soon. Thanks for choosing us!
-            </Text>
-          </View>
-        ) : fetchingPricing || fetchingExistingPlanPrice ? (
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size={"small"} color={colors.primary} />
-          </View>
-        ) : (
-          <View className="space-y-6 pb-4">
-            {/* <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-center space-x-10 mb-8">
+        {
+          //   userCategory === "premium" ? (
+          //   <View className="bg-yellow-100 p-4 rounded-md mx-5 mb-5">
+          //     <Text className="text-base text-center font-mada-Bold">
+          //       Hi! You are a premium user. Further upgrades are not present. If
+          //       you want to extend your plan, please wait; it will be available
+          //       soon. Thanks for choosing us!
+          //     </Text>
+          //   </View>
+          // ) :
+          fetchingPricing ? (
+            <View className="flex-1 items-center justify-center my-5">
+              <ActivityIndicator size={"small"} color={colors.primary} />
+            </View>
+          ) : (
+            <View>
+              {/* <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-center space-x-10 mb-8">
               {filteredPlans?.map((item, index) => (
                 <Pressable
                   key={item._id}
@@ -229,7 +183,7 @@ const SubscriptionPlansScreen: React.FC = () => {
               ))}
             </View> */}
 
-            {/* {mergedPricingData && mergedPricingData.length > 0 ? (
+              {/* {mergedPricingData && mergedPricingData.length > 0 ? (
               <Animated.ScrollView
                 ref={scrollViewRef as React.RefObject<Animated.ScrollView>}
                 horizontal
@@ -253,144 +207,17 @@ const SubscriptionPlansScreen: React.FC = () => {
               </Animated.ScrollView>
             ) : null} */}
 
-            {mergedPricingData && mergedPricingData.length > 0
-              ? mergedPricingData.map((plan) => (
-                  <View
-                    key={plan?._id}
-                    style={{
-                      shadowColor: "#000",
-                      shadowOpacity: 0.3,
-                      elevation: 2.5,
-                    }}
-                    className={clsx(
-                      "px-7 py-2 rounded-xl mx-5",
-                      plan?.title === "momentum"
-                        ? "bg-[#FFD9AE]"
-                        : plan?.title === "consistency"
-                          ? "bg-[#D8BDFF]"
-                          : "bg-[#C8FFB6]",
-                      user &&
-                        user.subscription.status === "active" &&
-                        user?.subscription.planId === plan?.planId
-                        ? "border-4 border-primary"
-                        : ""
-                    )}
-                  >
-                    <View className="border-b border-tab-item-gray py-2 flex-row items-center justify-between">
-                      <Text className="flex-1 capitalize text-lg font-mada-Bold leading-6">
-                        {plan?.title} Plan
-                      </Text>
-                      <View className="flex-row items-center space-x-2">
-                        {plan?.title === "consistency" && (
-                          <LinearGradient
-                            colors={[
-                              "rgba(248, 155, 5, 1)",
-                              "rgba(180, 56, 243, 1)",
-                            ]}
-                            dither={false}
-                            start={{ x: 0.1, y: 0 }}
-                            end={{ x: 1, y: 1 }}
-                            className="items-center justify-center py-1 px-3 rounded-full"
-                          >
-                            <Text className="text-[10px] font-mada-Bold leading-4 text-white">
-                              Most Popular
-                            </Text>
-                          </LinearGradient>
-                        )}
-
-                        {user &&
-                        user.subscription.status === "active" &&
-                        user.subscription.planId === plan?.planId ? (
-                          <View className="bg-primary px-3 py-1 rounded-full">
-                            <Text className="text-xs font-mada-medium text-white">
-                              Active Plan
-                            </Text>
-                          </View>
-                        ) : null}
-                      </View>
-                    </View>
-
-                    <View className="flex-row items-center space-x-1 pt-3">
-                      <Text className="text-3xl leading-8 font-mada-Bold">
-                        ₹
-                        {Math.round(
-                          Number(plan?.amount) /
-                            Number(plan?.["duration(months)"])
-                        )}
-                      </Text>
-                      <Text className="text-base font-mada-semibold">
-                        / month
-                      </Text>
-                    </View>
-
-                    <View className="flex-row items-center space-x-1">
-                      <Text className="text-xs font-mada-regular">
-                        {plan?.discountPercentage}% OFF
-                      </Text>
-                      <View className="relative">
-                        <View className="absolute top-1/2 left-0 -translate-y-0.5 -rotate-[6deg] w-16 h-0.5 bg-leadlly-red" />
-                        <Text className="text-xs font-mada-regular">
-                          ₹
-                          {Math.round(
-                            Number(plan?.initialPrice) /
-                              Number(plan?.["duration(months)"])
-                          )}
-                          / month
-                        </Text>
-                      </View>
-                    </View>
-                    <Text className="text-xs font-mada-regular font-bold py-1">
-                      Valid till:{" "}
-                      {user?.subscription.status === "active"
-                        ? new Date(
-                            new Date(user.subscription.dateOfDeactivation || new Date()).getTime() +
-                            Number(plan?.["duration(months)"]) * 30 * 24 * 60 * 60 * 1000
-                          ).toLocaleDateString("en-GB", {
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : `${plan?.["duration(months)"]} month${Number(plan?.["duration(months)"]) > 1 ? "s" : ""}`}
-                      {user?.subscription.status === "active" &&
-                        plan?.title === "momentum" &&
-                        " (1 month)"}
-                      {user?.subscription.status === "active" &&
-                        plan?.title === "consistency" &&
-                        (user?.academic?.competitiveExam === "neet"
-                          ? " (NEET 2025)"
-                          : user?.academic?.competitiveExam === "jee"
-                            ? " (JEE 2025)"
-                            : "")}
-                      {user?.subscription.status === "active" &&
-                        plan?.title === "sturdy-step" &&
-                        (user?.academic?.competitiveExam === "neet"
-                          ? " (NEET 2026)"
-                          : user?.academic?.competitiveExam === "jee"
-                            ? " (JEE 2026)"
-                            : "")}
-                    </Text>
-
-                    <Link
-                      href={{
-                        pathname: "/apply-coupon",
-                        params: {
-                          category: plan?.category,
-                          planId: plan?.planId,
-                          price: String(plan?.amount),
-                        },
-                      }}
-                      asChild
-                    >
-                      <TouchableOpacity className="bg-black rounded-full h-10 my-2 items-center justify-center">
-                        <Text className="text-white text-sm font-mada-medium">
-                          Apply Coupon
-                        </Text>
-                      </TouchableOpacity>
-                    </Link>
-                  </View>
-                ))
-              : null}
-          </View>
-        )}
+              {mergedPricingData && mergedPricingData.length > 0
+                ? mergedPricingData.map((plan) => (
+                    <RefactoredSubscriptionPlanCard
+                      key={plan?._id}
+                      plan={plan}
+                    />
+                  ))
+                : null}
+            </View>
+          )
+        }
 
         <View
           style={{
@@ -398,7 +225,7 @@ const SubscriptionPlansScreen: React.FC = () => {
             shadowOpacity: 0.3,
             elevation: 2.5,
           }}
-          className="bg-white rounded-lg px-7 py-4 mx-5 mt-3 mb-7"
+          className="bg-white rounded-lg px-7 py-4 mx-5 mb-7"
         >
           <View className="items-center justify-center border-b border-tab-item-gray pb-3">
             <Text className="text-xl font-mada-semibold">
