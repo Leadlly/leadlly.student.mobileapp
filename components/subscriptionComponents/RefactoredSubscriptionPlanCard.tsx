@@ -122,15 +122,14 @@ const RefactoredSubscriptionPlanCard = ({
       </Text>
 
       <Link
-        // href={{
-        //   pathname: "/apply-coupon",
-        //   params: {
-        //     category: plan?.category,
-        //     planId: plan?.planId,
-        //     price: String(plan?.amount),
-        //   },
-        // }}
-        href={"/subscription-end"}
+        href={{
+          pathname: "/apply-coupon",
+          params: {
+            category: plan?.category,
+            planId: plan?.planId,
+            price: String(plan?.amount),
+          },
+        }}
         asChild
       >
         <TouchableOpacity className="bg-black rounded-full h-10 my-2 items-center justify-center">
