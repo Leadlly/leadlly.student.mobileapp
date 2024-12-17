@@ -55,7 +55,7 @@ const WelcomeScreen = () => {
     const now = new Date();
 
     if (now >= trialEndDate) {
-      return <Redirect href={"/subscription-plans"} />;
+      return <Redirect href={"/subscription-end"} />;
     }
   }
 
