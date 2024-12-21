@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "expo-router";
 import { formatTime } from "../../helpers/utils";
 
 const FreeTrialTimer = () => {
-  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState<string>("");
 
   const router = useRouter();
   const pathname = usePathname();
@@ -22,7 +22,7 @@ const FreeTrialTimer = () => {
       // Redirect if the trial has ended and the user is not on the subscription page
       if (now >= trialEndDate && pathname !== "/subscription-plans") {
         console.log(trialEndDate, now >= trialEndDate);
-        router.replace("/subscription-plans");
+        router.replace("/subscription-end");
       } else {
         // Calculate remaining time in seconds
         const remainingTime = Math.max(
@@ -30,7 +30,17 @@ const FreeTrialTimer = () => {
           Math.floor((trialEndDate.getTime() - now.getTime()) / 1000)
         );
 
-        setTimeLeft(remainingTime);
+        // Format remaining time to hours, minutes, and seconds
+        const totalHours = String(Math.floor(remainingTime / 3600)).padStart(
+          2,
+          "0"
+        );
+        const minutes = String(
+          Math.floor((remainingTime % 3600) / 60)
+        ).padStart(2, "0");
+        const seconds = String(remainingTime % 60).padStart(2, "0");
+
+        setTimeLeft(`${totalHours}h : ${minutes}m : ${seconds}s`);
       }
     };
 
@@ -46,7 +56,7 @@ const FreeTrialTimer = () => {
 
   return (
     <Text className="text-[10px] leading-tight font-mada-medium text-white">
-      {timeLeft !== null ? formatTime(timeLeft) : "Loading..."}
+      {timeLeft !== null ? timeLeft : "Loading..."}
     </Text>
   );
 };

@@ -5,27 +5,23 @@ import {
   Text,
   ActivityIndicator,
   ImageBackground,
-  Pressable,
   Dimensions,
+  Image,
 } from "react-native";
-import { colors, subscriptionDetails } from "../../constants/constants";
-import { MergedPlanData, Plan } from "../../types/types";
+import { colors, premiumPlanFeatures } from "../../constants/constants";
 import * as Linking from "expo-linking";
 import { useAppSelector } from "../../services/redux/hooks";
-import { useGetSubscriptionPricing } from "../../services/queries/subscriptionQuery";
 import PaymentSuccessModal from "../../components/subscriptionComponents/PaymentSuccessModal";
 import PaymentCancelledModal from "../../components/subscriptionComponents/PaymentCancelledModal";
-import { SafeAreaView } from "react-native-safe-area-context";
-import clsx from "clsx";
-import Animated, {
+import {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
-import SubscriptionPlanCard from "../../components/subscriptionComponents/SubscriptionPlanCard";
-import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
 import useAppStateChange from "../../hooks/useAppStateChange";
 import { useLocalSearchParams } from "expo-router";
 import ReloadApp from "../../components/shared/ReloadApp";
+import useMergePricingData from "../../hooks/useMergePricingData";
+import RefactoredSubscriptionPlanCard from "../../components/subscriptionComponents/RefactoredSubscriptionPlanCard";
 
 const SubscriptionPlansScreen: React.FC = () => {
   const currentAppState = useAppStateChange();
@@ -34,46 +30,13 @@ const SubscriptionPlansScreen: React.FC = () => {
     isReloadingApp?: string;
   }>();
 
-  const { data: pricingData, isLoading: fetchingPricing } =
-    useGetSubscriptionPricing("main");
-
-  const { existingRemainingAmount, fetchingExistingPlanPrice } =
-    useGetExistingPlanRemainingAmount();
+  const { fetchingPricing, filteredPlans, mergedPricingData } =
+    useMergePricingData();
 
   const { user } = useAppSelector((state) => state.user);
 
-  // Plan hierarchy
-  const planHierarchy = ["basic", "pro", "premium"];
-
   // Get the user's current plan
-  const userCategory = user?.category || "free"; // Assume "free" if user category is null or undefined
-
-  // Filter the plans based on userCategory
-  const filteredPlans = pricingData?.pricing.filter((plan) => {
-    const planIndex = planHierarchy.indexOf(plan.category);
-    const userIndex = planHierarchy.indexOf(userCategory);
-
-    // Show plans that are hierarchically above the user's plan
-    return userIndex === -1 || planIndex > userIndex;
-  });
-
-  const mergedPricingData = filteredPlans?.map((pricing) => {
-    const matchingDetails = subscriptionDetails.find(
-      (detail) => detail.category === pricing.category
-    );
-
-    if (matchingDetails) {
-      return {
-        ...pricing,
-        discountPercentage: matchingDetails.discountPercentage,
-        initialPrice: matchingDetails.initialPrice,
-        features: matchingDetails.details,
-        image: matchingDetails?.image,
-      } as MergedPlanData;
-    }
-
-    return null;
-  });
+  // const userCategory = user?.category || "free"; // Assume "free" if user category is null or undefined
 
   const [paginationIndex, setPaginationIndex] = useState<number>(0);
 
@@ -169,27 +132,35 @@ const SubscriptionPlansScreen: React.FC = () => {
           </Text>
         </View>
 
-        <View className="items-center space-y-3 my-4">
-          <Text className="text-xl font-mada-Bold leading-tight">
-            Choose Your Plan
+        <View className="items-center space-y-1 mt-4 mb-6">
+          <View className="flex-row items-center justify-center space-x-1">
+            <Text className="text-xl text-primary font-mada-Bold leading-tight">
+              Flexible
+            </Text>
+            <Text className="text-xl font-mada-Bold leading-tight">Plans</Text>
+          </View>
+          <Text className="max-w-[300px] text-base font-mada-medium text-center">
+            Choose your best premium plan that works best for you
           </Text>
         </View>
 
-        {userCategory === "premium" ? (
-          <View className="bg-yellow-100 p-4 rounded-md mx-5 mb-5">
-            <Text className="text-base text-center font-mada-Bold">
-              Hi! You are a premium user. Further upgrades are not present. If
-              you want to extend your plan, please wait; it will be available
-              soon. Thanks for choosing us!
-            </Text>
-          </View>
-        ) : fetchingPricing || fetchingExistingPlanPrice ? (
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size={"small"} color={colors.primary} />
-          </View>
-        ) : (
-          <>
-            <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-center space-x-10 mb-8">
+        {
+          //   userCategory === "premium" ? (
+          //   <View className="bg-yellow-100 p-4 rounded-md mx-5 mb-5">
+          //     <Text className="text-base text-center font-mada-Bold">
+          //       Hi! You are a premium user. Further upgrades are not present. If
+          //       you want to extend your plan, please wait; it will be available
+          //       soon. Thanks for choosing us!
+          //     </Text>
+          //   </View>
+          // ) :
+          fetchingPricing ? (
+            <View className="flex-1 items-center justify-center my-5">
+              <ActivityIndicator size={"small"} color={colors.primary} />
+            </View>
+          ) : (
+            <View>
+              {/* <View className="max-w-[250px] w-full mx-auto flex-row items-center justify-center space-x-10 mb-8">
               {filteredPlans?.map((item, index) => (
                 <Pressable
                   key={item._id}
@@ -210,9 +181,9 @@ const SubscriptionPlansScreen: React.FC = () => {
                   </Text>
                 </Pressable>
               ))}
-            </View>
+            </View> */}
 
-            {mergedPricingData && mergedPricingData.length > 0 ? (
+              {/* {mergedPricingData && mergedPricingData.length > 0 ? (
               <Animated.ScrollView
                 ref={scrollViewRef as React.RefObject<Animated.ScrollView>}
                 horizontal
@@ -220,7 +191,6 @@ const SubscriptionPlansScreen: React.FC = () => {
                 pagingEnabled
                 onScroll={onScrollHandler}
                 scrollEventThrottle={16}
-                scrollEnabled={false}
               >
                 {mergedPricingData?.map((data, index) => (
                   <SubscriptionPlanCard
@@ -235,9 +205,49 @@ const SubscriptionPlansScreen: React.FC = () => {
                   />
                 ))}
               </Animated.ScrollView>
-            ) : null}
-          </>
-        )}
+            ) : null} */}
+
+              {mergedPricingData && mergedPricingData.length > 0
+                ? mergedPricingData.map((plan) => (
+                    <RefactoredSubscriptionPlanCard
+                      key={plan?._id}
+                      plan={plan}
+                    />
+                  ))
+                : null}
+            </View>
+          )
+        }
+
+        <View
+          style={{
+            shadowColor: "#000",
+            shadowOpacity: 0.3,
+            elevation: 2.5,
+          }}
+          className="bg-white rounded-lg px-7 py-4 mx-5 mb-7"
+        >
+          <View className="items-center justify-center border-b border-tab-item-gray pb-3">
+            <Text className="text-xl font-mada-semibold">
+              Why join Premium?
+            </Text>
+          </View>
+
+          <View className="space-y-5 mt-4 mb-2">
+            {premiumPlanFeatures.map((feat) => (
+              <View key={feat.id} className="flex-row items-center space-x-3">
+                <Image
+                  source={feat.icon}
+                  resizeMode="contain"
+                  className="w-7 h-7 -mt-0.5"
+                />
+                <Text className="text-base font-mada-regular">
+                  {feat.label}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
       </ScrollView>
 
       {transactionCancelled && (

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { colors } from "../../constants/constants";
 import { useAppDispatch, useAppSelector } from "../../services/redux/hooks";
 import { Controller, useForm } from "react-hook-form";
@@ -39,6 +39,15 @@ const ControlPanel = () => {
           : 3,
     },
   });
+
+  useEffect(() => {
+    if (user?.preferences?.continuousData?.nextDay !== undefined) {
+      form.setValue("nextDay", user.preferences.continuousData.nextDay, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [user]);
 
   const {
     mutateAsync: studentPersonalInfo,
@@ -119,7 +128,7 @@ const ControlPanel = () => {
                 Number of Questions
               </Text>
               <View className="flex-row items-center gap-3 flex-wrap mb-2">
-                {[3, 5, 7, 10].map((item) => (
+                {[3, 5, 7].map((item) => (
                   <TouchableOpacity
                     key={item}
                     onPress={() => field.onChange(item)}
@@ -147,7 +156,7 @@ const ControlPanel = () => {
               style={styles.containerStyle}
               className="bg-white rounded-lg px-4 py-3 mt-3 mb-1.5 mx-3"
             >
-              <Text className="flex-1 text-lg leading-6 font-mada-semibold mb-4">
+              <Text className="text-lg leading-6 font-mada-semibold mb-4">
                 Number of Back Revision Topics
               </Text>
               <View className="flex-row items-center gap-3 flex-wrap mb-2">

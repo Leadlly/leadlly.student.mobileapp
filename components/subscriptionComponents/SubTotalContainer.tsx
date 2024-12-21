@@ -54,9 +54,9 @@ const SubTotalContainer = ({
 
       const redirectUrl = Linking.createURL("subscription-plans");
 
-      const subscriptionUrl = `${webBaseUrl}/subscription-plans?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
+      const subscriptionUrl = `${webBaseUrl}/subscription-plans/apply-coupon?token=${encodeURIComponent(userToken!)}&subscriptionId=${encodeURIComponent(res.subscription.id)}&redirect=${encodeURIComponent(redirectUrl)}`;
 
-      await WebBrowser.openBrowserAsync(subscriptionUrl);
+      Linking.openURL(subscriptionUrl);
     } catch (error: any) {
       return Toast.show({
         type: "error",
@@ -72,9 +72,10 @@ const SubTotalContainer = ({
       : selectedCoupon.discountValue // Assume it's a fixed amount
     : 0;
 
-  const subtotal = isExistingRemainingAmount
-    ? Number(price) - existingRemainingAmount! - discountValue
-    : Number(price) - discountValue;
+  // const subtotal = isExistingRemainingAmount
+  //   ? Number(price) - existingRemainingAmount! - discountValue
+  //   : Number(price) - discountValue;
+  const subtotal =  Number(price) - discountValue;
 
   return (
     <View
@@ -140,7 +141,7 @@ const SubTotalContainer = ({
         </Text>
       </View>
 
-      {isExistingRemainingAmount && (
+      {/* {isExistingRemainingAmount && (
         <View
           className={clsx(
             "flex-row items-center justify-between px-5",
@@ -154,7 +155,7 @@ const SubTotalContainer = ({
             - ₹ {Math.round(existingRemainingAmount!)}/-
           </Text>
         </View>
-      )}
+      )} */}
 
       {selectedCoupon && (
         <View className="flex-row items-center justify-between my-3 px-5">
