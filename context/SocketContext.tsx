@@ -16,18 +16,19 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const user = useAppSelector((state) => state.user.user);
+  const CHAT_API_BASE_URL = process.env.EXPO_PUBLIC_CHAT_API_BASE_URL;
 
   useEffect(() => {
-    const fetchUserAndConnectSocket = async () => {
-      const socket = io("http://192.168.246.114:3000", {
+    const connectSocket = async () => {
+      const socket = io(CHAT_API_BASE_URL, {
         transports: ["websocket"],
         withCredentials: true,
         auth: { userToken: user?.token },
       });
 
-      if (socket && user) {
-        console.log({ socket, user });
+      console.log({ socket, user });
 
+      if (socket && user) {
         socket.emit("student_joining_room", {
           userEmail: user.email,
         });
@@ -51,8 +52,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       };
     };
 
-    fetchUserAndConnectSocket();
-  }, []);
+    connectSocket();
+  }, [user]);
 
   return (
     <SocketContext.Provider value={{ socket, notifications }}>
