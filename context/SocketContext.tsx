@@ -26,8 +26,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
         auth: { userToken: user?.token },
       });
 
-      console.log({ socket, user });
-
       if (socket && user) {
         socket.emit("student_joining_room", {
           userEmail: user.email,

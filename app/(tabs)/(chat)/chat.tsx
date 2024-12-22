@@ -25,6 +25,8 @@ import { useGetChatMessages } from "../../../services/queries/chatQuery";
 import { ChatMessage, ChatSection } from "../../../types/types";
 import { convertToHourMinute } from "../../../helpers/utils";
 import { format, isThisWeek, isThisYear, isToday, isYesterday } from "date-fns";
+import MentorInfo from "../../../components/MeetingComponents/MentorInfo";
+import { unreadMessages } from "../../../services/redux/slices/unreadMessageSlice";
 
 // Enable LayoutAnimation for Android
 if (Platform.OS === "android") {
@@ -185,7 +187,7 @@ const ChatScreen = () => {
   useEffect(() => {
     if (socket) {
       socket.emit("open_chat", { userId: user?._id, room: user?.email });
-      // dispatch(unreadMessages(0));
+      dispatch(unreadMessages(0));
     }
   }, [socket, messages, user, dispatch]);
 
@@ -212,27 +214,7 @@ const ChatScreen = () => {
     <View className="mb-16 bg-white flex-1">
       <View className="flex-1 overflow-hidden">
         <View className="bg-primary/20 flex-row items-center justify-between space-x-3 py-3 px-4">
-          <View className="flex-1 flex-row items-center space-x-3">
-            <View className="w-11 h-11 rounded-full border border-white bg-white">
-              <Image
-                source={require("../../../assets/images/teacher.jpg")}
-                resizeMode="contain"
-                className="w-full h-full rounded-full"
-              />
-            </View>
-
-            <View className="flex-1">
-              <Text
-                numberOfLines={1}
-                className="flex-1 text-lg font-mada-semibold"
-              >
-                Mr. Mentor
-              </Text>
-              <Text className="text-xs text-tab-item-gray font-mada-medium">
-                Last seen today at 11:50 PM
-              </Text>
-            </View>
-          </View>
+          <MentorInfo />
 
           <View className="flex-row items-center space-x-4">
             <TouchableOpacity>
@@ -262,31 +244,31 @@ const ChatScreen = () => {
             renderItem={({ item }) => (
               <Pressable
                 className={clsx(
-                  "my-2 mx-3 max-w-[50%]",
-                  item.sendBy === user?._id
-                    ? "ml-auto items-end"
-                    : "mr-auto items-start"
+                  "my-1 mx-3 max-w-[50%]",
+                  item.sendBy === user?._id ? "ml-auto" : "mr-auto"
                 )}
               >
                 <View
                   style={styles.boxShadow}
                   className={clsx(
                     "p-2.5 rounded-lg",
-                    item.sendBy === user?._id ? "bg-[#EDE2FD]" : "bg-white"
+                    item.sendBy === user?._id
+                      ? "bg-[#EDE2FD] items-end"
+                      : "bg-white items-start"
                   )}
                 >
                   <Text className="text-base font-mada-regular leading-5">
                     {item.message}
                   </Text>
+                  <Text className="text-xs text-secondary-text font-mada-regular">
+                    {format(item.timestamp, "hh:mm aaa")}
+                  </Text>
                 </View>
-                <Text className="text-xs text-secondary-text font-mada-regular leading-5">
-                  {format(item.timestamp, "HH:mm")}
-                </Text>
               </Pressable>
             )}
             renderSectionHeader={({ section: { title } }) => (
-              <View className="items-center justify-center bg-input-border/30 mx-auto px-4 py-1 rounded-md my-1">
-                <Text className="text-secondary-text text-xs font-mada-regular">
+              <View className="items-center justify-center bg-input-border/30 mx-auto px-6 py-1.5 rounded-full my-1">
+                <Text className="text-secondary-text text-[13px] font-mada-medium">
                   {title}
                 </Text>
               </View>

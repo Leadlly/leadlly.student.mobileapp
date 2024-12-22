@@ -174,6 +174,24 @@ export const useGetUser = () => {
   });
 };
 
+export const useGetMentorInfo = () => {
+  return useQuery({
+    queryKey: ["mentor"],
+    queryFn: async () => {
+      try {
+        const res = await axiosClient.get("/api/user/mentor/info");
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(`${error.response?.data.message}`);
+        } else {
+          throw new Error("An unknown error while fetching mentor info!!");
+        }
+      }
+    },
+  });
+};
+
 export const useSaveTodaysVibe = () => {
   const queryClient = useQueryClient();
 
