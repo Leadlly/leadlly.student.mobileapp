@@ -7,6 +7,7 @@ import {
   ListRenderItemInfo,
   ViewToken,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import DashboardIcon from "./icons/DashboardIcon";
@@ -22,9 +23,14 @@ import LibraryIcon from "./icons/LibraryIcon";
 import StudyRoomIcon from "./icons/StudyRoomIcon";
 import { colors } from "../constants/constants";
 import { useAppSelector } from "../services/redux/hooks";
+import { useGetMeetings } from "../services/queries/meetingQuery";
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const [visibleItems, setVisibleItems] = useState<ViewToken[]>([]);
+
+  const { data, isLoading, isFetching } = useGetMeetings("");
+
+  const meetings = data?.meetings;
 
   const flatListRef = useRef<FlatList<any>>(null);
 
@@ -111,6 +117,16 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         onLongPress={onLongPress}
         className="flex-1 justify-center items-center gap-y-2 w-[72px]"
       >
+        {item.name === "(chat)" && meetings && meetings?.length > 0 && (
+          <View className="absolute top-1 right-3 h-6 w-6 bg-primary items-center justify-center rounded-full z-10 border-white border-2">
+            {isFetching || isLoading ? (
+              <ActivityIndicator size={8} color={colors.white} />
+            ) : (
+              <Text className="text-[10px] text-white">{meetings.length}</Text>
+            )}
+          </View>
+        )}
+
         {icons[item.name as keyof typeof icons]({
           ...(item.name === "growth-meter"
             ? { fill: isFocused ? colors.primary : colors.tabItemGray }

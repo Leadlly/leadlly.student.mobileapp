@@ -29,7 +29,7 @@ const RefactoredSubscriptionPlanCard = ({
         user &&
           user.subscription.status === "active" &&
           user?.subscription.planId === plan?.planId
-          ? "border-4 border-primary"
+          ? "border-2 border-primary"
           : ""
       )}
     >
