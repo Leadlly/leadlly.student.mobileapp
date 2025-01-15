@@ -1,3 +1,4 @@
+import React from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import {
@@ -106,6 +107,7 @@ const ToDoList = ({
                     totalQuestions={
                       todaysTopics.questions?.[item.topic.name]?.length
                     }
+                    questions={todaysTopics?.questions?.[topic?.name!]}
                   />
                 ))}
                 {todaysTopics.continuousRevisionTopics.map((item) => (
@@ -119,6 +121,7 @@ const ToDoList = ({
                     totalQuestions={
                       todaysTopics.questions?.[item.topic.name]?.length
                     }
+                    questions={todaysTopics?.questions?.[topic?.name!]}
                   />
                 ))}
                 {todaysTopics.continuousRevisionSubTopics.map((item) => (
@@ -133,6 +136,7 @@ const ToDoList = ({
                     totalQuestions={
                       todaysTopics.questions?.[item.subtopic.name]?.length
                     }
+                    questions={todaysTopics?.questions?.[topic?.name!]}
                   />
                 ))}
               </ScrollView>

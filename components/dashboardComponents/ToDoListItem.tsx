@@ -1,11 +1,12 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { TRevisionProps } from "../../types/types";
+import { TQuizQuestionProps, TRevisionProps } from "../../types/types";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import clsx from "clsx";
 import { colors } from "../../constants/constants";
 import { useAppSelector } from "../../services/redux/hooks";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { useState } from "react";
 
 const ToDoListItem = ({
   item,
@@ -15,6 +16,7 @@ const ToDoListItem = ({
   setTopic,
   isSubtopic = false,
   totalQuestions,
+  questions,
 }: {
   item: TRevisionProps;
   completedTopics: any[];
@@ -25,7 +27,10 @@ const ToDoListItem = ({
   ) => void;
   isSubtopic?: boolean;
   totalQuestions: number;
+  questions: TQuizQuestionProps[];
 }) => {
+  const [isNoQuestionAvailable, setIsNoQuestionAvailable] = useState(false);
+
   const { dailyQuizzes } = useAppSelector((state) => state.dailyQuizzes);
 
   const dailyQuizCurrentTopic = dailyQuizzes.find(
@@ -39,7 +44,12 @@ const ToDoListItem = ({
     isSubtopic: boolean
   ) => {
     setTopic({ name: topic, _id: topicId, isSubtopic });
-    setModalVisible(true);
+
+    if (questions && questions.length > 0) {
+      setModalVisible(true);
+    } else {
+      setIsNoQuestionAvailable(true);
+    }
   };
 
   return (
@@ -68,11 +78,19 @@ const ToDoListItem = ({
             )
           }
         >
-          {incompleteTopics &&
-          incompleteTopics.length > 0 &&
-          incompleteTopics.includes(
-            isSubtopic ? item.subtopic.id : item.topic.id
-          ) ? (
+          {isNoQuestionAvailable ? (
+            <View
+              className={clsx(
+                "w-[18px] h-[18px] rounded border border-checkbox-gray items-center justify-center bg-leadlly-green/20"
+              )}
+            >
+              <Feather name="check" size={14} color={colors.leadllyGreen} />
+            </View>
+          ) : incompleteTopics &&
+            incompleteTopics.length > 0 &&
+            incompleteTopics.includes(
+              isSubtopic ? item.subtopic.id : item.topic.id
+            ) ? (
             <AnimatedCircularProgress
               size={18}
               fill={

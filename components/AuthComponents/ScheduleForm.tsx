@@ -1,5 +1,6 @@
+import React from "react";
 import { Image } from "expo-image";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import {
   ActivityIndicator,
   Pressable,
@@ -7,8 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { isValid, z } from "zod";
+import { z } from "zod";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Feather } from "@expo/vector-icons";
 import { FormType, StudentPersonalInfoProps } from "../../types/types";
