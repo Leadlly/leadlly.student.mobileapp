@@ -16,7 +16,7 @@ import * as Progress from "react-native-progress";
 import { capitalizeFirstLetter, widthPercentage } from "../../helpers/utils";
 import { colors } from "../../constants/constants";
 import { useState } from "react";
-import RenderHtml from "react-native-render-html";
+import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
 import clsx from "clsx";
 import Feather from "@expo/vector-icons/Feather";
 import { useSaveDailyQuiz } from "../../services/queries/dailyQuizQuery";
@@ -128,12 +128,14 @@ const QuestionsModal = ({
           type: "error",
           text1: res.message,
         });
+        setModalVisible(false);
       }
     } catch (error: any) {
       Toast.show({
         type: "error",
         text1: error.message,
       });
+      setModalVisible(false);
     }
   };
 
@@ -145,8 +147,9 @@ const QuestionsModal = ({
       dailyQuizCurrentTopic?.attemptedQuestions?.length > 0
     ) {
       await onHandleSubmit();
+    } else {
+      setModalVisible(false);
     }
-    // setModalVisible(false);
   };
 
   return (
@@ -277,6 +280,12 @@ const QuestionsModal = ({
                       source={{
                         html: questions[activeQuestion].question,
                       }}
+                      baseStyle={{ fontFamily: "Mada-Medium", fontSize: 16 }}
+                      systemFonts={[
+                        ...defaultSystemFonts,
+                        "Mada-Bold",
+                        "Mada-Medium",
+                      ]}
                     />
 
                     {questions[activeQuestion].images.length > 0 ? (
@@ -344,6 +353,15 @@ const QuestionsModal = ({
                         <RenderHtml
                           contentWidth={width - 120}
                           source={{ html: option.name }}
+                          baseStyle={{
+                            fontFamily: "Mada-Medium",
+                            fontSize: 15,
+                          }}
+                          systemFonts={[
+                            ...defaultSystemFonts,
+                            "Mada-Bold",
+                            "Mada-Medium",
+                          ]}
                         />
                       </View>
                     </Pressable>

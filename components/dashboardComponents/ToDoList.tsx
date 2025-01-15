@@ -101,13 +101,14 @@ const ToDoList = ({
                     key={item._id}
                     item={item}
                     setModalVisible={setModalVisible}
+                    topic={topic}
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
                     totalQuestions={
                       todaysTopics.questions?.[item.topic.name]?.length
                     }
-                    questions={todaysTopics?.questions?.[topic?.name!]}
+                    todaysTopics={todaysTopics}
                   />
                 ))}
                 {todaysTopics.continuousRevisionTopics.map((item) => (
@@ -115,13 +116,14 @@ const ToDoList = ({
                     key={item._id}
                     item={item}
                     setModalVisible={setModalVisible}
+                    topic={topic}
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
                     totalQuestions={
                       todaysTopics.questions?.[item.topic.name]?.length
                     }
-                    questions={todaysTopics?.questions?.[topic?.name!]}
+                    todaysTopics={todaysTopics}
                   />
                 ))}
                 {todaysTopics.continuousRevisionSubTopics.map((item) => (
@@ -129,6 +131,7 @@ const ToDoList = ({
                     key={item._id}
                     item={item}
                     setModalVisible={setModalVisible}
+                    topic={topic}
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
@@ -136,7 +139,7 @@ const ToDoList = ({
                     totalQuestions={
                       todaysTopics.questions?.[item.subtopic.name]?.length
                     }
-                    questions={todaysTopics?.questions?.[topic?.name!]}
+                    todaysTopics={todaysTopics}
                   />
                 ))}
               </ScrollView>
