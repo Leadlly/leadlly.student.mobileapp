@@ -1,3 +1,4 @@
+import React from "react";
 import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
 import ToDoList from "../../components/dashboardComponents/ToDoList";
 import NewTopicLearnt from "../../components/dashboardComponents/NewTopicLearnt";

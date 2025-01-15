@@ -1,3 +1,4 @@
+import React from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import {
@@ -100,12 +101,14 @@ const ToDoList = ({
                     key={item._id}
                     item={item}
                     setModalVisible={setModalVisible}
+                    topic={topic}
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
                     totalQuestions={
                       todaysTopics.questions?.[item.topic.name]?.length
                     }
+                    todaysTopics={todaysTopics}
                   />
                 ))}
                 {todaysTopics.continuousRevisionTopics.map((item) => (
@@ -113,12 +116,14 @@ const ToDoList = ({
                     key={item._id}
                     item={item}
                     setModalVisible={setModalVisible}
+                    topic={topic}
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
                     totalQuestions={
                       todaysTopics.questions?.[item.topic.name]?.length
                     }
+                    todaysTopics={todaysTopics}
                   />
                 ))}
                 {todaysTopics.continuousRevisionSubTopics.map((item) => (
@@ -126,6 +131,7 @@ const ToDoList = ({
                     key={item._id}
                     item={item}
                     setModalVisible={setModalVisible}
+                    topic={topic}
                     setTopic={setTopic}
                     completedTopics={todaysTopics.completedTopics}
                     incompleteTopics={todaysTopics.incompletedTopics}
@@ -133,6 +139,7 @@ const ToDoList = ({
                     totalQuestions={
                       todaysTopics.questions?.[item.subtopic.name]?.length
                     }
+                    todaysTopics={todaysTopics}
                   />
                 ))}
               </ScrollView>

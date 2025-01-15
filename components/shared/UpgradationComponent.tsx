@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   Text,
@@ -13,7 +14,6 @@ import { capitalizeFirstLetter } from "../../helpers/utils";
 import { colors } from "../../constants/constants";
 import useGetExistingPlanRemainingAmount from "../../hooks/useGetExistingPlanRemainingAmount";
 import { useAppSelector } from "../../services/redux/hooks";
-import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 
 const UpgradationComponent = ({
