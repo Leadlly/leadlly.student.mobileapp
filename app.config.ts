@@ -3,7 +3,7 @@ export default {
     owner: "leadlly_edusolutions_private_limited",
     name: "Leadlly",
     slug: "leadlly",
-    version: "1.0.3",
+    version: "1.0.5",
     scheme: "leadlly-student-app",
     orientation: "portrait",
     icon: "./assets/icon.png",
@@ -26,7 +26,7 @@ export default {
       },
       package: "com.leadlly.app",
       googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
-      versionCode: 9,
+      versionCode: 11,
     },
     updates: {
       url: "https://u.expo.dev/91b0599c-a56a-4e2e-87b0-a5614b4fd0ae",
