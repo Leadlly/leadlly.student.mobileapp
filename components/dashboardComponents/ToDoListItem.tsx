@@ -1,31 +1,46 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { TRevisionProps } from "../../types/types";
+import {
+  TDayProps,
+  TQuizQuestionProps,
+  TRevisionProps,
+} from "../../types/types";
 import { capitalizeFirstLetter } from "../../helpers/utils";
 import clsx from "clsx";
 import { colors } from "../../constants/constants";
 import { useAppSelector } from "../../services/redux/hooks";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { useEffect, useState } from "react";
 
 const ToDoListItem = ({
   item,
   setModalVisible,
   completedTopics,
   incompleteTopics,
+  topic,
   setTopic,
   isSubtopic = false,
   totalQuestions,
+  todaysTopics,
 }: {
   item: TRevisionProps;
   completedTopics: any[];
   incompleteTopics: any[];
   setModalVisible: (modalVisible: boolean) => void;
+  topic: {
+    name: string;
+    _id: string;
+    isSubtopic: boolean;
+  } | null;
   setTopic: (
     topic: { name: string; _id: string; isSubtopic: boolean } | null
   ) => void;
   isSubtopic?: boolean;
   totalQuestions: number;
+  todaysTopics: TDayProps | null;
 }) => {
+  const [isNoQuestionAvailable, setIsNoQuestionAvailable] = useState(false);
+
   const { dailyQuizzes } = useAppSelector((state) => state.dailyQuizzes);
 
   const dailyQuizCurrentTopic = dailyQuizzes.find(
@@ -39,7 +54,15 @@ const ToDoListItem = ({
     isSubtopic: boolean
   ) => {
     setTopic({ name: topic, _id: topicId, isSubtopic });
-    setModalVisible(true);
+
+    const topicQuestions: TQuizQuestionProps[] =
+      todaysTopics?.questions?.[topic];
+
+    if (!topicQuestions || topicQuestions.length === 0) {
+      setIsNoQuestionAvailable(true);
+    } else {
+      setModalVisible(true);
+    }
   };
 
   return (
@@ -102,19 +125,22 @@ const ToDoListItem = ({
             <View
               className={clsx(
                 "w-[18px] h-[18px] rounded border border-checkbox-gray items-center justify-center",
-                completedTopics &&
+                (completedTopics &&
                   completedTopics.length > 0 &&
                   completedTopics.includes(
                     isSubtopic ? item.subtopic.id : item.topic.id
-                  ) &&
-                  "bg-leadlly-green/20 border-0"
+                  )) ||
+                  isNoQuestionAvailable
+                  ? "bg-leadlly-green/20 border-0"
+                  : ""
               )}
             >
-              {completedTopics &&
-              completedTopics.length > 0 &&
-              completedTopics.includes(
-                isSubtopic ? item.subtopic.id : item.topic.id
-              ) ? (
+              {(completedTopics &&
+                completedTopics.length > 0 &&
+                completedTopics.includes(
+                  isSubtopic ? item.subtopic.id : item.topic.id
+                )) ||
+              isNoQuestionAvailable ? (
                 <Feather name="check" size={14} color={colors.leadllyGreen} />
               ) : null}
             </View>

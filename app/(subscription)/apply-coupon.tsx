@@ -1,14 +1,12 @@
+import React from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   ScrollView,
   StyleSheet,
   Image,
   ActivityIndicator,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { AntDesign } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Input from "../../components/shared/Input";
 import { colors } from "../../constants/constants";
@@ -202,16 +200,13 @@ const ApplyCoupon = () => {
               </View>
             </LinearGradient>
 
-              <View className="items-center justify-center p-4 px-5">
-                <Text className="text-xl leading-6 font-mada-semibold">
-                  New Offers
-                </Text>
-              </View>
-          
+            <View className="items-center justify-center p-4 px-5">
+              <Text className="text-xl leading-6 font-mada-semibold">
+                New Offers
+              </Text>
+            </View>
 
-            {
-            availableCoupons &&
-            availableCoupons.length > 0 ? (
+            {availableCoupons && availableCoupons.length > 0 ? (
               <View className="flex-1 space-y-3">
                 {availableCoupons.map((coupon, index) => (
                   <CouponCard

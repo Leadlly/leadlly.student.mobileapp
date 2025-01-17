@@ -47,46 +47,46 @@ const RequestMeetingForm: React.FC<RequestMeetingFormProps> = ({
   const handleFormSubmit = async (
     data: z.infer<typeof RequestMeetingFormSchema>
   ) => {
-    if (userCategory !== "premium" && userCategory !== "free") {
-      setIsCategory(true);
-    } else {
-      try {
-        await onSubmit(data);
-        onSuccess();
-      } catch (error: any) {
-        Toast.show({
-          type: "error",
-          text1: error.message || "An error occurred",
-        });
-      }
+    // if (userCategory !== "premium" && userCategory !== "free") {
+    //   setIsCategory(true);
+    // } else {
+    try {
+      await onSubmit(data);
+      onSuccess();
+    } catch (error: any) {
+      Toast.show({
+        type: "error",
+        text1: error.message || "An error occurred",
+      });
     }
+    // }
   };
 
-  useEffect(() => {
-    if (userCategory === "basic" || userCategory === "pro") {
-      setIsCategory(true);
-    }
-  }, [userCategory]);
+  // useEffect(() => {
+  //   if (userCategory === "basic" || userCategory === "pro") {
+  //     setIsCategory(true);
+  //   }
+  // }, [userCategory]);
 
-  if (isCategory === true) {
-    return (
-      <UpgradationComponent
-        animationSource={require("../../assets/upgrade_1.json")}
-        upgradeType="premium"
-        tagline="Empower you growth with this premium feature"
-        featureList={[
-          {
-            imageSource: require("../../assets/images/voucher.png"),
-            feature: "Personalized one on one session",
-          },
-          {
-            imageSource: require("../../assets/images/expensive-price.png"),
-            feature: "On demand sessions",
-          },
-        ]}
-      />
-    );
-  }
+  // if (isCategory === true) {
+  //   return (
+  //     <UpgradationComponent
+  //       animationSource={require("../../assets/upgrade_1.json")}
+  //       upgradeType="premium"
+  //       tagline="Empower you growth with this premium feature"
+  //       featureList={[
+  //         {
+  //           imageSource: require("../../assets/images/voucher.png"),
+  //           feature: "Personalized one on one session",
+  //         },
+  //         {
+  //           imageSource: require("../../assets/images/expensive-price.png"),
+  //           feature: "On demand sessions",
+  //         },
+  //       ]}
+  //     />
+  //   );
+  // }
 
   return (
     <>

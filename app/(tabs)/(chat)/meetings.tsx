@@ -93,9 +93,15 @@ const UpcomingMeetings = () => {
                   </View>
                 </TouchableOpacity>
               ) : (
-                <View className="bg-primary/60 rounded-md py-2 px-4 mt-3">
-                  <Text className="text-white text-center text-sm font-mada-semibold">
-                    Join Meeting
+                <View>
+                  <View className="bg-primary/60 rounded-md py-2 px-4 mt-3">
+                    <Text className="text-white text-center text-sm font-mada-semibold">
+                      Join Meeting
+                    </Text>
+                  </View>
+                  <Text className="text-[8px] font-mada-regular">
+                    Join button will be enabled once the mentor accepts the
+                    meeting.
                   </Text>
                 </View>
               )}

@@ -1,15 +1,11 @@
+import React from "react";
 import { View, Text, Pressable } from "react-native";
 import {
-  capitalizeFirstLetter,
   formatTopicString,
   getFormattedDate,
   getTodaysFormattedDate,
 } from "../../helpers/utils";
-import {
-  TChapterRevisionProps,
-  TDayProps,
-  TRevisionProps,
-} from "../../types/types";
+import { TDayProps } from "../../types/types";
 
 const WeeklyPlanButton = ({
   item,
