@@ -56,7 +56,7 @@ const ApplyCoupon = () => {
   const validateCustomCoupon = useDebouncedCallback(async (value: string) => {
     if (value.length > 0) {
       try {
-        const res = await checkCustomCoupon({ code: value });
+        const res = await checkCustomCoupon({ code: value, plan:planId });
 
         setSelectedCoupon(res.coupon);
         setIsCustomCouponValid(true);

@@ -80,7 +80,7 @@ export const useGetSubscriptionPricingByPlanId = (planId: string) => {
 
 export const useGetCoupon = (data: { plan: string; category: string }) => {
   return useQuery({
-    queryKey: ["coupon"],
+    queryKey: ["coupon", data.plan],
     queryFn: async () => {
       try {
         const res: AxiosResponse = await axiosClient.get(
@@ -103,7 +103,7 @@ export const useGetCoupon = (data: { plan: string; category: string }) => {
 
 export const useCheckCustomCoupon = () => {
   return useMutation({
-    mutationFn: async (data: { code: string }) => {
+    mutationFn: async (data: { code: string; plan: string }) => {
       try {
         const res = await axiosClient.post(
           "/api/subscription/coupons/check",
