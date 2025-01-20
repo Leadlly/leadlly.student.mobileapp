@@ -103,7 +103,7 @@ export const useGetCoupon = (data: { plan: string; category: string }) => {
 
 export const useCheckCustomCoupon = () => {
   return useMutation({
-    mutationFn: async (data: { code: string; planId: string }) => {
+    mutationFn: async (data: { code: string; plan: string }) => {
       try {
         const res = await axiosClient.post(
           "/api/subscription/coupons/check",
