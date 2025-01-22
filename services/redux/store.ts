@@ -3,6 +3,7 @@ import userReducer from "./slices/userSlice";
 import PlannerReducer from "./slices/plannerSlice";
 import WeeklyQuizReducer from "./slices/weeklyQuizSlice";
 import DailyQuizReducer from "./slices/dailyQuizSlice";
+import unreadMessagesReducer from "./slices/unreadMessageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     todaysPlan: PlannerReducer,
     weeklyQuizzes: WeeklyQuizReducer,
     dailyQuizzes: DailyQuizReducer,
+    unreadMessages: unreadMessagesReducer,
   },
 });
 

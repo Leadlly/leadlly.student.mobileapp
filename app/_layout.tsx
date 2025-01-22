@@ -7,6 +7,7 @@ import AppWrapper from "../components/AppWrapper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import NotificationHandler from "../components/NotificationHandler";
+import { SocketProvider } from "../context/SocketContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -34,9 +35,11 @@ const RootLayout = () => {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <NotificationHandler />
-        <AppWrapper />
-        <Toast />
+        <SocketProvider>
+          <NotificationHandler />
+          <AppWrapper />
+          <Toast />
+        </SocketProvider>
       </QueryClientProvider>
     </Provider>
   );

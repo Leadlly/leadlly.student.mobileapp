@@ -11,17 +11,36 @@ import { loadQuizzes } from "../services/redux/slices/weeklyQuizSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import UpgradeButton from "./shared/UpgradeButton";
 import { loadDailyQuizzes } from "../services/redux/slices/dailyQuizSlice";
+import { useGetUnreadNotifications } from "../services/queries/chatQuery";
+import { unreadMessages } from "../services/redux/slices/unreadMessageSlice";
 
 const AppWrapper = () => {
   const user = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  const { data, isLoading } = useGetUnreadNotifications({
+    receiver: user?._id,
+    room: user?.email,
+  });
+
   useEffect(() => {
     dispatch(loadUser());
     dispatch(loadDailyQuizzes());
     dispatch(loadQuizzes());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (data && data.unreadCount && data.unreadCount.length > 0) {
+      const unreadMessagesForUser = data.unreadCount.find(
+        (message: { room: string; messageCount: number }) =>
+          message.room === user?.email
+      );
+      dispatch(unreadMessages(unreadMessagesForUser?.messageCount));
+    }
+  }, [data, isLoading]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
